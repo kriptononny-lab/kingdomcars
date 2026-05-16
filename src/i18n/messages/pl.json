@@ -1,0 +1,78 @@
+{
+  "common": {
+    "loading": "Ładowanie...",
+    "error": "Wystąpił błąd",
+    "retry": "Spróbuj ponownie",
+    "close": "Zamknij",
+    "open": "Otwórz",
+    "menu": "Menu",
+    "back": "Wstecz",
+    "next": "Dalej",
+    "submit": "Wyślij",
+    "skipToContent": "Przejdź do treści"
+  },
+  "form": {
+    "step1Title": "Co przewozimy?",
+    "step2Title": "Ile osób potrzeba?",
+    "step3Title": "Twoje dane",
+    "stepIndicator": "Krok {current} z {total}",
+    "name": "Imię i nazwisko",
+    "namePlaceholder": "Jan Kowalski",
+    "email": "E-mail",
+    "emailPlaceholder": "twoj@email.pl",
+    "phone": "Numer telefonu",
+    "phonePlaceholder": "+48 ...",
+    "message": "Wiadomość",
+    "messagePlaceholder": "Opisz krótko swoje potrzeby (opcjonalne)",
+    "consent": "Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z <policyLink>polityką prywatności</policyLink>.",
+    "consentPolicyLink": "polityką prywatności",
+    "submit": "Wyślij zapytanie",
+    "submitting": "Wysyłanie...",
+    "success": "Dziękujemy! Skontaktujemy się z Tobą wkrótce.",
+    "errors": {
+      "required": "To pole jest wymagane",
+      "email": "Nieprawidłowy adres e-mail",
+      "phone": "Nieprawidłowy numer telefonu",
+      "minLength": "Minimum {min} znaków",
+      "maxLength": "Maksimum {max} znaków",
+      "consent": "Zgoda jest wymagana",
+      "rateLimit": "Zbyt wiele prób. Spróbuj ponownie za 10 minut.",
+      "server": "Coś poszło nie tak. Spróbuj ponownie."
+    }
+  },
+  "cookies": {
+    "title": "Pliki cookie",
+    "body": "Używamy plików cookie, aby zapewnić najlepsze doświadczenie. Dane analityczne są zbierane tylko za Twoją zgodą.",
+    "acceptAll": "Zaakceptuj wszystkie",
+    "acceptNecessary": "Tylko niezbędne",
+    "customize": "Dostosuj",
+    "save": "Zapisz wybór",
+    "categories": {
+      "necessary": "Niezbędne",
+      "necessaryDesc": "Wymagane do działania strony.",
+      "analytics": "Analityka",
+      "analyticsDesc": "Pomaga nam zrozumieć, jak używana jest strona.",
+      "marketing": "Marketing",
+      "marketingDesc": "Personalizowane reklamy."
+    },
+    "moreInfo": "Polityka cookie"
+  },
+  "errors": {
+    "notFoundTitle": "404 — Nie znaleziono",
+    "notFoundDescription": "Strona, której szukasz, nie istnieje lub została przeniesiona.",
+    "backHome": "Wróć do strony głównej",
+    "serverErrorTitle": "Coś poszło nie tak",
+    "serverErrorDescription": "Wystąpił błąd serwera. Spróbujemy naprawić to wkrótce."
+  },
+  "header": {
+    "language": "Język",
+    "openMenu": "Otwórz menu",
+    "closeMenu": "Zamknij menu",
+    "currentLanguage": "Aktualny język: {language}"
+  },
+  "languages": {
+    "pl": "Polski",
+    "en": "English",
+    "ru": "Русский"
+  }
+}

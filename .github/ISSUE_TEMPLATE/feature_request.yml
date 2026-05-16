@@ -1,0 +1,50 @@
+name: ✨ Feature request
+description: Suggest a new feature or improvement.
+labels: [enhancement, triage]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user / business problem is unsolved today?
+      placeholder: 'Admins have no way to bulk-export form submissions for monthly reporting.'
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What would you build? Sketch the user-facing flow.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What other approaches did you reject, and why?
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - 'Small — half a day or less'
+        - 'Medium — a few days'
+        - 'Large — multi-week, needs an ADR'
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: requirements-check
+    attributes:
+      label: Cross-cutting concerns
+      description: Which of these does this touch? (tick all that apply)
+      options:
+        - label: i18n — needs new copy across pl/en/ru
+        - label: SEO — affects metadata, sitemap, OG, or robots
+        - label: a11y — new interactive UI
+        - label: GDPR — collects, stores, or transmits user data
+        - label: Security — new auth, headers, or external surface
+        - label: Performance — affects LCP / INP / CLS / bundle size

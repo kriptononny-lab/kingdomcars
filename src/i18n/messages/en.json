@@ -1,0 +1,78 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try again",
+    "close": "Close",
+    "open": "Open",
+    "menu": "Menu",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "skipToContent": "Skip to content"
+  },
+  "form": {
+    "step1Title": "What are we transporting?",
+    "step2Title": "How many people do you need?",
+    "step3Title": "Your details",
+    "stepIndicator": "Step {current} of {total}",
+    "name": "Full name",
+    "namePlaceholder": "John Doe",
+    "email": "Email",
+    "emailPlaceholder": "you@email.com",
+    "phone": "Phone number",
+    "phonePlaceholder": "+48 ...",
+    "message": "Message",
+    "messagePlaceholder": "Briefly describe your needs (optional)",
+    "consent": "I agree to the processing of my personal data per <policyLink>the privacy policy</policyLink>.",
+    "consentPolicyLink": "the privacy policy",
+    "submit": "Send request",
+    "submitting": "Sending...",
+    "success": "Thank you! We'll be in touch shortly.",
+    "errors": {
+      "required": "This field is required",
+      "email": "Invalid email address",
+      "phone": "Invalid phone number",
+      "minLength": "Minimum {min} characters",
+      "maxLength": "Maximum {max} characters",
+      "consent": "Consent is required",
+      "rateLimit": "Too many attempts. Try again in 10 minutes.",
+      "server": "Something went wrong. Please try again."
+    }
+  },
+  "cookies": {
+    "title": "Cookies",
+    "body": "We use cookies to give you the best experience. Analytics is only collected with your consent.",
+    "acceptAll": "Accept all",
+    "acceptNecessary": "Necessary only",
+    "customize": "Customize",
+    "save": "Save choice",
+    "categories": {
+      "necessary": "Necessary",
+      "necessaryDesc": "Required for the site to function.",
+      "analytics": "Analytics",
+      "analyticsDesc": "Helps us understand how the site is used.",
+      "marketing": "Marketing",
+      "marketingDesc": "Personalised ads."
+    },
+    "moreInfo": "Cookie policy"
+  },
+  "errors": {
+    "notFoundTitle": "404 вЂ” Not found",
+    "notFoundDescription": "The page you're looking for doesn't exist or has been moved.",
+    "backHome": "Back to home",
+    "serverErrorTitle": "Something went wrong",
+    "serverErrorDescription": "A server error occurred. We'll fix it shortly."
+  },
+  "header": {
+    "language": "Language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "currentLanguage": "Current language: {language}"
+  },
+  "languages": {
+    "pl": "Polski",
+    "en": "English",
+    "ru": "Р СѓСЃСЃРєРёР№"
+  }
+}

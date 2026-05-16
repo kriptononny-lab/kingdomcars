@@ -1,0 +1,86 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+@theme {
+  --color-gold: var(--brand-gold);
+  --color-gold-light: var(--brand-gold-light);
+  --color-gold-dark: var(--brand-gold-dark);
+  --color-surface: var(--surface-base);
+  --color-surface-section: var(--surface-section);
+  --color-surface-card: var(--surface-card);
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --font-heading: var(--font-oswald), 'Oswald', sans-serif;
+  --font-body: var(--font-source-sans), 'Source Sans 3', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Use dvh-aware viewport on mobile (§8: no 100vh) */
+  --vh-fix: 1dvh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--surface-base);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* Safe-area aware (§8) */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Accessible focus-visible ring (§10) */
+*:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip link visibility on focus (§10) */
+.skip-link:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--surface-base); }
+::-webkit-scrollbar-thumb { background: var(--brand-gold-dark); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-gold); }
+
+/* Block-specific keyframes. All disabled under prefers-reduced-motion (above). */
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes vanBob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-3px) rotate(-0.3deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  75% { transform: translateY(-2px) rotate(0.3deg); }
+}
+@keyframes headlightPulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.9; } }
+@keyframes cityPulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.4); } }
+@keyframes drawRoute {
+  0% { stroke-dashoffset: 600; opacity: 0; }
+  20% { opacity: 1; }
+  60% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: -600; opacity: 0; }
+}
+.route-line { stroke-dasharray: 600; stroke-dashoffset: 600; animation: drawRoute 4s ease-in-out infinite; }
+@keyframes loadingBar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }

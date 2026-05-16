@@ -1,0 +1,191 @@
+# =============================================================================
+# CI — runs on every PR and on pushes to main. Implements §19 / §15 / §11.
+#
+# Jobs run in parallel where possible. Each job restores the same npm cache
+# (keyed off package-lock.json) so cold starts are minimised. The "build" job
+# uses SKIP_ENV_VALIDATION=1 so we don't need to expose real secrets to PRs.
+# =============================================================================
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  install:
+    name: Install (cached)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+        env:
+          # postinstall is `node scripts/patch-payload.mjs` — safe to run with no env.
+          HUSKY: '0'
+
+  lint:
+    name: Lint
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run lint
+      - run: npm run format:check
+
+  typecheck:
+    name: Typecheck
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+
+  test:
+    name: Unit tests
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run test:cov
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+
+  build:
+    name: Build
+    needs: install
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: '1'
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_SITE_HOST: localhost
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Bundle size report
+        run: npx bundlewatch --config bundlewatch.config.json || true
+        env:
+          BUNDLEWATCH_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  e2e:
+    name: E2E (Playwright)
+    needs: install
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: payload
+          POSTGRES_PASSWORD: ci_test_password
+          POSTGRES_DB: kingdomcars_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U payload -d kingdomcars_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgres://payload:ci_test_password@localhost:5432/kingdomcars_test
+      PAYLOAD_SECRET: ci_test_secret_at_least_thirty_two_chars_xx
+      PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
+      REVALIDATE_SECRET: ci_test_revalidate_secret_16ch
+      TELEGRAM_BOT_TOKEN: '0:ci_test_token_for_mock_server'
+      TELEGRAM_CHAT_ID: '-100000000000'
+      TELEGRAM_API_BASE: http://localhost:9999
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_SITE_HOST: localhost
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  audit:
+    name: npm audit
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      # `--audit-level=high` fails on high/critical only — moderate/low are
+      # surfaced via Dependabot PRs and don't gate CI.
+      - run: npm audit --omit=dev --audit-level=high
+
+  lighthouse:
+    name: Lighthouse CI
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: '1'
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_SITE_HOST: localhost
+      PAYLOAD_SECRET: ci_test_secret_at_least_thirty_two_chars_xx
+      PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
+      REVALIDATE_SECRET: ci_test_revalidate_secret_16ch
+      DATABASE_URL: postgres://payload:ci@localhost:5432/kingdomcars_test
+      TELEGRAM_BOT_TOKEN: '0:ci_mock'
+      TELEGRAM_CHAT_ID: '-1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Run LHCI
+        run: npx --yes @lhci/cli@0.14.x autorun --config=.lighthouserc.json
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

@@ -1,0 +1,36 @@
+# =============================================================================
+# CODEOWNERS — required reviewers per path. Implements §19.
+#
+# Owner: @kriptononny-lab (single-maintainer project for now). When the team
+# grows, replace with a GitHub team handle like `@kriptononny-lab/web` and
+# create that team in org settings.
+# =============================================================================
+
+# Catch-all — every PR needs the project owner's review.
+*                              @kriptononny-lab
+
+# Infrastructure: Docker, Compose, Caddy, deploy workflows.
+Dockerfile                     @kriptononny-lab
+Dockerfile.dev                 @kriptononny-lab
+docker-compose*.yml            @kriptononny-lab
+docker/                        @kriptononny-lab
+.github/workflows/             @kriptononny-lab
+Makefile                       @kriptononny-lab
+
+# Payload schema — collection/global/block changes touch the DB.
+src/payload/                   @kriptononny-lab
+scripts/seed.ts                @kriptononny-lab
+scripts/seed-data/             @kriptononny-lab
+scripts/migrate.ts             @kriptononny-lab
+
+# Security-sensitive modules.
+src/lib/env.ts                 @kriptononny-lab
+src/lib/security-headers.ts    @kriptononny-lab
+src/lib/rate-limit.ts          @kriptononny-lab
+src/lib/totp.ts                @kriptononny-lab
+src/lib/telegram.ts            @kriptononny-lab
+src/proxy.ts                   @kriptononny-lab
+next.config.ts                 @kriptononny-lab
+
+# Architecture decisions are immutable — append-only, never edit.
+docs/adr/                      @kriptononny-lab

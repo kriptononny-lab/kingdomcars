@@ -1,0 +1,12 @@
+.next/
+out/
+build/
+node_modules/
+public/
+coverage/
+playwright-report/
+test-results/
+*.lock
+*.log
+src/payload-types.ts
+src/app/(payload)/

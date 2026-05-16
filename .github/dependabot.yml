@@ -1,0 +1,72 @@
+# =============================================================================
+# Dependabot — weekly grouped updates across the three surfaces the project
+# uses. Implements §19. Groups exist to cut PR-noise: 30+ npm packages
+# updating individually = 30 PRs. Grouping by ecosystem keeps it to ~5/week.
+# =============================================================================
+
+version: 2
+
+updates:
+  # ---- npm: app dependencies ------------------------------------------------
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '04:00'
+      timezone: Europe/Warsaw
+    open-pull-requests-limit: 5
+    labels: ['dependencies', 'npm']
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      payload:
+        patterns: ['@payloadcms/*', 'payload']
+      sentry:
+        patterns: ['@sentry/*']
+      eslint:
+        patterns: ['eslint*', '@typescript-eslint/*', 'prettier*']
+      testing:
+        patterns: ['@testing-library/*', 'vitest*', '@vitest/*', '@playwright/*', 'playwright']
+      types:
+        patterns: ['@types/*']
+      next:
+        patterns: ['next', 'eslint-config-next', '@next/*']
+      react:
+        patterns: ['react', 'react-dom', '@types/react', '@types/react-dom']
+      tailwind:
+        patterns: ['tailwindcss', '@tailwindcss/*', 'prettier-plugin-tailwindcss']
+
+  # ---- Docker: base images --------------------------------------------------
+  - package-ecosystem: docker
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '04:00'
+      timezone: Europe/Warsaw
+    open-pull-requests-limit: 3
+    labels: ['dependencies', 'docker']
+    commit-message:
+      prefix: chore
+      include: scope
+
+  # ---- GitHub Actions: workflow action pins --------------------------------
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '04:00'
+      timezone: Europe/Warsaw
+    open-pull-requests-limit: 3
+    labels: ['dependencies', 'github-actions']
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      gha-core:
+        patterns: ['actions/*']
+      docker-actions:
+        patterns: ['docker/*']

@@ -1,0 +1,55 @@
+# =============================================================================
+# Lighthouse CI (§11).
+#
+# Spins up the production build against a service-Postgres, runs LHCI against
+# the three locale homepages, fails the build if perf < 95 or a11y/seo/best-
+# practices < 100 (thresholds defined in .lighthouserc.json).
+# =============================================================================
+
+name: Lighthouse
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lhci:
+    name: Lighthouse audit
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: payload
+          POSTGRES_PASSWORD: payload
+          POSTGRES_DB: kingdomcars
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U payload"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgres://payload:payload@localhost:5432/kingdomcars
+      PAYLOAD_SECRET: ci-payload-secret-must-be-at-least-32-chars-long
+      PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
+      REVALIDATE_SECRET: ci-revalidate-secret-16chars
+      TELEGRAM_BOT_TOKEN: ci-fake-bot-token
+      TELEGRAM_CHAT_ID: '-1000000000000'
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_SITE_HOST: localhost
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - run: npm run seed
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.14.x
+          lhci autorun --config=.lighthouserc.json
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

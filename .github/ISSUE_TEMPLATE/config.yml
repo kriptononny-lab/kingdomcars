@@ -1,0 +1,14 @@
+# Blank issues disabled to force the bug-report / feature-request templates.
+# Security vulnerabilities go through GitHub Security Advisories, never an
+# open issue — see SECURITY.md for the responsible disclosure flow.
+
+blank_issues_enabled: false
+
+contact_links:
+  - name: 🔒 Security vulnerability
+    url: https://github.com/kriptononny-lab/kingdomcars/security/advisories/new
+    about: Report a vulnerability privately via GitHub Security Advisories.
+
+  - name: 💬 General question / discussion
+    url: https://github.com/kriptononny-lab/kingdomcars/discussions
+    about: Open-ended questions or proposals — use Discussions, not Issues.

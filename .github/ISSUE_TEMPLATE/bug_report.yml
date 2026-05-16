@@ -1,0 +1,73 @@
+name: 🐛 Bug report
+description: Something works incorrectly or breaks.
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. The more specific you are,
+        the faster it gets fixed.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: One sentence — what's broken?
+      placeholder: 'Contact form submits but Telegram message never arrives.'
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Numbered steps. Be precise.
+      placeholder: |
+        1. Open `/en/about`
+        2. Fill the contact form
+        3. Click "Send"
+        4. Observe — toast says success but…
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Include error messages, logs, screenshots.
+    validations:
+      required: true
+
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      description: Browser + OS + commit SHA / deploy if known.
+      placeholder: 'Firefox 124 / macOS 14 / commit abc1234'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - 'P0 — site down or data loss'
+        - 'P1 — major flow broken (form, navigation, payment)'
+        - 'P2 — feature partially works, has a workaround'
+        - 'P3 — cosmetic / minor'
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else — recent changes you saw, network conditions, etc.

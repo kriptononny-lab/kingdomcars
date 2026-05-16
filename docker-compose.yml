@@ -1,0 +1,117 @@
+# =============================================================================
+# KingdomCars production stack (§18).
+#
+#   app      — Next.js + Payload, behind Caddy
+#   postgres — Postgres 16 with persistent volume (port 5432 exposed for build)
+#   caddy    — reverse proxy + auto-HTTPS via Let's Encrypt
+#
+# Build flow (handled by Makefile `up` target):
+#   1. postgres comes up first, port 5432 exposed on host
+#   2. `docker compose build app` runs with build.network=host → builder
+#      stage reaches Postgres via localhost:5432 to collect ISR page data
+#   3. compose up brings up the runtime stack
+# =============================================================================
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: '10m'
+    max-file: '3'
+
+networks:
+  app-network:
+    name: kc-app-network
+
+volumes:
+  postgres-data:
+  payload-media:
+  caddy-data:
+  caddy-config:
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-kingdomcars}
+      POSTGRES_USER: ${POSTGRES_USER:-payload}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}
+    # Port exposed so `docker compose build app` (running with
+    # network_mode: host) can reach the DB at localhost:5432.
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks: [app-network]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-payload} -d ${POSTGRES_DB:-kingdomcars}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    logging: *default-logging
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # builder stage needs DB access during `next build`. host mode lets
+      # the build reach the postgres service via localhost:5432 (Linux) or
+      # host.docker.internal (Docker Desktop maps localhost → host).
+      network: host
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:?must be set}
+        NEXT_PUBLIC_SITE_HOST: ${NEXT_PUBLIC_SITE_HOST:?must be set}
+        DATABASE_URL: postgres://${POSTGRES_USER:-payload}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB:-kingdomcars}
+        PAYLOAD_SECRET: ${PAYLOAD_SECRET:?must be set}
+        PAYLOAD_PUBLIC_SERVER_URL: ${PAYLOAD_PUBLIC_SERVER_URL:?must be set}
+        REVALIDATE_SECRET: ${REVALIDATE_SECRET:?must be set}
+        TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:?must be set}
+        TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:?must be set}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      # Runtime DATABASE_URL points at the compose service hostname.
+      DATABASE_URL: postgres://${POSTGRES_USER:-payload}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-kingdomcars}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    volumes:
+      - payload-media:/app/payload-media
+    networks: [app-network]
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://127.0.0.1:3000/api/health || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    logging: *default-logging
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks: [app-network]
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:-kingdomcars.example.com}
+      ACME_EMAIL: ${ACME_EMAIL:-admin@example.com}
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:80']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging: *default-logging

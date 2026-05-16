@@ -1,0 +1,65 @@
+# =============================================================================
+# Production overlay for docker-compose.yml.
+#
+# Applied via: docker compose -f docker-compose.yml -f docker-compose.prod.yml ...
+# (the Makefile's `up` target does this when ENV=prod).
+#
+# Adds production-only hardening: resource limits, restart policy `always`,
+# read-only filesystem flags, no Postgres port exposure. Does NOT redefine
+# the build, env_file, or networks — those come from the base file.
+# =============================================================================
+
+services:
+  postgres:
+    # Production never exposes Postgres on the host network — only the
+    # in-network `postgres` hostname is reachable. `!override` replaces the
+    # base file's `ports:` list entirely (default merge would append).
+    ports: !override []
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          memory: 512M
+
+  app:
+    image: ghcr.io/kriptononny-lab/kingdomcars:latest
+    # Builder stage skipped in prod — image is pre-built by CI and pulled
+    # from GHCR. `build:` block is replaced with no-op to avoid local builds.
+    build: !reset null
+    restart: always
+    read_only: true
+    tmpfs:
+      - /tmp:size=128M,mode=1777
+      - /app/.next/cache:size=256M
+    cap_drop: [ALL]
+    cap_add: [CHOWN, SETUID, SETGID]
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          memory: 1G
+    healthcheck:
+      # Tighter than dev — 15s interval, 3 retries, hard fail in 45s.
+      interval: 15s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+
+  caddy:
+    restart: always
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE, CHOWN, SETUID, SETGID]
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
