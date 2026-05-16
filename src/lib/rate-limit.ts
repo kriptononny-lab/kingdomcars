@@ -61,7 +61,10 @@ async function check(key: string, policy: Policy): Promise<RateLimitResult> {
   const limiter = getUpstashLimiter(policy);
   if (!limiter) {
     if (serverEnv.NODE_ENV === 'production') {
-      logger.warn({ prefix: policy.prefix }, 'rate-limit running in-memory in production — set UPSTASH_REDIS_REST_*');
+      logger.warn(
+        { prefix: policy.prefix },
+        'rate-limit running in-memory in production — set UPSTASH_REDIS_REST_*',
+      );
     }
     return inMemoryLimit(key, policy);
   }

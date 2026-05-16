@@ -12,14 +12,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
-const TARGET = path.resolve(
-  process.cwd(),
-  'node_modules',
-  'payload',
-  'dist',
-  'bin',
-  'loadEnv.js',
-);
+const TARGET = path.resolve(process.cwd(), 'node_modules', 'payload', 'dist', 'bin', 'loadEnv.js');
 
 const OLD_DEFAULT_IMPORT = "import nextEnvImport from '@next/env';";
 const NEW_NAMESPACE_IMPORT = "import * as nextEnvImport from '@next/env';";
@@ -49,7 +42,9 @@ if (content.includes(OLD_DESTRUCTURE) && !content.includes(NEW_RESOLUTION)) {
 
 if (changed) {
   writeFileSync(TARGET, content, 'utf8');
-  console.warn('[patch-payload] loadEnv.js patched (Payload 3 / Next 16 / Node 22+ ESM-CJS interop).');
+  console.warn(
+    '[patch-payload] loadEnv.js patched (Payload 3 / Next 16 / Node 22+ ESM-CJS interop).',
+  );
 } else if (content.includes(NEW_RESOLUTION)) {
   console.warn('[patch-payload] loadEnv.js already up to date.');
 } else {

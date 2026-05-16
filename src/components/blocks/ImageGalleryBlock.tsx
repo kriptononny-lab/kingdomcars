@@ -34,7 +34,7 @@ export function ImageGalleryBlockView({ block }: Props) {
                   className="h-auto w-full"
                 />
                 {entry.caption ? (
-                  <figcaption className="bg-surface-card px-4 py-3 text-sm text-text-muted">
+                  <figcaption className="bg-surface-card text-text-muted px-4 py-3 text-sm">
                     {entry.caption}
                   </figcaption>
                 ) : null}

@@ -1,8 +1,8 @@
-import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import security from 'eslint-plugin-security';
 import unicorn from 'eslint-plugin-unicorn';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
 /**
  * Flat config. eslint-config-next 16 already bundles `eslint-plugin-jsx-a11y`

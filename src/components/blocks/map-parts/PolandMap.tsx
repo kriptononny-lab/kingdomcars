@@ -20,12 +20,67 @@ const POLAND_PATH =
 
 export function PolandMap() {
   return (
-    <svg viewBox="0 0 500 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of Poland with covered cities" className="h-auto w-full">
-      <path d={POLAND_PATH} fill="rgba(232,168,37,0.06)" stroke="#E8A825" strokeWidth="1.5" strokeOpacity="0.3" />
-      <line x1="270" y1="190" x2="290" y2="330" stroke="#E8A825" strokeWidth="1" opacity="0.3" strokeDasharray="4 4" className="route-line" />
-      <line x1="270" y1="190" x2="190" y2="230" stroke="#E8A825" strokeWidth="1" opacity="0.3" strokeDasharray="4 4" className="route-line" style={{ animationDelay: '0.5s' }} />
-      <line x1="270" y1="190" x2="340" y2="110" stroke="#E8A825" strokeWidth="1" opacity="0.3" strokeDasharray="4 4" className="route-line" style={{ animationDelay: '1s' }} />
-      <line x1="270" y1="190" x2="210" y2="130" stroke="#E8A825" strokeWidth="1" opacity="0.3" strokeDasharray="4 4" className="route-line" style={{ animationDelay: '1.5s' }} />
+    <svg
+      viewBox="0 0 500 480"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Map of Poland with covered cities"
+      className="h-auto w-full"
+    >
+      <path
+        d={POLAND_PATH}
+        fill="rgba(232,168,37,0.06)"
+        stroke="#E8A825"
+        strokeWidth="1.5"
+        strokeOpacity="0.3"
+      />
+      <line
+        x1="270"
+        y1="190"
+        x2="290"
+        y2="330"
+        stroke="#E8A825"
+        strokeWidth="1"
+        opacity="0.3"
+        strokeDasharray="4 4"
+        className="route-line"
+      />
+      <line
+        x1="270"
+        y1="190"
+        x2="190"
+        y2="230"
+        stroke="#E8A825"
+        strokeWidth="1"
+        opacity="0.3"
+        strokeDasharray="4 4"
+        className="route-line"
+        style={{ animationDelay: '0.5s' }}
+      />
+      <line
+        x1="270"
+        y1="190"
+        x2="340"
+        y2="110"
+        stroke="#E8A825"
+        strokeWidth="1"
+        opacity="0.3"
+        strokeDasharray="4 4"
+        className="route-line"
+        style={{ animationDelay: '1s' }}
+      />
+      <line
+        x1="270"
+        y1="190"
+        x2="210"
+        y2="130"
+        stroke="#E8A825"
+        strokeWidth="1"
+        opacity="0.3"
+        strokeDasharray="4 4"
+        className="route-line"
+        style={{ animationDelay: '1.5s' }}
+      />
       {CITIES.map((city, i) => (
         <g key={city.name}>
           <circle

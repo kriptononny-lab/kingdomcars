@@ -3,10 +3,7 @@
 import { m } from 'framer-motion';
 import type { ReactNode } from 'react';
 
-import {
-  staggerContainer,
-  staggerItem,
-} from '@/components/animations/motion-constants';
+import { staggerContainer, staggerItem } from '@/components/animations/motion-constants';
 
 interface StaggerProps {
   children: ReactNode;

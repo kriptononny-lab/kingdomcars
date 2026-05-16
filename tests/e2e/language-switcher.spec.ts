@@ -12,7 +12,10 @@ import { expect, test } from '@playwright/test';
  */
 
 function localeButton(page: Page, code: 'pl' | 'en' | 'ru') {
-  return page.locator('button').filter({ hasText: new RegExp(`^${code}$`, 'i') }).first();
+  return page
+    .locator('button')
+    .filter({ hasText: new RegExp(`^${code}$`, 'i') })
+    .first();
 }
 
 test.describe('Language switcher', () => {

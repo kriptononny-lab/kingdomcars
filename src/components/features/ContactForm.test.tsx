@@ -47,7 +47,11 @@ describe('<ContactForm />', () => {
     await waitFor(() => expect(submitMock).toHaveBeenCalled());
     expect(onSuccess).toHaveBeenCalled();
     const submitted = submitMock.mock.calls[0]?.[0];
-    expect(submitted).toMatchObject({ name: 'Jan Kowalski', phone: '+48 500 100 200', consent: true });
+    expect(submitted).toMatchObject({
+      name: 'Jan Kowalski',
+      phone: '+48 500 100 200',
+      consent: true,
+    });
   });
 
   it('does not submit when consent is not given', async () => {

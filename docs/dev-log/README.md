@@ -15,30 +15,30 @@ session). Хранится для целей:
 
 ## Хронология
 
-| Файл | Период | Что внутри |
-|---|---|---|
-| `STAGE_0_CHANGES.md` | начальный setup | первичная скаффолдинг, конфиги, базовая структура |
-| `STAGE_0_2_CHANGES.md` | setup доделки | догрузка зависимостей и фиксы |
-| `STAGE_0_3_CHANGES.md` | setup доделки | догрузка зависимостей и фиксы |
-| `LOCAL_SETUP_STATUS.md` | snapshot | состояние локального окружения на момент записи |
-| `STEP_9_CHANGES.md` | Шаг 9 | SEO (metadata, sitemap, robots, OG, manifest) |
-| `STEP_10_CHANGES.md` | Шаг 10 | GDPR (cookie banner, privacy/cookie pages, аналитика) |
-| `STEP_11_CHANGES.md` | Шаг 11 | Security headers (CSP, HSTS, etc.) |
-| `STEP_11_1_CHANGES.md` | Шаг 11.1 | Security follow-up |
-| `STEP_12_CHANGES.md` | Шаг 12 | Тесты (Vitest setup, unit tests) |
-| `STEP_12_KNOWN_ISSUES.md` | Шаг 12 issues | известные проблемы тестов |
-| `STEP_13_CHANGES.md` | Шаг 13 | Docker, docker-compose, Caddyfile |
-| `STEP_13_1_CHANGES.md` | Шаг 13.1 | Docker follow-up |
-| `STEP_14_15_CHANGES.md` | Шаги 14–15 | CI/CD, GitHub Actions, ADR, docs |
-| `STEP_CLEANUP_CHANGES.md` | cleanup | архитектурный cleanup-патч (Sentry v9→v10, locale bug fix, a11y) |
-| `SESSION_HANDOFF_2026-05-15.md` | session 2026-05-15 | конец сессии перед первым аудитом — фиксирует «100/100 тестов, Docker healthy» |
-| `STAGE_A_CHANGES.md` | этап A (2026-05-15) | первая попытка восстановить §5: `.github`, `.vscode`, `public`, `Dockerfile.dev`, `docker-compose.prod.yml` |
-| `STAGE_B_CHANGES.md` | этап B (2026-05-15) | чистка корня — перенос STEP/STAGE логов в эту папку, обновление `.gitignore` |
-| `STAGE_C_CHANGES.md` | этап C (2026-05-15) | архитектурные правила §4 — split `get-page.ts`, фикс `CookieSettingsDialog`, удаление barrel re-export'ов из `types/blocks/index.ts` |
-| `STAGE_D_CHANGES.md` | этап D (2026-05-15) | долги: `server-only` в deps, ADR-0006, новый `TECH_DEBT.md`, синхронизация `vitest.config.ts` |
-| `SESSION_HANDOFF_2026-05-15_audit.md` | session конец дня | финальный handoff аудита, утверждение «спека закрыта» |
-| `AUDIT_2_CHANGES.md` | audit 2 (2026-05-15) | повторный аудит — `.github`/`.vscode`/`public` фактически отсутствовали в `v2.zip`, восстановлены; добавлен `eslint-plugin-security` (§20), склейка дубликата в `.gitignore` |
-| `TECH_DEBT.md` | живой реестр | отложенные задачи (otplib v12→v13, admin password, GitHub Settings, OWNER-плейсхолдеры) |
+| Файл                                  | Период               | Что внутри                                                                                                                                                                   |
+| ------------------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `STAGE_0_CHANGES.md`                  | начальный setup      | первичная скаффолдинг, конфиги, базовая структура                                                                                                                            |
+| `STAGE_0_2_CHANGES.md`                | setup доделки        | догрузка зависимостей и фиксы                                                                                                                                                |
+| `STAGE_0_3_CHANGES.md`                | setup доделки        | догрузка зависимостей и фиксы                                                                                                                                                |
+| `LOCAL_SETUP_STATUS.md`               | snapshot             | состояние локального окружения на момент записи                                                                                                                              |
+| `STEP_9_CHANGES.md`                   | Шаг 9                | SEO (metadata, sitemap, robots, OG, manifest)                                                                                                                                |
+| `STEP_10_CHANGES.md`                  | Шаг 10               | GDPR (cookie banner, privacy/cookie pages, аналитика)                                                                                                                        |
+| `STEP_11_CHANGES.md`                  | Шаг 11               | Security headers (CSP, HSTS, etc.)                                                                                                                                           |
+| `STEP_11_1_CHANGES.md`                | Шаг 11.1             | Security follow-up                                                                                                                                                           |
+| `STEP_12_CHANGES.md`                  | Шаг 12               | Тесты (Vitest setup, unit tests)                                                                                                                                             |
+| `STEP_12_KNOWN_ISSUES.md`             | Шаг 12 issues        | известные проблемы тестов                                                                                                                                                    |
+| `STEP_13_CHANGES.md`                  | Шаг 13               | Docker, docker-compose, Caddyfile                                                                                                                                            |
+| `STEP_13_1_CHANGES.md`                | Шаг 13.1             | Docker follow-up                                                                                                                                                             |
+| `STEP_14_15_CHANGES.md`               | Шаги 14–15           | CI/CD, GitHub Actions, ADR, docs                                                                                                                                             |
+| `STEP_CLEANUP_CHANGES.md`             | cleanup              | архитектурный cleanup-патч (Sentry v9→v10, locale bug fix, a11y)                                                                                                             |
+| `SESSION_HANDOFF_2026-05-15.md`       | session 2026-05-15   | конец сессии перед первым аудитом — фиксирует «100/100 тестов, Docker healthy»                                                                                               |
+| `STAGE_A_CHANGES.md`                  | этап A (2026-05-15)  | первая попытка восстановить §5: `.github`, `.vscode`, `public`, `Dockerfile.dev`, `docker-compose.prod.yml`                                                                  |
+| `STAGE_B_CHANGES.md`                  | этап B (2026-05-15)  | чистка корня — перенос STEP/STAGE логов в эту папку, обновление `.gitignore`                                                                                                 |
+| `STAGE_C_CHANGES.md`                  | этап C (2026-05-15)  | архитектурные правила §4 — split `get-page.ts`, фикс `CookieSettingsDialog`, удаление barrel re-export'ов из `types/blocks/index.ts`                                         |
+| `STAGE_D_CHANGES.md`                  | этап D (2026-05-15)  | долги: `server-only` в deps, ADR-0006, новый `TECH_DEBT.md`, синхронизация `vitest.config.ts`                                                                                |
+| `SESSION_HANDOFF_2026-05-15_audit.md` | session конец дня    | финальный handoff аудита, утверждение «спека закрыта»                                                                                                                        |
+| `AUDIT_2_CHANGES.md`                  | audit 2 (2026-05-15) | повторный аудит — `.github`/`.vscode`/`public` фактически отсутствовали в `v2.zip`, восстановлены; добавлен `eslint-plugin-security` (§20), склейка дубликата в `.gitignore` |
+| `TECH_DEBT.md`                        | живой реестр         | отложенные задачи (otplib v12→v13, admin password, GitHub Settings, OWNER-плейсхолдеры)                                                                                      |
 
 ## Правила добавления
 

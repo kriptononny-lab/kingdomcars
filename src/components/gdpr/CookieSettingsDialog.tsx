@@ -31,15 +31,15 @@ export function CookieSettingsDialog() {
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70 motion-safe:animate-[fadeIn_200ms]" />
         <Dialog.Content
           aria-describedby={undefined}
-          className="fixed left-1/2 top-1/2 z-50 w-[min(92vw,500px)] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-surface-card p-6 shadow-2xl"
+          className="bg-surface-card fixed top-1/2 left-1/2 z-50 w-[min(92vw,500px)] -translate-x-1/2 -translate-y-1/2 rounded-lg p-6 shadow-2xl"
         >
           <div className="mb-4 flex items-start justify-between gap-4">
-            <Dialog.Title className="font-heading text-base font-semibold uppercase tracking-wider text-text-primary">
+            <Dialog.Title className="font-heading text-text-primary text-base font-semibold tracking-wider uppercase">
               {t('title')}
             </Dialog.Title>
             <Dialog.Close
               aria-label={tCommon('close')}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-text-muted motion-safe:hover:bg-white/5"
+              className="text-text-muted inline-flex h-9 w-9 items-center justify-center rounded-md motion-safe:hover:bg-white/5"
             >
               <X size={20} aria-hidden="true" />
             </Dialog.Close>
@@ -68,14 +68,14 @@ export function CookieSettingsDialog() {
             <button
               type="button"
               onClick={() => set({ necessary: true, analytics, marketing })}
-              className="min-h-[44px] flex-1 rounded-md border border-white/10 px-4 text-sm font-semibold uppercase tracking-wider text-text-primary motion-safe:hover:border-gold/40 motion-safe:hover:text-gold"
+              className="text-text-primary motion-safe:hover:border-gold/40 motion-safe:hover:text-gold min-h-[44px] flex-1 rounded-md border border-white/10 px-4 text-sm font-semibold tracking-wider uppercase"
             >
               {t('save')}
             </button>
             <button
               type="button"
               onClick={() => set(ACCEPT_ALL)}
-              className="min-h-[44px] flex-1 rounded-md bg-gold px-4 text-sm font-semibold uppercase tracking-wider text-black motion-safe:hover:bg-gold/90"
+              className="bg-gold motion-safe:hover:bg-gold/90 min-h-[44px] flex-1 rounded-md px-4 text-sm font-semibold tracking-wider text-black uppercase"
             >
               {t('acceptAll')}
             </button>

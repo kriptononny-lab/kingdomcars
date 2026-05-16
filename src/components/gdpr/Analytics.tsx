@@ -31,12 +31,6 @@ export function Analytics() {
   }
 
   return (
-    <Script
-      src={url}
-      data-website-id={id}
-      data-do-not-track="true"
-      strategy="lazyOnload"
-      async
-    />
+    <Script src={url} data-website-id={id} data-do-not-track="true" strategy="lazyOnload" async />
   );
 }

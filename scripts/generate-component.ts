@@ -28,7 +28,9 @@ function parseArgs(argv: string[]): { name: string; bucket: BucketKey } {
   const flags = argv.filter((a) => a.startsWith('--')).map((a) => a.slice(2));
   const positional = argv.filter((a) => !a.startsWith('--'));
   if (positional.length === 0) {
-    console.error('usage: tsx scripts/generate-component.ts <Name> [--ui|--feature|--layout|--animation|--block]');
+    console.error(
+      'usage: tsx scripts/generate-component.ts <Name> [--ui|--feature|--layout|--animation|--block]',
+    );
     process.exit(1);
   }
   const name = positional[0]!;

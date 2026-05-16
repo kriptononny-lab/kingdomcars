@@ -19,6 +19,7 @@ deploy a known-credential admin account — a §13 violation ("сильный п
 через seed").
 
 After this patch:
+
 - **Production** (`NODE_ENV=production`): seed throws on boot if
   `SEED_ADMIN_PASSWORD` is unset or shorter than 12 chars.
 - **Development**: legacy fallback still works, but emits a loud warning
@@ -29,12 +30,12 @@ After this patch:
 `lib/logger.ts` exposed `withRequestId(...)` but nobody called it. After
 this patch the request-id flows through three entry points:
 
-| Entry | What happens |
-|---|---|
-| **`src/proxy.ts`** (front-end pages) | Generates UUID v4 if missing; forwards on the request to RSC layouts; echoes on the response for client/Sentry correlation |
-| **`/api/*` route handlers** | Read or generate via `getRequestId(req.headers)`; tagged logger via `loggerFromHeaders`; echo on `NextResponse` headers |
-| **Server Actions** (`submit-contact`) | Read via `await headers()` from Next; tagged logger via `loggerFromHeaders` |
-| **Payload hooks** (`check-mfa`) | Read via `req.headers`; tagged logger via `loggerFromHeaders` |
+| Entry                                 | What happens                                                                                                               |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **`src/proxy.ts`** (front-end pages)  | Generates UUID v4 if missing; forwards on the request to RSC layouts; echoes on the response for client/Sentry correlation |
+| **`/api/*` route handlers**           | Read or generate via `getRequestId(req.headers)`; tagged logger via `loggerFromHeaders`; echo on `NextResponse` headers    |
+| **Server Actions** (`submit-contact`) | Read via `await headers()` from Next; tagged logger via `loggerFromHeaders`                                                |
+| **Payload hooks** (`check-mfa`)       | Read via `req.headers`; tagged logger via `loggerFromHeaders`                                                              |
 
 The header name lives in `HEADERS.REQUEST_ID` constant (`@/lib/constants`) —
 no magic strings (§4.7). Validation is paranoid (`/^[\w.:-]{1,128}$/`): a
@@ -131,10 +132,10 @@ npm run seed
 
 ## Spec coverage delta after this patch
 
-| Item | Before 11.1 | After 11.1 |
-|---|---|---|
-| §13 "strong password via seed" | ❌ hardcoded fallback in all envs | ✅ prod enforces, dev warns |
-| §16 "correlation via x-request-id" | ❌ helper unused | ✅ wired through proxy + 4 api routes + action + 1 hook |
+| Item                               | Before 11.1                       | After 11.1                                              |
+| ---------------------------------- | --------------------------------- | ------------------------------------------------------- |
+| §13 "strong password via seed"     | ❌ hardcoded fallback in all envs | ✅ prod enforces, dev warns                             |
+| §16 "correlation via x-request-id" | ❌ helper unused                  | ✅ wired through proxy + 4 api routes + action + 1 hook |
 
 Remaining §13 partials (tracked for follow-up):
 
@@ -147,6 +148,7 @@ Remaining §13 partials (tracked for follow-up):
 ## Notes for future steps
 
 When Step 12 (Tests) lands, `lib/logger.ts` gets unit coverage for:
+
 - `getRequestId` — accept valid id, reject invalid chars, reject length > 128,
   generate UUID when header absent.
 - `loggerFromHeaders` — returns tagged child logger.

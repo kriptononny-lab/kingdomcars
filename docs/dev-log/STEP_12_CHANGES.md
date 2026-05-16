@@ -29,6 +29,7 @@ way the runtime does). Zero new prod deps.
 ## Files
 
 ### New configs (4)
+
 ```
 vitest.config.ts                 # jsdom, tsconfig paths, coverage thresholds
 playwright.config.ts             # 2 projects, 2 webServers (dev + telegram mock)
@@ -37,12 +38,14 @@ tests/setup.ts                   # jest-dom + next-intl / next/navigation mocks
 ```
 
 ### Fixtures (2)
+
 ```
 tests/fixtures/telegram-mock-server.ts   # Node http on :9999, 200 on any POST
 tests/fixtures/test-data.ts              # unique markers per e2e run
 ```
 
 ### Unit tests (8 — colocated)
+
 ```
 src/lib/totp.test.ts                  ★ 100% coverage target (§15)
 src/lib/rate-limit.test.ts            ★ 100% coverage target (§15)
@@ -55,6 +58,7 @@ src/lib/contact-schema.test.ts          Zod validation matrix
 ```
 
 ### Component tests (3 — colocated)
+
 ```
 src/components/features/ContactForm.test.tsx
 src/components/layout/LanguageSwitcher.test.tsx
@@ -62,6 +66,7 @@ src/components/layout/MobileMenu.test.tsx
 ```
 
 ### E2E (7)
+
 ```
 tests/e2e/home.spec.ts                  # 3 locales, hreflang, x-request-id
 tests/e2e/contact-form.spec.ts          # mock-verified Telegram delivery
@@ -73,6 +78,7 @@ tests/e2e/visual.spec.ts                # 3 screenshots, desktop only
 ```
 
 ### Modified (3)
+
 ```
 src/lib/env.ts                          # +TELEGRAM_API_BASE optional
 src/lib/telegram.ts                     # uses serverEnv.TELEGRAM_API_BASE ?? TELEGRAM.API_BASE
@@ -130,6 +136,7 @@ npm run test:e2e:update-snapshots
 ## Design notes
 
 ### Telegram mock
+
 The `webServer` array in `playwright.config.ts` starts two processes:
 `telegram-mock-server.ts` on :9999 and `npm run dev` on :3000. The dev
 server is launched with `TELEGRAM_API_BASE=http://localhost:9999` in its
@@ -138,6 +145,7 @@ the last 50 calls in memory and exposes them via `GET /__last`, which
 `contact-form.spec.ts` polls to verify delivery.
 
 ### Shared dev database (§15 decision 1)
+
 E2E tests run against the same Postgres as `npm run dev`. Test data is
 namespaced via random per-run IDs in `tests/fixtures/test-data.ts` —
 search `FormSubmissions` by `e2e-` prefix to find/clean test rows.
@@ -146,12 +154,14 @@ This is a deliberate compromise for local DX. CI (Step 14) will use a
 service-container Postgres so tests start from a known clean state.
 
 ### env.ts coverage via `vi.resetModules` + `vi.stubEnv` (§15 decision 4)
+
 `lib/env.ts` validates at module-load time and crashes on bad input. To
 cover all branches, each test resets the module registry, stubs a fresh
 `process.env`, and re-imports — vitest's idiomatic pattern for top-level
 side-effecting modules.
 
 ### Coverage thresholds
+
 - Global threshold: **50%** on `src/lib/**` + `src/components/{features,layout}/**`.
 - The four spec-mandated files (`telegram`, `rate-limit`, `env`, `totp`)
   are at **100%** by construction of their test suites.
@@ -163,13 +173,16 @@ side-effecting modules.
   They will be revisited in the architectural cleanup patch.
 
 ### Visual regression
+
 Snapshots are PNGs stored alongside specs in
 `tests/e2e/visual.spec.ts-snapshots/`. They're committed to git; baseline
 generation happens the first time you run `npm run test:e2e` after
 extraction. `maxDiffPixelRatio: 0.02` tolerates antialiasing jitter.
 
 ### Mobile vs desktop projects
+
 Some specs are project-conditional via `test.skip(({}, info) => …)`:
+
 - `mobile-nav.spec.ts` runs only on `mobile-chrome`.
 - `language-switcher.spec.ts` runs only on `desktop-chrome` (mobile
   variant uses the same logic but lives inside the drawer; covered by

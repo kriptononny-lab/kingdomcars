@@ -27,7 +27,12 @@ const server = createServer((req, res) => {
       body += chunk;
     });
     req.on('end', () => {
-      recorded.push({ method: req.method ?? '?', url: req.url ?? '?', body, at: new Date().toISOString() });
+      recorded.push({
+        method: req.method ?? '?',
+        url: req.url ?? '?',
+        body,
+        at: new Date().toISOString(),
+      });
       while (recorded.length > MAX_RECORDED) recorded.shift();
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ ok: true, result: { message_id: recorded.length } }));
