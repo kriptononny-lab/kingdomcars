@@ -15,7 +15,8 @@ const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === 'tr
  * require the env var explicitly via `lib/env.ts`.
  */
 const imageRemoteHost =
-  process.env.NEXT_PUBLIC_SITE_HOST ?? process.env.NEXT_PUBLIC_SITE_URL?.replace(/^https?:\/\//, '');
+  process.env.NEXT_PUBLIC_SITE_HOST ??
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/^https?:\/\//, '');
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -27,9 +28,7 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ['image/avif', 'image/webp'],
-    remotePatterns: imageRemoteHost
-      ? [{ protocol: 'https', hostname: imageRemoteHost }]
-      : [],
+    remotePatterns: imageRemoteHost ? [{ protocol: 'https', hostname: imageRemoteHost }] : [],
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },
   async headers() {

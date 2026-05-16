@@ -87,6 +87,11 @@ export function homePageData(locale: Locale) {
     title: titles[locale],
     slug: 'home',
     _status: 'published',
-    layout: [heroBlock(locale), servicesBlock(locale), pricingBlock(locale), contactFormBlock(locale)],
+    layout: [
+      heroBlock(locale),
+      servicesBlock(locale),
+      pricingBlock(locale),
+      contactFormBlock(locale),
+    ],
   };
 }

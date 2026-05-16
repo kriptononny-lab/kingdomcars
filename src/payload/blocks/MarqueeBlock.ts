@@ -10,8 +10,7 @@ export const MarqueeBlock: Block = {
       required: true,
       localized: true,
       admin: {
-        description:
-          'Scrolling line under the hero. Separate phrases with `♔` for visual rhythm.',
+        description: 'Scrolling line under the hero. Separate phrases with `♔` for visual rhythm.',
       },
     },
   ],

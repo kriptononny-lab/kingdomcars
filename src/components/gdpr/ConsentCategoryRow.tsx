@@ -21,13 +21,13 @@ export function ConsentCategoryRow({ title, description, checked, disabled, onCh
         checked={checked}
         disabled={disabled}
         onChange={(e) => onChange?.(e.target.checked)}
-        className="mt-1 h-4 w-4 accent-gold disabled:opacity-50"
+        className="accent-gold mt-1 h-4 w-4 disabled:opacity-50"
       />
       <span>
-        <span className="block font-heading text-sm font-semibold uppercase tracking-wider text-text-primary">
+        <span className="font-heading text-text-primary block text-sm font-semibold tracking-wider uppercase">
           {title}
         </span>
-        <span className="block text-xs text-text-muted">{description}</span>
+        <span className="text-text-muted block text-xs">{description}</span>
       </span>
     </label>
   );

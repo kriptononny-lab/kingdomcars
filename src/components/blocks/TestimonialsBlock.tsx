@@ -30,24 +30,24 @@ export function TestimonialsBlockView({ block }: Props) {
           {block.items.map((item, i) => (
             <article
               key={i}
-              className="rounded-lg border border-white/5 bg-surface-card p-7 transition-all duration-300 motion-safe:hover:border-gold/20"
+              className="bg-surface-card motion-safe:hover:border-gold/20 rounded-lg border border-white/5 p-7 transition-all duration-300"
             >
               <header className="mb-4 flex items-center gap-3">
                 <div
                   aria-hidden="true"
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-gold to-gold-dark font-heading text-base font-bold text-black"
+                  className="from-gold to-gold-dark font-heading flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br text-base font-bold text-black"
                 >
                   {item.name.charAt(0)}
                 </div>
                 <div className="flex-1">
                   <h5 className="text-[0.92rem] font-semibold">{item.name}</h5>
-                  <span className="text-xs text-text-muted">{item.location}</span>
+                  <span className="text-text-muted text-xs">{item.location}</span>
                 </div>
               </header>
               <Stars rating={item.rating} />
-              <p className="mb-3.5 text-sm leading-relaxed text-text-muted">{item.text}</p>
+              <p className="text-text-muted mb-3.5 text-sm leading-relaxed">{item.text}</p>
               {item.tag ? (
-                <span className="mt-auto inline-block rounded bg-gold/10 px-2.5 py-1 text-xs font-semibold text-gold">
+                <span className="bg-gold/10 text-gold mt-auto inline-block rounded px-2.5 py-1 text-xs font-semibold">
                   {item.tag}
                 </span>
               ) : null}

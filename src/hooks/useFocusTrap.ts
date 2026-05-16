@@ -15,7 +15,10 @@ interface Options {
  * `onClose` on Escape. Saves and restores focus to the element that was
  * focused before activation (§10).
  */
-export function useFocusTrap(containerRef: RefObject<HTMLElement | null>, { active, onClose }: Options): void {
+export function useFocusTrap(
+  containerRef: RefObject<HTMLElement | null>,
+  { active, onClose }: Options,
+): void {
   useEffect(() => {
     if (!active) return;
     const container = containerRef.current;

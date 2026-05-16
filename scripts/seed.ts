@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger';
 import config from '@/payload/payload.config';
 
 import { homePageData } from './seed-data/home';
-import { headerData, footerData } from './seed-data/navigation';
+import { footerData, headerData } from './seed-data/navigation';
 import { STATIC_SLUGS, staticPageData } from './seed-data/static-pages';
 
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@kingdomcars.example.com';
@@ -75,10 +75,7 @@ async function ensureSiteSettings(payload: Payload) {
  * runtime against the collection schema. We rely on the seed running
  * successfully end-to-end as the type contract.
  */
-async function seedLocalisedPage(
-  payload: Payload,
-  build: (locale: Locale) => PageSeedInput,
-) {
+async function seedLocalisedPage(payload: Payload, build: (locale: Locale) => PageSeedInput) {
   const plData = build('pl');
   const existing = await payload.find({
     collection: 'pages',

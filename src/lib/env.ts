@@ -49,11 +49,17 @@ const clientSchema = z.object({
  */
 const skipValidation = process.env.SKIP_ENV_VALIDATION === '1';
 
-function parse<T extends z.ZodTypeAny>(schema: T, source: Record<string, unknown>, label: string): z.infer<T> {
+function parse<T extends z.ZodTypeAny>(
+  schema: T,
+  source: Record<string, unknown>,
+  label: string,
+): z.infer<T> {
   if (skipValidation) return source as z.infer<T>;
   const result = schema.safeParse(source);
   if (!result.success) {
-    const issues = result.error.issues.map((i) => `  • ${i.path.join('.')}: ${i.message}`).join('\n');
+    const issues = result.error.issues
+      .map((i) => `  • ${i.path.join('.')}: ${i.message}`)
+      .join('\n');
     throw new Error(`Invalid ${label} environment variables:\n${issues}`);
   }
   return result.data;

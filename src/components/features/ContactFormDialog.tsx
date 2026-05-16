@@ -31,9 +31,9 @@ export function ContactFormDialog({ open, onOpenChange }: Props) {
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70 motion-safe:animate-[fadeIn_200ms]" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[min(92vw,460px)] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-gold p-6 shadow-2xl">
+        <Dialog.Content className="bg-gold fixed top-1/2 left-1/2 z-50 w-[min(92vw,460px)] -translate-x-1/2 -translate-y-1/2 rounded-lg p-6 shadow-2xl">
           <div className="mb-4 flex items-start justify-between gap-4">
-            <Dialog.Title className="font-heading text-xl font-semibold uppercase tracking-wider text-black">
+            <Dialog.Title className="font-heading text-xl font-semibold tracking-wider text-black uppercase">
               {sent ? t('success') : t('step3Title')}
             </Dialog.Title>
             <Dialog.Close

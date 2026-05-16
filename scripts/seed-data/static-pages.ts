@@ -15,21 +15,30 @@ const COPY: Record<StaticSlug, Record<Locale, PageCopy>> = {
       title: 'O nas',
       blocks: [
         { kind: 'h2', text: 'Kim jesteśmy' },
-        { kind: 'p', text: 'KingdomCars to firma transportowa działająca w Warszawie i okolicach.' },
+        {
+          kind: 'p',
+          text: 'KingdomCars to firma transportowa działająca w Warszawie i okolicach.',
+        },
       ],
     },
     en: {
       title: 'About',
       blocks: [
         { kind: 'h2', text: 'Who we are' },
-        { kind: 'p', text: 'KingdomCars is a transport company operating in Warsaw and the surrounding region.' },
+        {
+          kind: 'p',
+          text: 'KingdomCars is a transport company operating in Warsaw and the surrounding region.',
+        },
       ],
     },
     ru: {
       title: 'О нас',
       blocks: [
         { kind: 'h2', text: 'Кто мы' },
-        { kind: 'p', text: 'KingdomCars — транспортная компания, работающая в Варшаве и окрестностях.' },
+        {
+          kind: 'p',
+          text: 'KingdomCars — транспортная компания, работающая в Варшаве и окрестностях.',
+        },
       ],
     },
   },
@@ -78,7 +87,10 @@ const COPY: Record<StaticSlug, Record<Locale, PageCopy>> = {
       title: 'Политика cookie',
       blocks: [
         { kind: 'h2', text: 'Файлы cookie' },
-        { kind: 'p', text: 'Сайт использует cookie в соответствии с политикой конфиденциальности.' },
+        {
+          kind: 'p',
+          text: 'Сайт использует cookie в соответствии с политикой конфиденциальности.',
+        },
       ],
     },
   },

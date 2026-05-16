@@ -36,6 +36,7 @@ Patch swaps two files and removes one that was incomplete.
 
 The original overlay had two unfixed bugs that would prevent it from
 working out of the box:
+
 - No init script to create the `umami` database in the shared Postgres.
 - No Caddy site block for `analytics.<domain>` — so even when Umami is
   up, Caddy can't proxy to it.

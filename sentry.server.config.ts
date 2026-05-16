@@ -22,10 +22,7 @@ if (dsn) {
     tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1,
     sendDefaultPii: false,
     // Avoid noisy framework-internal warnings (HANDOFF §4).
-    ignoreErrors: [
-      /transformAlgorithm is not a function/i,
-      /Aborted fetch/i,
-    ],
+    ignoreErrors: [/transformAlgorithm is not a function/i, /Aborted fetch/i],
     beforeSend(event) {
       const headers = event.request?.headers;
       if (headers) {

@@ -11,7 +11,12 @@ interface Props {
 
 const DEFAULT_DURATION = 1800;
 
-export function AnimatedCounter({ target, suffix = '', label, durationMs = DEFAULT_DURATION }: Props) {
+export function AnimatedCounter({
+  target,
+  suffix = '',
+  label,
+  durationMs = DEFAULT_DURATION,
+}: Props) {
   const [count, setCount] = useState(0);
   const [started, setStarted] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -60,11 +65,11 @@ export function AnimatedCounter({ target, suffix = '', label, durationMs = DEFAU
 
   return (
     <div ref={ref} className="text-center">
-      <div className="mb-2 font-heading text-[clamp(2.5rem,5vw,3.6rem)] font-bold leading-none text-gold [text-shadow:0_0_30px_rgba(232,168,37,0.3)]">
+      <div className="font-heading text-gold mb-2 text-[clamp(2.5rem,5vw,3.6rem)] leading-none font-bold [text-shadow:0_0_30px_rgba(232,168,37,0.3)]">
         {count}
         {suffix}
       </div>
-      <div className="text-sm uppercase tracking-[0.1em] text-text-muted">{label}</div>
+      <div className="text-text-muted text-sm tracking-[0.1em] uppercase">{label}</div>
     </div>
   );
 }

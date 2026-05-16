@@ -1,4 +1,13 @@
-import { Calendar, Check, Clock, FileText, MapPin, Shield, Star, type LucideIcon } from 'lucide-react';
+import {
+  Calendar,
+  Check,
+  Clock,
+  FileText,
+  MapPin,
+  Shield,
+  Star,
+  type LucideIcon,
+} from 'lucide-react';
 
 const ICONS = {
   calendar: Calendar,

@@ -1,31 +1,46 @@
-interface City {
-  cx: number;
-  cy: number;
-  name: string;
-}
+import { CITIES, POLAND_PATH, ROUTES } from '@/components/blocks/map-parts/poland-map-data';
 
-const CITIES: City[] = [
-  { cx: 270, cy: 190, name: 'Warszawa' },
-  { cx: 290, cy: 330, name: 'Kraków' },
-  { cx: 340, cy: 110, name: 'Gdańsk' },
-  { cx: 190, cy: 230, name: 'Wrocław' },
-  { cx: 210, cy: 130, name: 'Poznań' },
-  { cx: 240, cy: 220, name: 'Łódź' },
-  { cx: 250, cy: 320, name: 'Katowice' },
-  { cx: 350, cy: 260, name: 'Lublin' },
-];
+const WARSAW = { cx: 270, cy: 190 };
 
-const POLAND_PATH =
-  'M180,60 L220,55 L260,50 L300,48 L340,52 L370,60 L400,80 L420,100 L430,130 L440,160 L430,200 L420,240 L400,270 L380,300 L360,330 L340,360 L310,380 L280,390 L250,400 L220,395 L190,380 L160,360 L140,330 L120,300 L110,270 L100,240 L95,210 L100,180 L110,150 L120,120 L140,90 L160,70 Z';
-
+/**
+ * Decorative Poland map: country outline + dashed routes from Warszawa to
+ * four other cities + pulsing pins. All static geometry lives in
+ * `poland-map-data.ts`.
+ *
+ * Animations (`cityPulse`, `routeDraw` via `.route-line`) are declared in
+ * globals.css and gated by `prefers-reduced-motion: no-preference`.
+ */
 export function PolandMap() {
   return (
-    <svg viewBox="0 0 500 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of Poland with covered cities" className="h-auto w-full">
-      <path d={POLAND_PATH} fill="rgba(232,168,37,0.06)" stroke="#E8A825" strokeWidth="1.5" strokeOpacity="0.3" />
-      <line x1="270" y1="190" x2="290" y2="330" stroke="#E8A825" strokeWidth="1" opacity="0.3" strokeDasharray="4 4" className="route-line" />
-      <line x1="270" y1="190" x2="190" y2="230" stroke="#E8A825" strokeWidth="1" opacity="0.3" strokeDasharray="4 4" className="route-line" style={{ animationDelay: '0.5s' }} />
-      <line x1="270" y1="190" x2="340" y2="110" stroke="#E8A825" strokeWidth="1" opacity="0.3" strokeDasharray="4 4" className="route-line" style={{ animationDelay: '1s' }} />
-      <line x1="270" y1="190" x2="210" y2="130" stroke="#E8A825" strokeWidth="1" opacity="0.3" strokeDasharray="4 4" className="route-line" style={{ animationDelay: '1.5s' }} />
+    <svg
+      viewBox="0 0 500 480"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Map of Poland with covered cities"
+      className="h-auto w-full"
+    >
+      <path
+        d={POLAND_PATH}
+        fill="rgba(232,168,37,0.06)"
+        stroke="#E8A825"
+        strokeWidth="1.5"
+        strokeOpacity="0.3"
+      />
+      {ROUTES.map((r) => (
+        <line
+          key={`${r.x2},${r.y2}`}
+          x1={WARSAW.cx}
+          y1={WARSAW.cy}
+          x2={r.x2}
+          y2={r.y2}
+          stroke="#E8A825"
+          strokeWidth="1"
+          opacity="0.3"
+          strokeDasharray="4 4"
+          className="route-line"
+          style={{ animationDelay: `${r.delayS}s` }}
+        />
+      ))}
       {CITIES.map((city, i) => (
         <g key={city.name}>
           <circle
@@ -45,7 +60,15 @@ export function PolandMap() {
           </text>
         </g>
       ))}
-      <circle cx="270" cy="190" r="12" fill="none" stroke="#E8A825" strokeWidth="1" opacity="0.3">
+      <circle
+        cx={WARSAW.cx}
+        cy={WARSAW.cy}
+        r="12"
+        fill="none"
+        stroke="#E8A825"
+        strokeWidth="1"
+        opacity="0.3"
+      >
         <animate attributeName="r" from="6" to="20" dur="2s" repeatCount="indefinite" />
         <animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite" />
       </circle>

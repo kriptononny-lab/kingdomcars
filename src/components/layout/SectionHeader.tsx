@@ -28,14 +28,14 @@ export function SectionHeader({
         className,
       )}
     >
-      <span aria-hidden="true" className="block h-1 w-12 rounded-sm bg-gold" />
+      <span aria-hidden="true" className="bg-gold block h-1 w-12 rounded-sm" />
       <div>
         {eyebrow ? (
-          <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-text-muted">
+          <span className="text-text-muted block text-xs font-semibold tracking-[0.18em] uppercase">
             {eyebrow}
           </span>
         ) : null}
-        <Heading className="font-heading text-[clamp(1.5rem,3vw,2rem)] font-semibold uppercase tracking-wider">
+        <Heading className="font-heading text-[clamp(1.5rem,3vw,2rem)] font-semibold tracking-wider uppercase">
           {title}
         </Heading>
       </div>

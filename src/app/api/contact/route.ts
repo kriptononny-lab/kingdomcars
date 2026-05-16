@@ -20,7 +20,9 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: Request) {
   const form = await req.formData();
   const rawLocale = String(form.get('locale') ?? '');
-  const locale: Locale = LOCALES.includes(rawLocale as Locale) ? (rawLocale as Locale) : DEFAULT_LOCALE;
+  const locale: Locale = LOCALES.includes(rawLocale as Locale)
+    ? (rawLocale as Locale)
+    : DEFAULT_LOCALE;
 
   // Build the object first, then let Zod parse it — same path the action
   // would take server-side, so types stay aligned without `as never`.

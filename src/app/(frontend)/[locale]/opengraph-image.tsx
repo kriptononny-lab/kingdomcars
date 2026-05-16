@@ -44,43 +44,39 @@ export default async function OpenGraphImage({ params }: Params) {
   const font = await loadFont(locale);
 
   return new ImageResponse(
-    (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1408 100%)',
+        color: '#e6c47a',
+        fontFamily: 'Oswald, sans-serif',
+        padding: 80,
+      }}
+    >
+      <div style={{ fontSize: 140, fontWeight: 700, letterSpacing: 8, lineHeight: 1 }}>
+        {SITE.NAME.toUpperCase()}
+      </div>
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          height: '100%',
-          background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1408 100%)',
-          color: '#e6c47a',
-          fontFamily: 'Oswald, sans-serif',
-          padding: 80,
+          fontSize: 36,
+          marginTop: 32,
+          color: '#f4e4b1',
+          maxWidth: 900,
+          textAlign: 'center',
+          opacity: 0.9,
         }}
       >
-        <div style={{ fontSize: 140, fontWeight: 700, letterSpacing: 8, lineHeight: 1 }}>
-          {SITE.NAME.toUpperCase()}
-        </div>
-        <div
-          style={{
-            fontSize: 36,
-            marginTop: 32,
-            color: '#f4e4b1',
-            maxWidth: 900,
-            textAlign: 'center',
-            opacity: 0.9,
-          }}
-        >
-          {tagline}
-        </div>
+        {tagline}
       </div>
-    ),
+    </div>,
     {
       ...size,
-      fonts: font
-        ? [{ name: 'Oswald', data: font, style: 'normal', weight: 700 }]
-        : undefined,
+      fonts: font ? [{ name: 'Oswald', data: font, style: 'normal', weight: 700 }] : undefined,
     },
   );
 }

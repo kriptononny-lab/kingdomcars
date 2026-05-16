@@ -32,7 +32,8 @@ async function probe(log: ReturnType<typeof loggerFromHeaders>): Promise<Subsyst
   try {
     const payload = await getPayloadInstance();
     payloadOk = true;
-    const drizzle = (payload.db as { drizzle?: { execute?: (q: string) => Promise<unknown> } }).drizzle;
+    const drizzle = (payload.db as { drizzle?: { execute?: (q: string) => Promise<unknown> } })
+      .drizzle;
     if (drizzle?.execute) {
       await drizzle.execute('SELECT 1');
       dbOk = true;

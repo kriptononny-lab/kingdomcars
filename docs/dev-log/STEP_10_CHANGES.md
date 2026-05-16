@@ -6,41 +6,41 @@ Per §14 of the architecture spec.
 
 ### New files (8)
 
-| File | Lines | Purpose |
-|---|---|---|
-| `src/types/consent.ts` | 28 | Types + `REJECT_ALL` / `ACCEPT_ALL` constants |
-| `src/lib/consent.ts` | 18 | Shared cookie name + TTL (client + server) |
-| `src/lib/actions/save-consent.ts` | 34 | Server action — writes cookie with correct attributes |
-| `src/components/gdpr/CookieConsentProvider.tsx` | 92 | Client provider with React context |
-| `src/components/gdpr/CookieBanner.tsx` | 74 | Fixed bottom-bar with 4 actions |
-| `src/components/gdpr/CookieSettingsDialog.tsx` | 95 | Radix modal with per-category toggles |
-| `src/components/gdpr/ConsentCategoryRow.tsx` | 34 | Toggle row helper (extracted to stay <100 lines) |
-| `src/components/gdpr/Analytics.tsx` | 43 | Umami gate — only mounts after `consent.analytics === true` |
-| `src/components/gdpr/CookieSettingsLink.tsx` | 24 | Footer button to reopen settings dialog |
+| File                                            | Lines | Purpose                                                     |
+| ----------------------------------------------- | ----- | ----------------------------------------------------------- |
+| `src/types/consent.ts`                          | 28    | Types + `REJECT_ALL` / `ACCEPT_ALL` constants               |
+| `src/lib/consent.ts`                            | 18    | Shared cookie name + TTL (client + server)                  |
+| `src/lib/actions/save-consent.ts`               | 34    | Server action — writes cookie with correct attributes       |
+| `src/components/gdpr/CookieConsentProvider.tsx` | 92    | Client provider with React context                          |
+| `src/components/gdpr/CookieBanner.tsx`          | 74    | Fixed bottom-bar with 4 actions                             |
+| `src/components/gdpr/CookieSettingsDialog.tsx`  | 95    | Radix modal with per-category toggles                       |
+| `src/components/gdpr/ConsentCategoryRow.tsx`    | 34    | Toggle row helper (extracted to stay <100 lines)            |
+| `src/components/gdpr/Analytics.tsx`             | 43    | Umami gate — only mounts after `consent.analytics === true` |
+| `src/components/gdpr/CookieSettingsLink.tsx`    | 24    | Footer button to reopen settings dialog                     |
 
 ### Modified files (2)
 
-| File | Change |
-|---|---|
+| File                                     | Change                                                              |
+| ---------------------------------------- | ------------------------------------------------------------------- |
 | `src/app/(frontend)/[locale]/layout.tsx` | Wraps children in `<CookieConsentProvider>`; mounts `<Analytics />` |
-| `src/components/layout/Footer.tsx` | Appends `<CookieSettingsLink />` to legal links row |
+| `src/components/layout/Footer.tsx`       | Appends `<CookieSettingsLink />` to legal links row                 |
 
 ## UX choices (confirmed with user)
 
 - **Format**: hybrid — bottom-bar with Accept all / Necessary only / Customize, where Customize opens a settings modal with per-category toggles.
-- **Close (X) = Necessary only**: GDPR-conservative per CJEU C-673/17 *Planet49* — absence of explicit consent = no consent.
+- **Close (X) = Necessary only**: GDPR-conservative per CJEU C-673/17 _Planet49_ — absence of explicit consent = no consent.
 - **Renewable**: cookie TTL 12 months; visitors can revise via Footer link at any time.
 
 ## Cookie attributes
 
-| Attribute | Value | Why |
-|---|---|---|
-| Name | `__Host-consent` (prod) / `consent` (dev) | `__Host-` prefix requires `Secure`, blocked on plain-HTTP localhost |
-| `Path` | `/` | Required by `__Host-` prefix |
-| `Secure` | prod=true, dev=false | HTTPS-only in prod; dev runs over HTTP localhost |
-| `SameSite` | `Lax` | Sent on top-level navigation, safe vs CSRF |
-| `HttpOnly` | `false` | Banner provider reads it client-side to skip banner for returning users |
-| `Max-Age` | 31 536 000 (12 months) | §14 "renewable" requirement |
+| Attribute  | Value                                     | Why                                                                     |
+| ---------- | ----------------------------------------- | ----------------------------------------------------------------------- |
+| Name       | `__Host-consent` (prod) / `consent` (dev) | `__Host-` prefix requires `Secure`, blocked on plain-HTTP localhost     |
+| `Path`     | `/`                                       | Required by `__Host-` prefix                                            |
+| `Secure`   | prod=true, dev=false                      | HTTPS-only in prod; dev runs over HTTP localhost                        |
+| `SameSite` | `Lax`                                     | Sent on top-level navigation, safe vs CSRF                              |
+| `HttpOnly` | `false`                                   | Banner provider reads it client-side to skip banner for returning users |
+| `Max-Age`  | 31 536 000 (12 months)                    | §14 "renewable" requirement                                             |
 
 ## Architectural notes
 

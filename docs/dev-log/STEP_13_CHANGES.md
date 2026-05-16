@@ -96,6 +96,7 @@ make up
 ```
 
 `make up` performs four steps under the hood:
+
 1. `docker compose up -d postgres`
 2. wait until postgres is healthy
 3. `docker compose build app` (builder stage talks to Postgres on host:5432)
@@ -153,6 +154,7 @@ dev container. Production stack validation happens in CI.
 ## What's next
 
 **Step 14 — CI/CD**:
+
 - `.github/workflows/{ci,deploy,codeql}.yml`
 - Isolated Postgres service container for e2e in CI
 - This is where Docker artifacts get their canonical validation on Linux

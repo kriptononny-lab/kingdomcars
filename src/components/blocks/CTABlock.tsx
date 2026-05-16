@@ -17,7 +17,7 @@ export function CTABlockView({ block }: Props) {
   return (
     <section className="bg-gold py-16">
       <Container className="text-center">
-        <h2 className="mb-3 font-heading text-[clamp(1.6rem,3vw,2.2rem)] font-semibold uppercase tracking-wider text-black">
+        <h2 className="font-heading mb-3 text-[clamp(1.6rem,3vw,2.2rem)] font-semibold tracking-wider text-black uppercase">
           {block.title}
         </h2>
         {block.body ? <p className="mx-auto mb-7 max-w-2xl text-black/70">{block.body}</p> : null}

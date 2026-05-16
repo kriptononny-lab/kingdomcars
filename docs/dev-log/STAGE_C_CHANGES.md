@@ -10,46 +10,46 @@
 
 ### Новые файлы
 
-| Файл | Что внутри |
-|---|---|
-| `src/lib/get-page-by-slug.ts` | `getPageBySlug()` + приватная `asPageDoc()` — 69 строк |
-| `src/lib/get-page-slugs.ts` | `getAllPageSlugs()` — 21 строка |
-| `src/lib/get-pages-for-sitemap.ts` | `SitemapPage` interface + `getAllPagesForSitemap()` — 44 строки |
+| Файл                                              | Что внутри                                                                  |
+| ------------------------------------------------- | --------------------------------------------------------------------------- |
+| `src/lib/get-page-by-slug.ts`                     | `getPageBySlug()` + приватная `asPageDoc()` — 69 строк                      |
+| `src/lib/get-page-slugs.ts`                       | `getAllPageSlugs()` — 21 строка                                             |
+| `src/lib/get-pages-for-sitemap.ts`                | `SitemapPage` interface + `getAllPagesForSitemap()` — 44 строки             |
 | `src/components/gdpr/useSyncFromConsentOnOpen.ts` | хук с `useEffect`/`useState` вынесенный из CookieSettingsDialog — 34 строки |
 
 ### Модифицированные файлы (24)
 
 **7 потребителей старого `@/lib/get-page`:**
 
-| Файл | Что изменилось |
-|---|---|
-| `src/components/layout/PageRenderer.tsx` | `get-page` → `get-page-by-slug` |
-| `src/app/(frontend)/[locale]/page.tsx` | `get-page` → `get-page-by-slug` |
-| `src/app/(frontend)/[locale]/cookies/page.tsx` | `get-page` → `get-page-by-slug` |
-| `src/app/(frontend)/[locale]/privacy/page.tsx` | `get-page` → `get-page-by-slug` |
-| `src/app/(frontend)/[locale]/about/page.tsx` | `get-page` → `get-page-by-slug` |
+| Файл                                             | Что изменилось                                       |
+| ------------------------------------------------ | ---------------------------------------------------- |
+| `src/components/layout/PageRenderer.tsx`         | `get-page` → `get-page-by-slug`                      |
+| `src/app/(frontend)/[locale]/page.tsx`           | `get-page` → `get-page-by-slug`                      |
+| `src/app/(frontend)/[locale]/cookies/page.tsx`   | `get-page` → `get-page-by-slug`                      |
+| `src/app/(frontend)/[locale]/privacy/page.tsx`   | `get-page` → `get-page-by-slug`                      |
+| `src/app/(frontend)/[locale]/about/page.tsx`     | `get-page` → `get-page-by-slug`                      |
 | `src/app/(frontend)/[locale]/[...slug]/page.tsx` | разделён на 2: `get-page-by-slug` + `get-page-slugs` |
-| `src/app/sitemap.ts` | `get-page` → `get-pages-for-sitemap` |
+| `src/app/sitemap.ts`                             | `get-page` → `get-pages-for-sitemap`                 |
 
 **14 потребителей старого barrel `@/types/blocks`** → перенаправлены на конкретные модули `./content`/`./business`/`./cta`/`./common`:
 
-| Файл | Куда теперь импортит |
-|---|---|
-| `src/types/globals.ts` | `LinkValue` → `common` |
-| `src/components/layout/NavLink.tsx` | `LinkValue` → `common` |
-| `src/components/blocks/FeaturesBlock.tsx` | `FeaturesBlock` → `content` |
-| `src/components/blocks/CTABlock.tsx` | `CTABlock` → `cta`, `LinkValue` → `common` |
-| `src/components/blocks/PricingBlock.tsx` | `PricingBlock` → `business` |
-| `src/components/blocks/MarqueeBlock.tsx` | `MarqueeBlock` → `content` |
-| `src/components/blocks/ContactFormBlock.tsx` | `ContactFormBlock` → `cta` |
-| `src/components/blocks/FAQBlock.tsx` | `FAQBlock` → `business` |
-| `src/components/blocks/HeroBlock.tsx` | `HeroBlock` → `content`, `LinkValue` → `common` |
-| `src/components/blocks/RichTextBlock.tsx` | `RichTextBlock` → `content` |
-| `src/components/blocks/CountersBlock.tsx` | `CountersBlock` → `business` |
-| `src/components/blocks/TestimonialsBlock.tsx` | `TestimonialsBlock` → `business` |
-| `src/components/blocks/ServicesBlock.tsx` | `ServicesBlock` → `business` |
-| `src/components/blocks/MapBlock.tsx` | `MapBlock` → `business` |
-| `src/components/blocks/ImageGalleryBlock.tsx` | `ImageGalleryBlock` → `content` |
+| Файл                                          | Куда теперь импортит                            |
+| --------------------------------------------- | ----------------------------------------------- |
+| `src/types/globals.ts`                        | `LinkValue` → `common`                          |
+| `src/components/layout/NavLink.tsx`           | `LinkValue` → `common`                          |
+| `src/components/blocks/FeaturesBlock.tsx`     | `FeaturesBlock` → `content`                     |
+| `src/components/blocks/CTABlock.tsx`          | `CTABlock` → `cta`, `LinkValue` → `common`      |
+| `src/components/blocks/PricingBlock.tsx`      | `PricingBlock` → `business`                     |
+| `src/components/blocks/MarqueeBlock.tsx`      | `MarqueeBlock` → `content`                      |
+| `src/components/blocks/ContactFormBlock.tsx`  | `ContactFormBlock` → `cta`                      |
+| `src/components/blocks/FAQBlock.tsx`          | `FAQBlock` → `business`                         |
+| `src/components/blocks/HeroBlock.tsx`         | `HeroBlock` → `content`, `LinkValue` → `common` |
+| `src/components/blocks/RichTextBlock.tsx`     | `RichTextBlock` → `content`                     |
+| `src/components/blocks/CountersBlock.tsx`     | `CountersBlock` → `business`                    |
+| `src/components/blocks/TestimonialsBlock.tsx` | `TestimonialsBlock` → `business`                |
+| `src/components/blocks/ServicesBlock.tsx`     | `ServicesBlock` → `business`                    |
+| `src/components/blocks/MapBlock.tsx`          | `MapBlock` → `business`                         |
+| `src/components/blocks/ImageGalleryBlock.tsx` | `ImageGalleryBlock` → `content`                 |
 
 **`src/types/blocks/index.ts`** — переписан: остался только `PageBlock` union (без `export type { ... } from './business'` и аналогов). Это уже не barrel: union физически не может жить ни в одном sibling-файле, потому что охватывает все три. Семантика уникальна.
 
@@ -87,6 +87,7 @@ docker compose ps
 ```
 
 Все четыре должны остаться зелёными:
+
 - `lint`: 0 ошибок (новый файл `useSyncFromConsentOnOpen.ts` прогоняется через ESLint)
 - `typecheck`: 0 ошибок (все импорты валидны, типы те же)
 - `test`: 100/100 passed (никаких тестовых файлов мы не трогали)

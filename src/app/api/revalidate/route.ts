@@ -12,7 +12,7 @@ import { getRequestId, loggerFromHeaders } from '@/lib/logger';
  * "publish" workflow from another service, or a cron job after data import.
  *
  * Auth: `Authorization: Bearer ${REVALIDATE_SECRET}`.
- * Body: `{ "tag": "pages" | "header" | "footer" | "site-settings" }`.
+ * Body: `{ "tag": "pages" | "header" | "footer" | "site-settings" | "redirects" }`.
  */
 
 export const dynamic = 'force-dynamic';
@@ -23,6 +23,7 @@ const ALLOWED_TAGS = [
   REVALIDATE.TAG_HEADER,
   REVALIDATE.TAG_FOOTER,
   REVALIDATE.TAG_SETTINGS,
+  REVALIDATE.TAG_REDIRECTS,
 ] as const;
 
 type AllowedTag = (typeof ALLOWED_TAGS)[number];

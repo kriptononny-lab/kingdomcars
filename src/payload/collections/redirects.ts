@@ -2,6 +2,10 @@ import type { CollectionConfig } from 'payload';
 
 import { anyone } from '@/payload/access/anyone';
 import { isAdmin } from '@/payload/access/is-admin';
+import {
+  revalidateRedirectsAfterChange,
+  revalidateRedirectsAfterDelete,
+} from '@/payload/hooks/revalidate-redirects';
 
 export const Redirects: CollectionConfig = {
   slug: 'redirects',
@@ -16,6 +20,10 @@ export const Redirects: CollectionConfig = {
     create: isAdmin,
     update: isAdmin,
     delete: isAdmin,
+  },
+  hooks: {
+    afterChange: [revalidateRedirectsAfterChange],
+    afterDelete: [revalidateRedirectsAfterDelete],
   },
   fields: [
     {

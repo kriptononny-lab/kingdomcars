@@ -9,7 +9,10 @@ test.describe('Contact form', () => {
 
     await page.goto('/');
     // The contact form lives inside a ContactFormBlock; scroll it into view.
-    const form = page.locator('form').filter({ has: page.getByRole('button', { name: /.+/ }) }).first();
+    const form = page
+      .locator('form')
+      .filter({ has: page.getByRole('button', { name: /.+/ }) })
+      .first();
     await form.scrollIntoViewIfNeeded();
 
     const name = uniqueName();
@@ -20,7 +23,9 @@ test.describe('Contact form', () => {
     await form.getByRole('button', { name: /.+/ }).click();
 
     // Submission is async; allow up to 8s for the action + persistence + mock call.
-    await expect.poll(async () => (await fetchTelegramMockCalls()).count, { timeout: 8000 }).toBeGreaterThan(baseline);
+    await expect
+      .poll(async () => (await fetchTelegramMockCalls()).count, { timeout: 8000 })
+      .toBeGreaterThan(baseline);
 
     const after = await fetchTelegramMockCalls();
     const last = after.calls.at(-1);

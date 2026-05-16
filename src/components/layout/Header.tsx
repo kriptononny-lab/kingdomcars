@@ -23,7 +23,7 @@ export async function Header() {
   const navItems = data.navItems ?? [];
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b border-white/5 bg-surface/85 backdrop-blur-md">
+    <header className="bg-surface/85 fixed inset-x-0 top-0 z-40 border-b border-white/5 backdrop-blur-md">
       <Container className="flex h-[76px] items-center justify-between gap-6">
         <Logo />
         <nav
@@ -34,7 +34,7 @@ export async function Header() {
             <NavLink
               key={item.id ?? item.link.label}
               link={item.link}
-              className="font-heading text-[0.82rem] font-semibold uppercase tracking-[0.06em] text-text-primary motion-safe:hover:text-gold"
+              className="font-heading text-text-primary motion-safe:hover:text-gold text-[0.82rem] font-semibold tracking-[0.06em] uppercase"
             />
           ))}
         </nav>
@@ -42,7 +42,7 @@ export async function Header() {
           {cfg.phonePrimary ? (
             <a
               href={`tel:${cfg.phonePrimary.replaceAll(/\s+/g, '')}`}
-              className="inline-flex items-center gap-2 rounded-md border border-gold/30 px-3 py-2 font-heading text-sm font-semibold text-gold motion-safe:hover:bg-gold/10"
+              className="border-gold/30 font-heading text-gold motion-safe:hover:bg-gold/10 inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm font-semibold"
               aria-label={`Call ${cfg.phonePrimary}`}
             >
               <Phone size={14} aria-hidden="true" />
@@ -54,7 +54,7 @@ export async function Header() {
             <button
               type="button"
               data-cta-open="true"
-              className="min-h-[44px] rounded-lg bg-gold px-5 py-2.5 font-heading text-sm font-semibold uppercase tracking-wider text-black motion-safe:hover:bg-gold-light"
+              className="bg-gold font-heading motion-safe:hover:bg-gold-light min-h-[44px] rounded-lg px-5 py-2.5 text-sm font-semibold tracking-wider text-black uppercase"
             >
               {data.ctaLabel}
             </button>

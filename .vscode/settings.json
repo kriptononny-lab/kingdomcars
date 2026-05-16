@@ -1,69 +1,50 @@
 {
-  // -------- Editor / save behaviour ------------------------------------------
+  // Editor — defer formatting to Prettier on save; ESLint auto-fixes after.
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "never"
   },
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
 
-  // -------- Language defaults ------------------------------------------------
-  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[yaml]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-
-  // -------- TypeScript -------------------------------------------------------
-  // Use the workspace's TS version so type errors match what `npm run typecheck`
-  // reports (avoids the "works in CI, breaks locally" trap).
+  // Typescript — use the workspace version (matches tsconfig + plugins).
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.suggest.autoImports": true,
 
-  // -------- ESLint -----------------------------------------------------------
+  // ESLint — flat config, run on save.
   "eslint.useFlatConfig": true,
+  "eslint.run": "onType",
   "eslint.workingDirectories": [{ "mode": "auto" }],
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
 
-  // -------- Tailwind v4 ------------------------------------------------------
-  // Get IntelliSense inside cn() / cva() / clsx() — without these regexes,
-  // class names in helper calls show no autocomplete or hover-preview.
+  // Tailwind IntelliSense — pick up `cva()` and `cn()` template strings.
   "tailwindCSS.experimental.classRegex": [
-    ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-    ["clsx\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+    ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
   ],
   "tailwindCSS.includeLanguages": { "typescript": "javascript", "typescriptreact": "javascript" },
 
-  // -------- File explorer / search ------------------------------------------
-  // Hide generated noise — easy to surface via View > Show Hidden in Explorer.
+  // Files — exclude noise from search/explorer but keep on disk.
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
   "files.exclude": {
     "**/.next": true,
     "**/.turbo": true,
+    "**/node_modules": true,
     "**/coverage": true,
     "**/playwright-report": true,
     "**/test-results": true,
     "**/*.tsbuildinfo": true
   },
   "search.exclude": {
+    "**/package-lock.json": true,
     "**/.next": true,
     "**/coverage": true,
-    "**/playwright-report": true,
-    "**/test-results": true,
-    "**/package-lock.json": true,
-    "**/src/payload-types.ts": true
-  },
-  "files.associations": {
-    "*.css": "tailwindcss",
-    "Dockerfile.dev": "dockerfile",
-    ".env*": "dotenv"
-  },
-  "files.insertFinalNewline": true,
-  "files.trimTrailingWhitespace": true
+    "src/payload-types.ts": true
+  }
 }

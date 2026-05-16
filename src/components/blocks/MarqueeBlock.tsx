@@ -13,7 +13,7 @@ interface Props {
 export function MarqueeBlockView({ block }: Props) {
   const text = block.text;
   return (
-    <div className="overflow-hidden bg-gold py-3" aria-label={text}>
+    <div className="bg-gold overflow-hidden py-3" aria-label={text}>
       <div
         className="flex w-max whitespace-nowrap will-change-transform"
         style={{ animation: 'marquee 30s linear infinite' }}
@@ -22,7 +22,7 @@ export function MarqueeBlockView({ block }: Props) {
         {Array.from({ length: 4 }).map((_, i) => (
           <span
             key={i}
-            className="px-8 font-heading text-sm font-bold uppercase tracking-[0.15em] text-black"
+            className="font-heading px-8 text-sm font-bold tracking-[0.15em] text-black uppercase"
           >
             {text}
           </span>

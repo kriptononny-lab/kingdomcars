@@ -57,8 +57,9 @@ the throw is wrong:
 - `scripts/stubs/server-only-loader.mjs` — Node ESM loader hook that
   short-circuits the `server-only` specifier to an empty stub. Registered
   by `scripts/bootstrap-env.mts` via `module.register()` before any user
-  code loads. Used by `tsx --import ./scripts/bootstrap-env.mts ...`,
-  which is how `npm run seed` and `npm run migrate` invoke tsx.
+  code loads. Used by `node --import=tsx/esm --import=./scripts/bootstrap-env.mts ...`,
+  which is how `npm run seed` and `npm run migrate` invoke Node (see
+  Addendum below for why this is `node + tsx/esm` rather than plain `tsx`).
 - `tests/stubs/server-only.ts` — empty module aliased from
   `vitest.config.ts` (`resolve.alias['server-only'] → tests/stubs/server-only.ts`).
   Vitest's resolver looks at aliases before walking `node_modules`, so the
@@ -97,10 +98,10 @@ one of the two stubs.
   merged because Vitest aliases want a TS file and the Node loader hook
   wants an ESM .mjs, and reaching from one to the other would create a
   circular dependency through `vite-tsconfig-paths` at test time.
-- **The loader hook runs only for tsx invocations that pass through
+- **The loader hook runs only for invocations that pass through
   `bootstrap-env.mts`.** If anyone adds a new CLI script and forgets to
-  invoke it as `tsx --import ./scripts/bootstrap-env.mts ...`, the
-  script will throw on the first `import 'server-only'` reached. The
+  invoke it as `node --import=tsx/esm --import=./scripts/bootstrap-env.mts ...`,
+  the script will throw on the first `import 'server-only'` reached. The
   fix is to copy the invocation pattern from `scripts/seed.ts` or
   `scripts/migrate.ts` (which is why the npm scripts pre-baked the
   flag).
@@ -118,3 +119,43 @@ one of the two stubs.
   check fires only at lint time, not at compile time. Naming
   conventions are even softer. Keeping the React-team-blessed mechanism
   is the lowest-effort, highest-fidelity option.
+
+## Addendum (2026-05-16): Linux CI loader-hook resolution
+
+The original loader hook above works locally on Windows + Node 24 but
+failed on the GitHub Actions Linux runner (Node 22):
+
+```
+Error: This module cannot be imported from a Client Component module.
+  at Object.<anonymous> (node_modules/server-only/index.js:1:7)
+  at Module._compile (node:internal/modules/cjs/loader:1705:14)
+  at tsx transformer (...)
+  at <anonymous> (src/lib/rate-limit.ts:1:8)
+```
+
+Root cause: with no `"type": "module"` in `package.json`, `tsx` works in
+CJS mode on Linux/Node 22; `module.register()` registers an **ESM resolve
+hook** which doesn't intercept the CJS `require('server-only')` that
+`tsx`'s CJS transformer emits.
+
+**Resolution — two layers, in order of preference:**
+
+1. **`node --import=tsx/esm --import=./scripts/bootstrap-env.mts`**
+   (applied in `package.json` `payload:migrate` and `seed`). `tsx/esm` is
+   tsx's ESM-only loader; with it registered first, every subsequent
+   import goes through ESM resolution and our `server-only-loader.mjs`
+   gets to short-circuit the `server-only` specifier. No process-level
+   stub needed.
+
+2. **`STUB_SERVER_ONLY=1` env flag at CI step** (fallback). If the ESM
+   loader path turns out not to fire on some future Node/tsx combination,
+   set the env in the CI workflow's Build and E2E jobs only. The
+   `scripts/patch-payload.mjs` postinstall script then overwrites
+   `node_modules/server-only/index.js` with an empty `module.exports = {}`.
+   Production deploys never set this env, so the real package stays in
+   place and the RSC boundary check fires as designed.
+
+Both layers are reversible: removing the env flag restores the real
+package on the next `npm ci`; switching `payload:migrate` back to plain
+`tsx --import ...` reverts the loader-hook flow. The fallback exists
+solely so the CI gate isn't blocked by a Node/tsx-interop edge case.
