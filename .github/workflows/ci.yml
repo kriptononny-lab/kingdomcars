@@ -5,14 +5,13 @@
 # (keyed off package-lock.json) so cold starts are minimised. The "build" job
 # uses SKIP_ENV_VALIDATION=1 so we don't need to expose real secrets to PRs.
 #
-# Build and E2E set STUB_SERVER_ONLY=1 so the postinstall script (see
-# scripts/patch-payload.mjs) replaces `node_modules/server-only/index.js`
-# with a no-op. The real `server-only` package throws when loaded outside
-# an RSC compiler, which crashes the tsx-driven CLI scripts (migrate, seed)
-# that we need at build time. Production deploys never set this env, so
-# the real package — and the bundler's client/server boundary check it
-# enforces — is preserved. See docs/adr/0006-server-only.md for the full
-# rationale and the loader-hook history.
+# Build, E2E and Lighthouse set STUB_SERVER_ONLY=1 so the postinstall script
+# (see scripts/patch-payload.mjs) replaces `node_modules/server-only/index.js`
+# with a no-op. The real `server-only` package throws when loaded outside an
+# RSC compiler, which crashes the tsx-driven CLI scripts (migrate, seed) that
+# we need at build time. Production deploys never set this env, so the real
+# package — and the bundler's client/server boundary check it enforces — is
+# preserved. See docs/adr/0006-server-only.md for the full rationale.
 # =============================================================================
 
 name: CI
@@ -211,16 +210,32 @@ jobs:
     name: Lighthouse CI
     needs: build
     runs-on: ubuntu-latest
+    # Lighthouse runs `next build` which (via generateStaticParams) needs to
+    # query Payload, which needs Postgres. Mirror Build's service container
+    # so the build step here has the same dependencies satisfied.
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: payload
+          POSTGRES_PASSWORD: ci_lhci_password
+          POSTGRES_DB: kingdomcars_lhci
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U payload -d kingdomcars_lhci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
       STUB_SERVER_ONLY: '1'
       SKIP_ENV_VALIDATION: '1'
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       NEXT_PUBLIC_SITE_HOST: localhost
-      PAYLOAD_SECRET: ci_test_secret_at_least_thirty_two_chars_xx
+      PAYLOAD_SECRET: ci_lhci_secret_at_least_thirty_two_chars_xx
       PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
-      REVALIDATE_SECRET: ci_test_revalidate_secret_16ch
-      DATABASE_URL: postgres://payload:ci@localhost:5432/kingdomcars_test
-      TELEGRAM_BOT_TOKEN: '0:ci_mock'
+      REVALIDATE_SECRET: ci_lhci_revalidate_secret_16ch
+      DATABASE_URL: postgres://payload:ci_lhci_password@localhost:5432/kingdomcars_lhci
+      TELEGRAM_BOT_TOKEN: '0:ci_lhci_mock'
       TELEGRAM_CHAT_ID: '-1'
     steps:
       - uses: actions/checkout@v4
@@ -229,6 +244,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci --no-audit --no-fund
+      - name: Apply Payload migrations
+        run: npm run payload:migrate
       - run: npm run build
       - name: Run LHCI
         run: npx --yes @lhci/cli@0.14.x autorun --config=.lighthouserc.json
