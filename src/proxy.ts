@@ -1,6 +1,6 @@
+import createMiddleware from 'next-intl/middleware';
 import type { NextResponse } from 'next/server';
 import { type NextRequest } from 'next/server';
-import createMiddleware from 'next-intl/middleware';
 
 import { routing } from '@/i18n/routing';
 import { HEADERS } from '@/lib/constants';

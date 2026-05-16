@@ -56,7 +56,7 @@ export function buildPageMetadata(page: PageDoc, locale: Locale): Metadata {
       description,
       url: canonical,
       siteName: SITE.NAME,
-      locale: locale === 'pl' ? 'pl_PL' : (locale === 'en' ? 'en_GB' : 'ru_RU'),
+      locale: locale === 'pl' ? 'pl_PL' : locale === 'en' ? 'en_GB' : 'ru_RU',
       type: 'website',
     },
     twitter: { card: 'summary_large_image', title, description },

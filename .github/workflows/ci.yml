@@ -88,19 +88,31 @@ jobs:
     name: Build
     needs: install
     runs-on: ubuntu-latest
+    # `next build` walks `generateStaticParams` for `/[locale]/[...slug]`,
+    # which queries Payload (and therefore Postgres) for the list of slugs.
+    # In docker-compose this works because compose brings Postgres up first;
+    # in CI we mirror that with a service container plus a migrate step so
+    # the schema exists before the build runs.
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: payload
+          POSTGRES_PASSWORD: ci_build_password
+          POSTGRES_DB: kingdomcars_build
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U payload -d kingdomcars_build"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
-      # `SKIP_ENV_VALIDATION=1` skips our Zod validation in `src/lib/env.ts`,
-      # but Payload itself runs its own init check during `Collecting page data`
-      # (it reads `PAYLOAD_SECRET` directly via `process.env`). Without these
-      # values the build fails with "missing secret key. A secret key is
-      # needed to secure Payload." — even though no real DB is touched.
-      # The values below are mocks; the build never connects to anything.
       SKIP_ENV_VALIDATION: '1'
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       NEXT_PUBLIC_SITE_HOST: localhost
+      DATABASE_URL: postgres://payload:ci_build_password@localhost:5432/kingdomcars_build
       PAYLOAD_SECRET: ci_build_mock_secret_at_least_thirty_two_chars
       PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
-      DATABASE_URL: postgres://mock:mock@localhost:5432/mock_build_db
       REVALIDATE_SECRET: ci_build_mock_revalidate_secret_16ch
       TELEGRAM_BOT_TOKEN: '0:ci_build_mock'
       TELEGRAM_CHAT_ID: '-1'
@@ -111,6 +123,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci --no-audit --no-fund
+      - name: Apply Payload migrations
+        run: npm run payload:migrate
       - run: npm run build
       - name: Bundle size report
         run: npx bundlewatch --config bundlewatch.config.json || true
@@ -151,6 +165,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci --no-audit --no-fund
+      - name: Apply Payload migrations
+        run: npm run payload:migrate
+      - name: Seed test data
+        run: npm run seed
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4
