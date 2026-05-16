@@ -80,6 +80,18 @@ jobs:
             SKIP_ENV_VALIDATION=1
             NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }}
             NEXT_PUBLIC_SITE_HOST=${{ vars.NEXT_PUBLIC_SITE_HOST }}
+            PAYLOAD_SECRET=ci_image_build_mock_secret_at_least_32ch
+            PAYLOAD_PUBLIC_SERVER_URL=${{ vars.NEXT_PUBLIC_SITE_URL }}
+            DATABASE_URL=postgres://mock:mock@localhost:5432/mock_build_db
+            REVALIDATE_SECRET=ci_image_build_mock_revalidate_16ch
+            TELEGRAM_BOT_TOKEN=0:ci_image_build_mock
+            TELEGRAM_CHAT_ID=-1
+            # These are MOCKS used only to satisfy Payload's init check during
+            # `next build` page-data collection inside the image. They are NOT
+            # baked into runtime — the prod container reads real values from
+            # `.env.production` mounted at runtime via docker-compose. If a real
+            # build accidentally pinned these as defaults, the prod start would
+            # fail with the same secret check, surfacing the misconfiguration.
 
   deploy:
     name: SSH deploy

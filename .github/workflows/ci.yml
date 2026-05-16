@@ -89,9 +89,21 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     env:
+      # `SKIP_ENV_VALIDATION=1` skips our Zod validation in `src/lib/env.ts`,
+      # but Payload itself runs its own init check during `Collecting page data`
+      # (it reads `PAYLOAD_SECRET` directly via `process.env`). Without these
+      # values the build fails with "missing secret key. A secret key is
+      # needed to secure Payload." — even though no real DB is touched.
+      # The values below are mocks; the build never connects to anything.
       SKIP_ENV_VALIDATION: '1'
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       NEXT_PUBLIC_SITE_HOST: localhost
+      PAYLOAD_SECRET: ci_build_mock_secret_at_least_thirty_two_chars
+      PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
+      DATABASE_URL: postgres://mock:mock@localhost:5432/mock_build_db
+      REVALIDATE_SECRET: ci_build_mock_revalidate_secret_16ch
+      TELEGRAM_BOT_TOKEN: '0:ci_build_mock'
+      TELEGRAM_CHAT_ID: '-1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

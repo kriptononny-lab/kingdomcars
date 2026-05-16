@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { setRequestLocale } from 'next-intl/server';
 
 import { PageRenderer } from '@/components/layout/PageRenderer';
 import { LOCALES, type Locale } from '@/lib/constants';

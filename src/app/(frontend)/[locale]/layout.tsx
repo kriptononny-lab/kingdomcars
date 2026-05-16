@@ -1,6 +1,6 @@
+import { notFound } from 'next/navigation';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
-import { notFound } from 'next/navigation';
 
 import { MotionProvider } from '@/components/animations/MotionProvider';
 import { CtaFormProvider } from '@/components/features/CtaFormProvider';
