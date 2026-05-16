@@ -4,6 +4,15 @@
 # Jobs run in parallel where possible. Each job restores the same npm cache
 # (keyed off package-lock.json) so cold starts are minimised. The "build" job
 # uses SKIP_ENV_VALIDATION=1 so we don't need to expose real secrets to PRs.
+#
+# Build and E2E set STUB_SERVER_ONLY=1 so the postinstall script (see
+# scripts/patch-payload.mjs) replaces `node_modules/server-only/index.js`
+# with a no-op. The real `server-only` package throws when loaded outside
+# an RSC compiler, which crashes the tsx-driven CLI scripts (migrate, seed)
+# that we need at build time. Production deploys never set this env, so
+# the real package — and the bundler's client/server boundary check it
+# enforces — is preserved. See docs/adr/0006-server-only.md for the full
+# rationale and the loader-hook history.
 # =============================================================================
 
 name: CI
@@ -107,6 +116,9 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
+      # CI-only stub: replace `server-only` with a no-op so the migrate /
+      # seed CLI scripts can import server modules. See header for details.
+      STUB_SERVER_ONLY: '1'
       SKIP_ENV_VALIDATION: '1'
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       NEXT_PUBLIC_SITE_HOST: localhost
@@ -149,6 +161,8 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
+      # CI-only stub: see header for rationale.
+      STUB_SERVER_ONLY: '1'
       DATABASE_URL: postgres://payload:ci_test_password@localhost:5432/kingdomcars_test
       PAYLOAD_SECRET: ci_test_secret_at_least_thirty_two_chars_xx
       PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
@@ -198,6 +212,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     env:
+      STUB_SERVER_ONLY: '1'
       SKIP_ENV_VALIDATION: '1'
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       NEXT_PUBLIC_SITE_HOST: localhost

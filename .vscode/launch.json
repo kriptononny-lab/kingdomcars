@@ -2,80 +2,58 @@
   "version": "0.2.0",
   "configurations": [
     {
-      // Run `next dev` under the Node debugger. Stops on uncaught exceptions
-      // and `debugger` statements anywhere in server code (Server Components,
-      // route handlers, server actions).
-      "name": "Next.js: dev (server)",
+      "name": "Next.js: dev server (server-side)",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
-      "skipFiles": ["<node_internals>/**"],
-      "console": "integratedTerminal",
-      "env": {
-        "NODE_OPTIONS": "--inspect"
-      }
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "serverReadyAction": {
+        "pattern": "started server on .+, url: (https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      },
+      "console": "integratedTerminal"
     },
     {
-      // Attach to an already-running Next dev server (port 9229). Useful when
-      // you started the app via Docker but want to debug into the container.
-      "name": "Next.js: attach server",
-      "type": "node",
-      "request": "attach",
-      "port": 9229,
-      "restart": true,
-      "skipFiles": ["<node_internals>/**"]
-    },
-    {
-      // Open a Chrome window pointed at localhost:3000 with the VS Code
-      // debugger attached. Breakpoints in Client Components and browser code
-      // resolve via sourcemaps.
-      "name": "Next.js: dev (client Chrome)",
+      "name": "Next.js: dev (client-side, Chrome)",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}",
-      "sourceMapPathOverrides": {
-        "webpack://_N_E/*": "${webRoot}/*"
-      }
+      "sourceMaps": true,
+      "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile"
     },
     {
-      // Run only the currently open test file in the debugger.
       "name": "Vitest: current file",
       "type": "node",
       "request": "launch",
+      "autoAttachChildProcesses": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
       "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
       "args": ["run", "${relativeFile}"],
-      "console": "integratedTerminal",
-      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+      "smartStep": true,
+      "console": "integratedTerminal"
     },
     {
-      "name": "Vitest: all",
+      "name": "Vitest: all tests",
       "type": "node",
       "request": "launch",
+      "autoAttachChildProcesses": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
       "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
       "args": ["run"],
-      "console": "integratedTerminal",
-      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+      "smartStep": true,
+      "console": "integratedTerminal"
     },
     {
-      // Open Playwright's interactive UI runner — the easiest way to step
-      // through an e2e test.
-      "name": "Playwright: debug (UI)",
+      "name": "Playwright: current test file",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/node_modules/@playwright/test/cli.js",
-      "args": ["test", "--ui"],
+      "program": "${workspaceFolder}/node_modules/.bin/playwright",
+      "args": ["test", "${relativeFile}", "--headed"],
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
       "console": "integratedTerminal"
-    }
-  ],
-  "compounds": [
-    {
-      // Start dev server + open Chrome with debugger. One click, full-stack
-      // debugging in two panes.
-      "name": "Full debug (server + client)",
-      "configurations": ["Next.js: dev (server)", "Next.js: dev (client Chrome)"],
-      "stopAll": true
     }
   ]
 }

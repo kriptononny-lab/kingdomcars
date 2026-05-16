@@ -1,27 +1,28 @@
 import createMiddleware from 'next-intl/middleware';
-import type { NextResponse } from 'next/server';
-import { type NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
 import { routing } from '@/i18n/routing';
 import { HEADERS } from '@/lib/constants';
+import { findRedirect } from '@/lib/get-redirects';
 import { buildContentSecurityPolicy } from '@/lib/security-headers';
 
 /**
- * Next 16 renames `middleware.ts` в†’ `proxy.ts`. Same runtime, clearer name.
+ * Next 16 renames `middleware.ts` → `proxy.ts` and pins the runtime to
+ * Node.js (Edge is no longer supported here per the v16 upgrade docs).
+ * That's what lets us reach Payload directly via `findRedirect()`.
  *
  * Responsibilities (chained):
- *   1. Generate a per-request CSP nonce (cryptographically random, base64).
- *   2. Generate (or pass through) an `x-request-id` for log correlation (В§16).
- *   3. Forward nonce + request-id on the incoming request so downstream
- *      Server Components / actions / route handlers can read them via
- *      `headers()`.
- *   4. Delegate locale routing to `next-intl`.
- *   5. Stamp the response with `Content-Security-Policy` containing the
- *      same nonce + `'strict-dynamic'`, and echo the request-id so the
- *      browser DevTools / Sentry can correlate.
+ *   1. Editor-managed redirects (§6 `Redirects` collection). Looked up via
+ *      a tagged `unstable_cache`; the `Redirects.afterChange` hook flips
+ *      the tag so changes take effect immediately.
+ *   2. Per-request CSP nonce (cryptographically random, base64) (§13).
+ *   3. `x-request-id` for log correlation (§16) — generated, or trusted
+ *      from an upstream proxy after a strict allow-list check.
+ *   4. Locale routing — delegated to `next-intl`.
+ *   5. CSP + request-id stamped on the response.
  *
- * Matcher excludes /admin/*, /api/*, /sentry-tunnel/*, /_next/*, fonts,
- * files with extensions. The Sentry tunnel route bypasses i18n entirely.
+ * Matcher excludes /admin, /api, /sentry-tunnel, /_next, fonts, anything
+ * with an extension. The Sentry tunnel bypasses i18n entirely.
  */
 
 const handleI18n = createMiddleware(routing);
@@ -38,7 +39,17 @@ function resolveRequestId(req: NextRequest): string {
   return crypto.randomUUID();
 }
 
-export default function proxy(req: NextRequest): NextResponse {
+async function tryRedirect(req: NextRequest): Promise<NextResponse | null> {
+  const rule = await findRedirect(req.nextUrl.pathname);
+  if (!rule) return null;
+  const target = rule.to.startsWith('http') ? rule.to : new URL(rule.to, req.url).toString();
+  return NextResponse.redirect(target, rule.statusCode);
+}
+
+export default async function proxy(req: NextRequest): Promise<NextResponse> {
+  const redirect = await tryRedirect(req);
+  if (redirect) return redirect;
+
   const nonce = generateNonce();
   const requestId = resolveRequestId(req);
   req.headers.set(HEADERS.NONCE, nonce);

@@ -1,39 +1,17 @@
 {
-  // Extensions VS Code will offer to install on first open of this repo.
-  // Keep this list short and high-signal — every entry should pay rent.
   "recommendations": [
-    // Core formatting & linting
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-
-    // Stack-specific
     "bradlc.vscode-tailwindcss",
-    "ms-azuretools.vscode-docker",
-    "github.vscode-github-actions",
-    "ms-playwright.playwright",
-    "vitest.explorer",
-
-    // TypeScript ergonomics
-    "yoavbls.pretty-ts-errors",
     "usernamehw.errorlens",
-
-    // Git & GitHub
     "eamodio.gitlens",
-    "github.vscode-pull-request-github",
-
-    // Format helpers
-    "redhat.vscode-yaml",
-    "tamasfe.even-better-toml",
-
-    // Quality of life
+    "ms-azuretools.vscode-docker",
+    "yoavbls.pretty-ts-errors",
+    "orta.vscode-jest",
+    "ms-playwright.playwright",
     "streetsidesoftware.code-spell-checker",
-    "mikestead.dotenv"
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml"
   ],
-
-  "unwantedRecommendations": [
-    // dprint conflicts with prettier formatter selection
-    "dprint.dprint",
-    // We use eslint flat config — stylelint isn't part of the stack
-    "stylelint.vscode-stylelint"
-  ]
+  "unwantedRecommendations": ["hookyqr.beautify", "ms-vscode.vscode-typescript-tslint-plugin"]
 }

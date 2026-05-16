@@ -48,6 +48,7 @@ export const REVALIDATE = {
   TAG_HEADER: 'header',
   TAG_FOOTER: 'footer',
   TAG_SETTINGS: 'site-settings',
+  TAG_REDIRECTS: 'redirects',
 } as const;
 
 /** HTTP header names we set or read across the request lifecycle (§16). */
