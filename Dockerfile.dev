@@ -11,7 +11,7 @@
 # resolution and native modules (sharp, @parcel/watcher) behave identically.
 # =============================================================================
 
-FROM node:24-alpine
+FROM node:26-alpine
 
 RUN apk add --no-cache libc6-compat
 

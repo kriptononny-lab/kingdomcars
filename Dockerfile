@@ -27,7 +27,7 @@
 # =============================================================================
 
 # -------- 1. deps -----------------------------------------------------------
-FROM node:24-alpine AS deps
+FROM node:26-alpine AS deps
 RUN apk add --no-cache libc6-compat
 # Match host npm 11 so `npm ci` reads the lockfile with the same resolution
 # rules used to write it. node:24-alpine still ships npm 10 by default.
@@ -39,7 +39,7 @@ RUN --mount=type=cache,id=npm,target=/root/.npm \
     npm ci --no-audit --no-fund
 
 # -------- 2. builder --------------------------------------------------------
-FROM node:24-alpine AS builder
+FROM node:26-alpine AS builder
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 
@@ -77,7 +77,7 @@ COPY . .
 CMD ["npm", "run", "seed"]
 
 # -------- 4. runner ---------------------------------------------------------
-FROM node:24-alpine AS runner
+FROM node:26-alpine AS runner
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 ENV NODE_ENV=production \
