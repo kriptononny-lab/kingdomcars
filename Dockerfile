@@ -5,7 +5,8 @@
 # Stages:
 #   1. deps     — install full dependency tree (cached separately from src)
 #   2. builder  — next build (standalone output, needs live DB for ISR pages)
-#   3. runner   — node:24-alpine + standalone output + non-root nextjs:1001
+#   3. seeder   — deps + source; runs tsx seed/migrate scripts
+#   4. runner   — node:24-alpine + standalone output + non-root nextjs:1001
 #
 # Node 24 pinned across all stages so it matches the host's npm 11 lockfile
 # format. Mixing host npm 11 (lockfileVersion v3 with new optionalDependency
@@ -34,7 +35,7 @@ RUN npm install -g npm@11
 WORKDIR /app
 COPY package.json package-lock.json* .npmrc* ./
 COPY scripts/patch-payload.mjs ./scripts/patch-payload.mjs
-RUN --mount=type=cache,target=/root/.npm \
+RUN --mount=type=cache,id=npm,target=/root/.npm \
     npm ci --no-audit --no-fund
 
 # -------- 2. builder --------------------------------------------------------
@@ -68,13 +69,20 @@ COPY . .
 # Use webpack: Turbopack's standalone external resolution misses pino/dataloader.
 RUN npx next build --webpack
 
-# -------- 3. runner ---------------------------------------------------------
+# -------- 3. seeder (make seed / make migrate) ------------------------------
+# Inherits full node_modules from deps + source. No next build needed.
+# Runs tsx directly so all TypeScript path aliases resolve.
+FROM deps AS seeder
+COPY . .
+CMD ["npm", "run", "seed"]
+
+# -------- 4. runner ---------------------------------------------------------
 FROM node:24-alpine AS runner
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
-    PORT=3000 \
+    PORT=${PORT:-3000} \
     HOSTNAME=0.0.0.0
 
 RUN addgroup --system --gid 1001 nodejs \
