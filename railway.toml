@@ -1,6 +1,3 @@
-[build]
-watchPatterns = ["src/**", "scripts/**", "public/**"]
-
 [deploy]
 startCommand = "node server.js"
 healthcheckPath = "/api/health"
