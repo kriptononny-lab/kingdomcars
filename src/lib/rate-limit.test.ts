@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { applyEnv, restoreEnv, snapshotEnv } from '../../tests/fixtures/env-stubs';
+import { applyEnv, restoreEnv, snapshotEnv } from '@tests/fixtures/env-stubs';
 
 let snap: ReturnType<typeof snapshotEnv>;
 

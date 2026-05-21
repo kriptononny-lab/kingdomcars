@@ -16,7 +16,7 @@ interface Props {
  */
 export function FAQBlockView({ block }: Props) {
   return (
-    <section className="py-20">
+    <section className="py-28">
       <JsonLd data={faqPageJsonLd(block.items)} />
       <Container>
         <SectionHeader title={block.sectionTitle} />

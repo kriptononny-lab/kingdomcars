@@ -1,0 +1,42 @@
+# syntax=docker/dockerfile:1.7
+# =============================================================================
+# KingdomCars dev image.
+#
+# Used by `docker compose -f docker-compose.yml -f docker-compose.dev.yml up`
+# (or `make dev`) to run `next dev` with hot reload inside a container while
+# the source tree is bind-mounted from the host. No standalone build, no
+# Sentry wrap, no asset hashing — every change visible on the next request.
+#
+# Pinned to the same Node major as production Dockerfile so dependency
+# resolution and native modules (sharp, @parcel/watcher) behave identically.
+# =============================================================================
+
+FROM node:24-alpine
+
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+ENV NODE_ENV=development \
+    NEXT_TELEMETRY_DISABLED=1 \
+    PORT=3000 \
+    HOSTNAME=0.0.0.0 \
+    WATCHPACK_POLLING=true \
+    CHOKIDAR_USEPOLLING=true
+
+# Install dependencies in a separate layer so source edits don't bust the
+# npm cache. lockfile + .npmrc together — the .npmrc holds legacy-peer-deps
+# which changes what `npm ci` will accept (see SESSION_HANDOFF.md lesson 10).
+COPY package.json package-lock.json* .npmrc* ./
+RUN npm ci --no-audit --no-fund
+
+# Source is mounted at runtime via the compose volume — this COPY is only
+# the fallback for `docker build` without compose.
+COPY . .
+
+EXPOSE 3000
+
+# Polling is the cross-platform safety net for inotify quirks on Docker
+# Desktop (Windows/macOS bind mounts) — costs a touch of CPU, gains
+# reliable hot-reload everywhere.
+CMD ["npm", "run", "dev"]

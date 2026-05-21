@@ -10,6 +10,12 @@ import { LOCALES, SITE, type Locale } from '@/lib/constants';
  * 1200×630 — the size every social platform expects. Falls back to system
  * fonts if the custom font fails to load (decorative, not load-blocking).
  *
+ * Placement note: §5 lists `opengraph-image.tsx` at `src/app/` level, but
+ * Next.js OG-image files only receive `params` from the route segment they
+ * live in. A root-level file has no `locale` param → can't localise the
+ * tagline or load the right font subset. Keeping it here (`[locale]/`) is
+ * the correct Next.js i18n pattern and supersedes the spec's flat listing.
+ *
  * Runtime: Node.js. The Edge runtime can't read from `public/fonts/` via
  * `fs`; we'd have to bundle fonts as imports, which is a lot of glue for
  * marginal latency win on a cached endpoint.

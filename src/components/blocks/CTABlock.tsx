@@ -23,24 +23,29 @@ export function CTABlockView({ block }: Props) {
         {block.body ? <p className="mx-auto mb-7 max-w-2xl text-black/70">{block.body}</p> : null}
         {block.ctas && block.ctas.length > 0 ? (
           <div className="flex flex-wrap justify-center gap-4">
-            {block.ctas.map((cta, i) => {
-              const href = ctaHref(cta);
+            {block.ctas.map((entry, i) => {
+              const { link } = entry;
+              const href = ctaHref(link);
               if (href) {
                 return (
                   <CTAButton
-                    key={i}
+                    key={entry.id ?? i}
                     href={href}
                     variant={i === 0 ? 'primary' : 'secondary'}
-                    target={cta.kind === 'external' && cta.newTab ? '_blank' : undefined}
-                    rel={cta.kind === 'external' ? 'noopener' : undefined}
+                    target={link.kind === 'external' && link.newTab ? '_blank' : undefined}
+                    rel={link.kind === 'external' ? 'noopener' : undefined}
                   >
-                    {cta.label}
+                    {link.label}
                   </CTAButton>
                 );
               }
               return (
-                <CTAButton key={i} openCtaForm variant={i === 0 ? 'primary' : 'secondary'}>
-                  {cta.label}
+                <CTAButton
+                  key={entry.id ?? i}
+                  openCtaForm
+                  variant={i === 0 ? 'primary' : 'secondary'}
+                >
+                  {link.label}
                 </CTAButton>
               );
             })}

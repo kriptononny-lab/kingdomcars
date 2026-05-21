@@ -8,7 +8,7 @@ interface Props {
 
 export function ContactFormBlockView({ block }: Props) {
   return (
-    <section id="contact-form" className="bg-gold relative overflow-hidden py-16">
+    <section id="contact-form" className="bg-gold relative overflow-hidden py-24">
       <Container className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
         <div>
           <h2 className="font-heading mb-2 text-[clamp(1.5rem,3vw,2rem)] font-semibold tracking-wider text-black uppercase">

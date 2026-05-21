@@ -13,7 +13,7 @@ interface Props {
 export function NumberedGrid({ items, quote }: Props) {
   return (
     <>
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
         {items.map((item, i) => (
           <article
             key={i}
@@ -25,7 +25,7 @@ export function NumberedGrid({ items, quote }: Props) {
             >
               {String(i + 1).padStart(2, '0')}
             </span>
-            <h4 className="font-heading relative mb-2 text-base font-semibold tracking-wider uppercase">
+            <h4 className="font-heading relative mb-3 text-base font-semibold tracking-wider uppercase">
               {item.title}
             </h4>
             {item.subtitle ? (
@@ -35,7 +35,7 @@ export function NumberedGrid({ items, quote }: Props) {
         ))}
       </div>
       {quote ? (
-        <blockquote className="border-gold/20 bg-gold/[0.06] text-text-muted mt-10 rounded-lg border p-8 text-base leading-relaxed italic">
+        <blockquote className="border-gold/20 bg-gold/[0.06] text-text-muted mt-14 rounded-lg border p-8 text-base leading-relaxed italic">
           {quote}
         </blockquote>
       ) : null}

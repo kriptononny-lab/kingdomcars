@@ -13,12 +13,8 @@
 # package — and the bundler's client/server boundary check it enforces — is
 # preserved. See docs/adr/0006-server-only.md for the full rationale.
 #
-# Lighthouse is informational (continue-on-error). The thresholds in
-# .lighthouserc.json are aspirational quality gates (a11y=1.0, seo=1.0)
-# that target feature-complete state. Several known content/a11y bugs are
-# tracked in STEP_12_KNOWN_ISSUES.md and won't pass until the cleanup
-# patch lands. Flipping LHCI back to a hard gate is the last step of that
-# cleanup ticket.
+# Lighthouse gate (§11): perf ≥ 0.95, a11y / best-practices / seo = 1.0.
+# Thresholds live in `.lighthouserc.json`. Regressions block the merge.
 # =============================================================================
 
 name: CI
@@ -209,10 +205,8 @@ jobs:
     name: Lighthouse CI
     needs: build
     runs-on: ubuntu-latest
-    # Don't block the merge on LHCI while STEP_12_KNOWN_ISSUES.md content/a11y
-    # bugs are still in flight. Once those land and `.lighthouserc.json`
-    # thresholds reflect actual achievable scores, remove this line.
-    continue-on-error: true
+    # §11 gate: perf ≥ 0.95, a11y/best-practices/seo = 1.0. If the build
+    # regresses, the merge is blocked — that's the whole point of the gate.
     services:
       postgres:
         image: postgres:16-alpine

@@ -23,14 +23,14 @@ function Stars({ rating }: { rating: number }) {
 
 export function TestimonialsBlockView({ block }: Props) {
   return (
-    <section id="reviews" className="py-20">
+    <section id="reviews" className="py-28">
       <Container>
         <SectionHeader title={block.sectionTitle} />
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {block.items.map((item, i) => (
             <article
-              key={i}
-              className="bg-surface-card motion-safe:hover:border-gold/20 rounded-lg border border-white/5 p-7 transition-all duration-300"
+              key={item.id ?? i}
+              className="bg-surface-card motion-safe:hover:border-gold/20 rounded-lg border border-white/5 p-8 transition-all duration-300"
             >
               <header className="mb-4 flex items-center gap-3">
                 <div

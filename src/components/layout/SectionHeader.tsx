@@ -23,7 +23,7 @@ export function SectionHeader({
   return (
     <div
       className={cn(
-        'mb-12 flex items-center gap-4',
+        'mb-16 flex items-center gap-4',
         align === 'center' && 'justify-center',
         className,
       )}

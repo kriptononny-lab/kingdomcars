@@ -13,7 +13,16 @@ interface Props {
 }
 
 /** Slugs handled by their own explicit routes — must NOT be SSG'd here. */
-const RESERVED = new Set(['home', 'about', 'privacy', 'cookies']);
+const RESERVED = new Set([
+  'home',
+  'about',
+  'privacy',
+  'cookies',
+  'uslugi',
+  'services',
+  'cennik',
+  'pricing',
+]);
 
 /**
  * Build SSG params for every published Page in every locale, minus the

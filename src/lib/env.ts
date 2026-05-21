@@ -75,8 +75,10 @@ const isServerSide =
   globalThis.window === undefined ||
   (typeof process !== 'undefined' && typeof process.versions?.node === 'string');
 
+/** Validated client-safe environment variables (safe to expose to the browser). */
 export const clientEnv = parse(clientSchema, process.env, 'client');
 
+/** Validated server-only environment variables. Throws on missing required vars. */
 export const serverEnv = isServerSide
   ? parse(serverSchema, process.env, 'server')
   : ({} as z.infer<typeof serverSchema>);

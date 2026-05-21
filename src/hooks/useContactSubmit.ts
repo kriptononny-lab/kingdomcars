@@ -4,9 +4,9 @@ import { useTranslations } from 'next-intl';
 import { useTransition } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 
-import { submitContactAction, type ContactActionResult } from '@/actions/submit-contact';
 import { type Locale } from '@/lib/constants';
 import { contactDefaults, type ContactInput } from '@/lib/contact-schema';
+import { submitContactAction, type ContactActionResult } from '@/lib/submit-contact';
 
 interface Options {
   locale: Locale;

@@ -9,13 +9,13 @@ interface Props {
 
 export function ServicesBlockView({ block }: Props) {
   return (
-    <section id="services" className="py-20">
+    <section id="services" className="bg-surface-section py-28">
       <Container>
         <SectionHeader title={block.sectionTitle} />
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {block.items.map((item, i) => (
             <article
-              key={i}
+              key={item.id ?? i}
               className="group bg-surface-card flex flex-col overflow-hidden rounded-lg border border-white/5 transition-all duration-300 motion-safe:hover:shadow-[0_25px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(232,168,37,0.3)]"
             >
               <div className="flex h-[200px] items-center justify-center overflow-hidden">
@@ -29,8 +29,8 @@ export function ServicesBlockView({ block }: Props) {
                 </h3>
                 {/*
                   `aria-label` guarantees an accessible name even if a Payload
-                  editor accidentally empties the `cta` field — STEP_12_KNOWN_ISSUES #1.
-                  Visible text falls through to `item.title` for the same reason.
+                  editor accidentally empties the `cta` field. Visible text
+                  falls through to `item.title` for the same reason.
                 */}
                 <button
                   type="button"

@@ -3,24 +3,22 @@ import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
 /**
- * Accessibility scan — currently in **informational mode**.
+ * Accessibility scan — currently in **informational mode** (logs axe
+ * violations per page, does not fail the build).
  *
- * Three known critical/serious violations are tracked in
- * `docs/dev-log/STEP_12_KNOWN_ISSUES.md` and have NOT been fixed in source
- * yet (the cleanup patch they reference is still pending):
- *   • button-name        → `ServicesBlock` CTA buttons render empty on
- *     locales where the seed didn't write `items[].cta` / `items[].title`
- *     (Payload localised-array seed gotcha — needs explicit `id` per item)
- *   • link-name          → `NavLink` fallback never fires
- *   • color-contrast     → consent text on `bg-gold` is too low contrast
+ * Three classes of issues were previously tracked here:
+ *   • `button-name` on ServicesBlock CTA buttons
+ *   • `link-name` on Header / Footer NavLink components
+ *   • `color-contrast` on the consent text inside `ContactFormBlock`
  *
- * Strict mode (`EXPECT_CLEAN = true`) MUST stay off until the source fixes
- * land. The previous flip-to-true was premature and broke CI #5; flipping
- * back keeps the suite as a tripwire (logs violations, doesn't fail) while
- * the cleanup ticket is in flight.
+ * Source-side fixes are in: `ServiceIcon` button now has a guaranteed
+ * `aria-label={item.cta || item.title}`, `NavLink` has a 5-level
+ * `accessibleName()` fallback, and the consent disclaimer is `text-black/80`
+ * on `bg-gold` (~13:1 contrast).
  *
- * When the three fixes land, flip `EXPECT_CLEAN` back to `true` in the
- * same commit so the regression guard is active.
+ * Once a local `npm run test:e2e -- a11y.spec.ts` passes against a freshly
+ * seeded DB across all three locales, flip `EXPECT_CLEAN` to `true` in the
+ * same commit — the suite then becomes a regression guard.
  */
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
@@ -53,9 +51,9 @@ async function scanAndReport(page: Page, label: string) {
   if (EXPECT_CLEAN) {
     expect(results.violations).toEqual([]);
   } else {
-    // Informational mode — assert only that axe ran successfully. Real
-    // violations are tracked in STEP_12_KNOWN_ISSUES.md and will be fixed
-    // in the cleanup patch, at which point EXPECT_CLEAN flips to true.
+    // Informational mode — assert only that axe ran successfully. Flip
+    // `EXPECT_CLEAN` to true once a local run is clean across all three
+    // locales (see file header for status).
     expect(typeof results.violations.length).toBe('number');
   }
 }

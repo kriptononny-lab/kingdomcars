@@ -11,15 +11,15 @@ const COUNTS: Array<1 | 2 | 3 | 4> = [1, 2, 3, 4];
 
 export function PricingBlockView({ block }: Props) {
   return (
-    <section id="pricing" className="py-20">
+    <section id="pricing" className="bg-surface-section py-28">
       <Container>
         <SectionHeader title={block.sectionTitle} />
-        <div className="mb-7 grid grid-cols-2 gap-6 lg:grid-cols-4">
+        <div className="mb-10 grid grid-cols-2 gap-8 lg:grid-cols-4">
           {block.items.map((item, i) => {
             const count = COUNTS[i] ?? 4;
             return (
               <article
-                key={i}
+                key={item.id ?? i}
                 className="bg-surface-card motion-safe:hover:border-gold rounded-lg border border-white/5 p-9 text-center transition-all duration-300 motion-safe:hover:scale-[1.04]"
               >
                 <div className="bg-gold mx-auto mb-4 flex h-[72px] w-[72px] items-center justify-center rounded-lg text-black">

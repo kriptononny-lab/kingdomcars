@@ -5,6 +5,10 @@ import { serverEnv } from '@/lib/env';
 import { logger } from '@/lib/logger';
 import { escapeHtml } from '@/lib/utils';
 
+/**
+ * Data passed to `sendTelegramMessage`. All fields come directly from
+ * the validated contact form submission stored in `form-submissions`.
+ */
 export interface TelegramPayload {
   name: string;
   phone: string;
@@ -38,6 +42,17 @@ function formatMessage(p: TelegramPayload): string {
  *
  * `TELEGRAM_API_BASE` env (optional) overrides the default endpoint — used by
  * e2e tests to point at a local mock server (§15).
+ */
+/**
+ * Send a formatted HTML notification to the configured Telegram chat.
+ * Runs fire-and-forget after the form submission is already persisted —
+ * a Telegram failure must NOT block the user response.
+ *
+ * @param payload - Contact submission data to include in the message.
+ * @returns `true` if the Telegram API accepted the message, `false` otherwise.
+ *
+ * @example
+ * const ok = await sendTelegramMessage({ name: 'Jan', phone: '+48 123 456 789', locale: 'pl' });
  */
 export async function sendTelegramMessage(payload: TelegramPayload): Promise<boolean> {
   const apiBase = serverEnv.TELEGRAM_API_BASE ?? TELEGRAM.API_BASE;

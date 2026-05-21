@@ -11,7 +11,6 @@ export const linkField: GroupField = {
     {
       name: 'label',
       type: 'text',
-      required: true,
       localized: true,
     },
     {

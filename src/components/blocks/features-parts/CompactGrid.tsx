@@ -13,11 +13,11 @@ const ICON_FALLBACK: IconKey = 'check';
  */
 export function CompactGrid({ items }: Props) {
   return (
-    <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+    <div className="grid grid-cols-1 gap-7 md:grid-cols-3">
       {items.map((item, i) => (
         <div
           key={i}
-          className="border-gold/15 bg-surface-card motion-safe:hover:border-gold flex items-center gap-4 rounded-lg border p-5 shadow-[0_12px_40px_rgba(0,0,0,0.4)] transition-all duration-300 motion-safe:hover:-translate-y-1"
+          className="border-gold/15 bg-surface-card motion-safe:hover:border-gold flex items-center gap-5 rounded-lg border p-6 shadow-[0_12px_40px_rgba(0,0,0,0.4)] transition-all duration-300 motion-safe:hover:-translate-y-1"
         >
           <div className="bg-gold/10 text-gold flex h-[52px] w-[52px] min-w-[52px] items-center justify-center rounded-full">
             <Icon name={(item.icon as IconKey) ?? ICON_FALLBACK} />

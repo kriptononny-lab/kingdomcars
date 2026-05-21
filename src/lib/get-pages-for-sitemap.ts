@@ -3,6 +3,7 @@ import 'server-only';
 import { LOCALES, type Locale } from '@/lib/constants';
 import { getPayloadInstance } from '@/lib/payload';
 
+/** Minimal page data needed to build a sitemap entry. */
 export interface SitemapPage {
   id: string | number;
   updatedAt: string;

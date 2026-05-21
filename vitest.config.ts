@@ -21,6 +21,9 @@ export default defineConfig({
   resolve: {
     alias: {
       'server-only': resolve(__dirname, 'tests/stubs/server-only.ts'),
+      // @tests/* alias mirrors tsconfig.json — lets test helper imports
+      // avoid relative `../../tests/` paths (§4.10 no ../../).
+      '@tests': resolve(__dirname, 'tests'),
     },
   },
   test: {

@@ -1,5 +1,5 @@
 import type { Locale } from '@/lib/constants';
-import type { PageBlock } from '@/types/blocks';
+import type { PageBlock } from '@/types/blocks/page-block';
 
 /**
  * Domain shape of a published Page as it flows from Payload through

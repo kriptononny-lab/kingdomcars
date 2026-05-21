@@ -8,7 +8,7 @@ interface Props {
 
 export function MapBlockView({ block }: Props) {
   return (
-    <section className="bg-surface-section relative overflow-hidden py-20">
+    <section className="bg-surface-section relative overflow-hidden py-28">
       <Container>
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_1.4fr]">
           <div>
@@ -25,10 +25,10 @@ export function MapBlockView({ block }: Props) {
             <ul className="flex flex-wrap gap-2">
               {block.cities.map((city) => (
                 <li
-                  key={city}
+                  key={city.id ?? city.name}
                   className="border-gold/20 bg-gold/[0.08] text-gold rounded-full border px-3.5 py-1.5 text-xs font-semibold tracking-wider"
                 >
-                  {city}
+                  {city.name}
                 </li>
               ))}
             </ul>

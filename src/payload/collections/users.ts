@@ -35,7 +35,11 @@ export const Users: CollectionConfig = {
     beforeLogin: [beforeLoginCheck],
   },
   access: {
-    create: isAdmin,
+    // §6: users are created exclusively via the seed script (which uses
+    // `overrideAccess: true`) — never through the admin UI or the REST API.
+    // This denies HTTP create attempts even from logged-in admins; if a new
+    // user is needed, re-run `make seed` with the SEED_ADMIN_* envs.
+    create: () => false,
     read: isAdmin,
     update: isAdmin,
     delete: isAdmin,

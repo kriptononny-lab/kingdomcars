@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-import { submitContactAction } from '@/actions/submit-contact';
 import { DEFAULT_LOCALE, LOCALES, type Locale } from '@/lib/constants';
 import { contactSchema } from '@/lib/contact-schema';
+import { submitContactAction } from '@/lib/submit-contact';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic';
  * Locale comes from the form's hidden field — this route is mounted at the
  * locale-less `/api/contact` path (locale-scoped routes live under
  * `(frontend)/[locale]/`). An earlier version read `params.locale` here,
- * which was always undefined; STEP_12_KNOWN_ISSUES #1.
+ * which was always undefined.
  */
 export async function POST(req: Request) {
   const form = await req.formData();

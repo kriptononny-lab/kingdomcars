@@ -38,11 +38,11 @@ ps: ## list running services
 build: ## build app image only (assumes postgres already running)
 	$(COMPOSE) build app
 
-seed: ## run seed script inside app container
-	$(COMPOSE) exec app npm run seed
+seed: ## run seed script (seeder image with full node_modules)
+	$(COMPOSE) --profile tools run --rm seeder
 
 migrate: ## run payload migrations
-	$(COMPOSE) exec app npm run payload:migrate
+	$(COMPOSE) --profile tools run --rm seeder npm run payload:migrate
 
 shell: ## shell into app container
 	$(COMPOSE) exec app sh

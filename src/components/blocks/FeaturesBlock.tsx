@@ -22,10 +22,11 @@ interface Props {
 export function FeaturesBlockView({ block }: Props) {
   return (
     <section
+      id={block.variant === 'numbered' ? 'advantages' : undefined}
       className={cn(
-        'py-20',
+        'py-28',
         block.variant === 'numbered' && 'bg-surface-section',
-        block.variant === 'trust' && 'border-gold/5 bg-surface-section border-y py-10',
+        block.variant === 'trust' && 'border-gold/5 bg-surface-section border-y py-14',
       )}
     >
       <Container>

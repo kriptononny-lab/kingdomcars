@@ -54,7 +54,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
       # builder stage needs DB access during `next build`. host mode lets
       # the build reach the postgres service via localhost:5432 (Linux) or
       # host.docker.internal (Docker Desktop maps localhost → host).
@@ -115,3 +115,24 @@ services:
       retries: 3
       start_period: 10s
     logging: *default-logging
+
+  # ── One-off tooling (profile: tools) ──────────────────────────────────────
+  # Usage:  docker compose --profile tools run --rm seeder
+  # Or via Makefile:  make seed
+  seeder:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: seeder
+    profiles: [tools]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      # development → Payload's postgres adapter calls pushDevSchema on init,
+      # creating any tables that don't yet exist (new blocks, collections).
+      NODE_ENV: development
+      DATABASE_URL: postgres://${POSTGRES_USER:-payload}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-kingdomcars}
+    networks: [app-network]

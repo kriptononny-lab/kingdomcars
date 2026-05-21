@@ -5,6 +5,7 @@ import { unstable_cache } from 'next/cache';
 import { REVALIDATE } from '@/lib/constants';
 import { getPayloadInstance } from '@/lib/payload';
 
+/** A single redirect rule fetched from the Payload `redirects` collection. */
 export interface Redirect {
   from: string;
   to: string;

@@ -24,7 +24,10 @@ export function ImageGalleryBlockView({ block }: Props) {
           {block.images.map((entry, i) => {
             const src = entry.image.sizes?.card?.url ?? entry.image.url;
             return (
-              <figure key={i} className="overflow-hidden rounded-lg border border-white/5">
+              <figure
+                key={entry.id ?? i}
+                className="overflow-hidden rounded-lg border border-white/5"
+              >
                 <Image
                   src={src}
                   alt={entry.image.alt ?? ''}

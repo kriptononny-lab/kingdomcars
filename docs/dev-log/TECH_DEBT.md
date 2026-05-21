@@ -25,7 +25,18 @@
      Authenticator–generated secret still verifies on the first try
   4. Bump the dependency in `package.json` and regenerate `package-lock.json`
 
-## Default admin password
+## 3-step CTA wizard form
+
+- **Where:** new `src/payload/blocks/WizardFormBlock.ts` + `src/components/blocks/WizardFormBlock.tsx`
+- **Why deferred:** v1 site has a multi-step guided form ("Co przewozimy?" → details → contact)
+  that doesn't exist in v2. The current `contactFormBlock` renders a single-step RHF form.
+- **Closure criteria:**
+  1. Add `WizardFormBlock` Payload schema with step config (service options, steps list)
+  2. Build client-side `WizardFormBlock.tsx` with step state machine (step 1: service select,
+     step 2: size/details, step 3: contact + submit)
+  3. On step 3 submit, call the same `submitContactAction` used by `ContactForm`
+  4. Add `wizardForm` to `page-blocks.ts` registry and `PageBlock` union
+  5. Update seed to replace current `contactFormBlock` with `wizardFormBlock` on home page
 
 - **Where:** `scripts/seed.ts` env defaults
 - **Why deferred:** session-specific; needs human intervention through the

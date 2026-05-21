@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const submitMock = vi.fn();
 
-vi.mock('@/actions/submit-contact', () => ({
+vi.mock('@/lib/submit-contact', () => ({
   submitContactAction: (input: unknown) => submitMock(input),
 }));
 

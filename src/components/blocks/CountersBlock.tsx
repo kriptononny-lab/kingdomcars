@@ -16,10 +16,15 @@ interface Props {
  */
 export function CountersBlockView({ block }: Props) {
   return (
-    <section className="py-[70px]">
-      <Container className="grid grid-cols-2 gap-8 md:grid-cols-4">
+    <section className="bg-surface-section py-24">
+      <Container className="grid grid-cols-2 gap-10 md:grid-cols-4">
         {block.items.map((item, i) => (
-          <AnimatedCounter key={i} target={item.target} suffix={item.suffix} label={item.label} />
+          <AnimatedCounter
+            key={item.id ?? i}
+            target={item.target}
+            suffix={item.suffix}
+            label={item.label}
+          />
         ))}
       </Container>
     </section>
