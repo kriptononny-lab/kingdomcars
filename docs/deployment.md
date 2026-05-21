@@ -106,7 +106,7 @@ docker compose -f docker-compose.yml -f docker-compose.umami.yml up -d
   `docker compose ps`.
 - **Database connection refused** — Postgres healthcheck takes ~20 s on
   first boot; `app` is configured to wait via `depends_on: condition:
-  service_healthy`, so the first `make up` should "just work" but cold
+service_healthy`, so the first `make up` should "just work" but cold
   starts can take a minute.
 - **Disk fills with Docker logs** — already mitigated by `json-file`
   driver with 10 MB × 3 file rotation per service, but if you have many

@@ -49,11 +49,17 @@ const clientSchema = z.object({
  */
 const skipValidation = process.env.SKIP_ENV_VALIDATION === '1';
 
-function parse<T extends z.ZodTypeAny>(schema: T, source: Record<string, unknown>, label: string): z.infer<T> {
+function parse<T extends z.ZodTypeAny>(
+  schema: T,
+  source: Record<string, unknown>,
+  label: string,
+): z.infer<T> {
   if (skipValidation) return source as z.infer<T>;
   const result = schema.safeParse(source);
   if (!result.success) {
-    const issues = result.error.issues.map((i) => `  • ${i.path.join('.')}: ${i.message}`).join('\n');
+    const issues = result.error.issues
+      .map((i) => `  • ${i.path.join('.')}: ${i.message}`)
+      .join('\n');
     throw new Error(`Invalid ${label} environment variables:\n${issues}`);
   }
   return result.data;
@@ -69,8 +75,10 @@ const isServerSide =
   globalThis.window === undefined ||
   (typeof process !== 'undefined' && typeof process.versions?.node === 'string');
 
+/** Validated client-safe environment variables (safe to expose to the browser). */
 export const clientEnv = parse(clientSchema, process.env, 'client');
 
+/** Validated server-only environment variables. Throws on missing required vars. */
 export const serverEnv = isServerSide
   ? parse(serverSchema, process.env, 'server')
   : ({} as z.infer<typeof serverSchema>);

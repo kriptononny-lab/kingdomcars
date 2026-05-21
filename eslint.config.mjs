@@ -1,8 +1,8 @@
-import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import security from 'eslint-plugin-security';
 import unicorn from 'eslint-plugin-unicorn';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
 /**
  * Flat config. eslint-config-next 16 already bundles `eslint-plugin-jsx-a11y`
@@ -50,15 +50,14 @@ export default defineConfig([
           caughtErrorsIgnorePattern: '^_',
         },
       ],
-      'import/order': [
-        'error',
-        {
-          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-          'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true },
-          pathGroups: [{ pattern: '@/**', group: 'internal', position: 'before' }],
-        },
-      ],
+      'import/order': 'off',
+      // ↑ Disabled deliberately. `prettier-plugin-organize-imports` (see
+      // `.prettierrc`) uses TypeScript's organize-imports to sort imports
+      // by its own scheme — which doesn't agree with `import/order`'s
+      // group/alphabetical scheme. Running both creates an infinite
+      // ping-pong where each `--fix` pass undoes the other. We delegate
+      // import ordering to Prettier (single source of truth) and keep
+      // ESLint focused on semantic checks.
       'import/no-default-export': 'off',
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/filename-case': 'off',
@@ -70,6 +69,11 @@ export default defineConfig([
       'unicorn/prefer-global-this': 'off',
       'unicorn/prefer-module': 'off',
       'unicorn/import-style': 'off',
+      // Prettier formats nested ternaries without wrapping parens — unicorn
+      // wants them parenthesised. Prettier's layout is already readable,
+      // and re-adding parens just gets stripped on the next `format:write`.
+      // Same pattern as `import/order` above: defer to Prettier.
+      'unicorn/no-nested-ternary': 'off',
       'security/detect-object-injection': 'off',
       'security/detect-non-literal-fs-filename': 'off',
     },

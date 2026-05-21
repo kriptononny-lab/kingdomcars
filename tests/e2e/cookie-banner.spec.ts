@@ -31,13 +31,14 @@ test.describe('Cookie banner', () => {
   test('accept-all dismisses the banner and persists consent', async ({ page }) => {
     await page.goto('/');
     const banner = page.getByRole('region', { name: bannerLocator });
-    await banner.getByRole('button', { name: /akcept|accept|прин/i }).first().click();
+    await banner
+      .getByRole('button', { name: /akcept|accept|прин/i })
+      .first()
+      .click();
     await expect(banner).not.toBeVisible();
 
     // Server action runs in a transition — poll until cookie lands.
-    await expect
-      .poll(() => readBrowserConsentCookie(page), { timeout: 5000 })
-      .toBeTruthy();
+    await expect.poll(() => readBrowserConsentCookie(page), { timeout: 5000 }).toBeTruthy();
 
     const consent = await readBrowserConsentCookie(page);
     expect(consent).toContain('analytics');

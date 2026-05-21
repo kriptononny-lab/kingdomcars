@@ -161,9 +161,9 @@ default; CSRF is handled by Server Actions automatically.
 
 ## i18n: two layers
 
-| Layer | Source of truth | When to use |
-|---|---|---|
-| **Content** (pages, blocks, nav labels) | Payload `localization` config | Anything an editor types |
+| Layer                                             | Source of truth                 | When to use              |
+| ------------------------------------------------- | ------------------------------- | ------------------------ |
+| **Content** (pages, blocks, nav labels)           | Payload `localization` config   | Anything an editor types |
 | **UI strings** (button labels, validation errors) | `i18n/messages/{pl,en,ru}.json` | Anything shipped as code |
 
 URL slugs are localised too (see `i18n/routing.ts`):

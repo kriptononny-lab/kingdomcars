@@ -74,5 +74,14 @@
     "pl": "Polski",
     "en": "English",
     "ru": "Р СѓСЃСЃРєРёР№"
+  },
+  "wizard": {
+    "apartment": "Apartment move",
+    "warehouse": "Warehouse transport",
+    "trash": "Waste removal",
+    "office": "Office move",
+    "people": "{count} {count, plural, one {person} other {people}}",
+    "back": "← Back",
+    "doneTitle": "Thank you for your request!"
   }
 }

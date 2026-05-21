@@ -21,6 +21,7 @@ const prettyTransport =
     ? { target: 'pino-pretty', options: { colorize: true, translateTime: 'HH:MM:ss.l' } }
     : undefined;
 
+/** Root pino logger instance. Use `loggerFromHeaders` in request context for trace IDs. */
 export const logger = pino({
   ...baseOptions,
   ...(prettyTransport ? { transport: prettyTransport } : {}),

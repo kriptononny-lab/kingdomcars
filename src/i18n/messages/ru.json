@@ -74,5 +74,14 @@
     "pl": "Polski",
     "en": "English",
     "ru": "Русский"
+  },
+  "wizard": {
+    "apartment": "Перевозка квартиры",
+    "warehouse": "Перевозка склада",
+    "trash": "Вывоз мусора",
+    "office": "Перевозка офиса",
+    "people": "{count} {count, plural, one {человек} few {человека} other {человек}}",
+    "back": "← Назад",
+    "doneTitle": "Спасибо за заявку!"
   }
 }

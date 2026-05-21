@@ -5,4 +5,5 @@ All notable changes to this project are documented here. Format based on [Keep a
 ## [Unreleased]
 
 ### Added
+
 - Initial project scaffolding: Next.js 16, Payload 3, Tailwind 4, TypeScript strict, next-intl, ESLint + Prettier + Lefthook, Sentry hooks, Docker/Caddy/Postgres compose.

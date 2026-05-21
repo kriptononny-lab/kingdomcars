@@ -52,6 +52,7 @@ export async function getPageBySlug(slug: string, locale: Locale): Promise<PageD
           locale,
           depth: 2,
           limit: 1,
+          overrideAccess: true,
         });
         return asPageDoc(result.docs[0]);
       } catch {

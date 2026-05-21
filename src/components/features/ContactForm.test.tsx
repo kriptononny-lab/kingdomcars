@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const submitMock = vi.fn();
 
-vi.mock('@/actions/submit-contact', () => ({
+vi.mock('@/lib/submit-contact', () => ({
   submitContactAction: (input: unknown) => submitMock(input),
 }));
 
@@ -47,7 +47,11 @@ describe('<ContactForm />', () => {
     await waitFor(() => expect(submitMock).toHaveBeenCalled());
     expect(onSuccess).toHaveBeenCalled();
     const submitted = submitMock.mock.calls[0]?.[0];
-    expect(submitted).toMatchObject({ name: 'Jan Kowalski', phone: '+48 500 100 200', consent: true });
+    expect(submitted).toMatchObject({
+      name: 'Jan Kowalski',
+      phone: '+48 500 100 200',
+      consent: true,
+    });
   });
 
   it('does not submit when consent is not given', async () => {

@@ -2,6 +2,7 @@
  * Application-wide constants. No magic numbers/strings in feature code (§4.7).
  */
 
+/** Site-wide identity constants — name, tagline per locale, default OG locale. */
 export const SITE = {
   NAME: 'KingdomCars',
   TAGLINE: {
@@ -12,8 +13,11 @@ export const SITE = {
   DEFAULT_OG_LOCALE: 'pl_PL',
 } as const;
 
+/** Supported locale codes. Order matters: first is the default. */
 export const LOCALES = ['pl', 'en', 'ru'] as const;
+/** Union of supported locale strings derived from `LOCALES`. */
 export type Locale = (typeof LOCALES)[number];
+/** Default locale served at the root path and used as fallback. */
 export const DEFAULT_LOCALE: Locale = 'pl';
 
 /** Tailwind breakpoints mirror — for JS-side media queries (§8). */
@@ -37,17 +41,20 @@ export const LOGIN_RATE_LIMIT = {
   WINDOW_SEC: 900,
 } as const;
 
+/** Telegram Bot API configuration — base URL and request timeout. */
 export const TELEGRAM = {
   API_BASE: 'https://api.telegram.org',
   TIMEOUT_MS: 5000,
 } as const;
 
+/** Next.js on-demand revalidation tags and ISR TTL (§17). */
 export const REVALIDATE = {
   PAGES_SEC: 3600,
   TAG_PAGES: 'pages',
   TAG_HEADER: 'header',
   TAG_FOOTER: 'footer',
   TAG_SETTINGS: 'site-settings',
+  TAG_REDIRECTS: 'redirects',
 } as const;
 
 /** HTTP header names we set or read across the request lifecycle (§16). */
@@ -56,6 +63,7 @@ export const HEADERS = {
   NONCE: 'x-nonce',
 } as const;
 
+/** Shared animation timing constants for Framer Motion and CSS transitions. */
 export const ANIMATION = {
   DURATION_FAST_MS: 200,
   DURATION_BASE_MS: 400,

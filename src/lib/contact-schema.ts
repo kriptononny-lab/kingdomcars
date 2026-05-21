@@ -32,6 +32,7 @@ export const contactSchema = z.object({
   locale: z.enum(LOCALES),
 });
 
+/** Inferred TypeScript type from `contactSchema` — used by RHF and server action. */
 export type ContactInput = z.infer<typeof contactSchema>;
 
 /** Default values for the form on mount. */

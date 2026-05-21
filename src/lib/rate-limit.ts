@@ -7,9 +7,16 @@ import { CONTACT_RATE_LIMIT, LOGIN_RATE_LIMIT } from '@/lib/constants';
 import { serverEnv } from '@/lib/env';
 import { logger } from '@/lib/logger';
 
+/**
+ * Normalised result returned by every rate-limit check.
+ * `success: false` means the caller was throttled and should return 429.
+ */
 export interface RateLimitResult {
+  /** Whether the request is allowed through. */
   success: boolean;
+  /** Remaining requests in the current window. */
   remaining: number;
+  /** Unix timestamp (ms) when the window resets. */
   resetAt: number;
 }
 
@@ -61,7 +68,10 @@ async function check(key: string, policy: Policy): Promise<RateLimitResult> {
   const limiter = getUpstashLimiter(policy);
   if (!limiter) {
     if (serverEnv.NODE_ENV === 'production') {
-      logger.warn({ prefix: policy.prefix }, 'rate-limit running in-memory in production — set UPSTASH_REDIS_REST_*');
+      logger.warn(
+        { prefix: policy.prefix },
+        'rate-limit running in-memory in production — set UPSTASH_REDIS_REST_*',
+      );
     }
     return inMemoryLimit(key, policy);
   }
@@ -81,11 +91,24 @@ const LOGIN_POLICY: Policy = {
   prefix: 'kc:login',
 };
 
+/**
+ * Rate-limit check for the public contact form endpoint.
+ *
+ * @param key - Unique identifier for the caller (hashed IP address).
+ * @returns `RateLimitResult` — call `.success` to decide whether to proceed.
+ */
 export function checkContactRateLimit(key: string): Promise<RateLimitResult> {
   return check(key, CONTACT_POLICY);
 }
 
 /** Brute-force protection on the Payload admin login (§13). 5 / 15min / IP. */
+/**
+ * Rate-limit check for the Payload admin login endpoint.
+ * Stricter than the contact form: fewer requests, longer window.
+ *
+ * @param key - Unique identifier for the caller (hashed IP address).
+ * @returns `RateLimitResult` — call `.success` to decide whether to proceed.
+ */
 export function checkLoginRateLimit(key: string): Promise<RateLimitResult> {
   return check(key, LOGIN_POLICY);
 }

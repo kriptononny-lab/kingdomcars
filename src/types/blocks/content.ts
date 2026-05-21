@@ -19,7 +19,7 @@ export interface FeaturesBlock extends BaseBlock {
   blockType: 'features';
   variant: 'compact' | 'trust' | 'numbered';
   sectionTitle?: string;
-  items: Array<{ title: string; subtitle?: string; icon?: string }>;
+  items: Array<{ id?: string; title: string; subtitle?: string; icon?: string }>;
   quote?: string;
 }
 
@@ -36,5 +36,5 @@ export interface RichTextBlock extends BaseBlock {
 export interface ImageGalleryBlock extends BaseBlock {
   blockType: 'imageGallery';
   sectionTitle?: string;
-  images: Array<{ image: Media; caption?: string }>;
+  images: Array<{ id?: string; image: Media; caption?: string }>;
 }

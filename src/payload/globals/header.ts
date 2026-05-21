@@ -17,6 +17,7 @@ export const Header: GlobalConfig = {
       name: 'navItems',
       type: 'array',
       label: 'Navigation items',
+      localized: true,
       minRows: 0,
       maxRows: 10,
       fields: [linkField],

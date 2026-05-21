@@ -8,9 +8,12 @@
  * In dev we fall back to the unprefixed name so the flow works locally.
  */
 
+/** Cookie name used in production (uses `__Host-` prefix for security). */
 export const CONSENT_COOKIE_PROD = '__Host-consent';
+/** Cookie name used in development (plain name, no `__Host-` prefix). */
 export const CONSENT_COOKIE_DEV = 'consent';
 
+/** Active consent cookie name — `__Host-consent` in production, `consent` in dev. */
 export const CONSENT_COOKIE =
   process.env.NODE_ENV === 'production' ? CONSENT_COOKIE_PROD : CONSENT_COOKIE_DEV;
 

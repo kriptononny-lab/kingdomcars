@@ -13,8 +13,8 @@ import {
 
 import { CookieBanner } from '@/components/gdpr/CookieBanner';
 import { CookieSettingsDialog } from '@/components/gdpr/CookieSettingsDialog';
-import { saveConsent } from '@/lib/actions/save-consent';
 import { CONSENT_COOKIE_REGEX } from '@/lib/consent';
+import { saveConsent } from '@/lib/save-consent';
 import type { ConsentState } from '@/types/consent';
 
 function readClientCookie(): ConsentState | null {

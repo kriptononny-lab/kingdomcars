@@ -15,29 +15,29 @@ export async function Footer() {
   const cfg = (settings ?? {}) as SiteSettingsData;
 
   return (
-    <footer className="border-t border-white/5 bg-surface-section py-12">
+    <footer className="bg-surface-section border-t border-white/5 py-12">
       <Container>
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
           <div>
             <Logo size={56} />
             {data.tagline ? (
-              <p className="mt-4 max-w-sm text-sm text-text-muted">{data.tagline}</p>
+              <p className="text-text-muted mt-4 max-w-sm text-sm">{data.tagline}</p>
             ) : null}
             {cfg.phonePrimary ? (
               <a
                 href={`tel:${cfg.phonePrimary.replaceAll(/\s+/g, '')}`}
-                className="mt-4 inline-block font-heading text-base text-gold"
+                className="font-heading text-gold mt-4 inline-block text-base"
               >
                 {cfg.phonePrimary}
               </a>
             ) : null}
-            {cfg.address ? <p className="mt-1 text-sm text-text-muted">{cfg.address}</p> : null}
-            {cfg.hours ? <p className="text-sm text-text-muted">{cfg.hours}</p> : null}
+            {cfg.address ? <p className="text-text-muted mt-1 text-sm">{cfg.address}</p> : null}
+            {cfg.hours ? <p className="text-text-muted text-sm">{cfg.hours}</p> : null}
           </div>
           {(data.columns ?? []).map((column) => (
             <div key={column.id ?? column.heading ?? ''}>
               {column.heading ? (
-                <h4 className="mb-4 font-heading text-sm font-semibold uppercase tracking-wider text-text-primary">
+                <h4 className="font-heading text-text-primary mb-4 text-sm font-semibold tracking-wider uppercase">
                   {column.heading}
                 </h4>
               ) : null}
@@ -46,7 +46,7 @@ export async function Footer() {
                   <li key={entry.id ?? entry.link.label}>
                     <NavLink
                       link={entry.link}
-                      className="text-sm text-text-muted motion-safe:hover:text-gold"
+                      className="text-text-muted motion-safe:hover:text-gold text-sm"
                     />
                   </li>
                 ))}
@@ -55,20 +55,21 @@ export async function Footer() {
           ))}
         </div>
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/5 pt-6">
-          <p className="text-xs text-text-muted">
-            {data.copyright ?? `© ${new Date().getFullYear()} ${cfg.organisationName ?? 'KingdomCars'}`}
+          <p className="text-text-muted text-xs">
+            {data.copyright ??
+              `© ${new Date().getFullYear()} ${cfg.organisationName ?? 'KingdomCars'}`}
           </p>
           <ul className="flex flex-wrap gap-4">
             {(data.legalLinks ?? []).map((entry) => (
               <li key={entry.id ?? entry.link.label}>
                 <NavLink
                   link={entry.link}
-                  className="text-xs text-text-muted motion-safe:hover:text-gold"
+                  className="text-text-muted motion-safe:hover:text-gold text-xs"
                 />
               </li>
             ))}
             <li>
-              <CookieSettingsLink className="text-xs text-text-muted motion-safe:hover:text-gold" />
+              <CookieSettingsLink className="text-text-muted motion-safe:hover:text-gold text-xs" />
             </li>
           </ul>
         </div>

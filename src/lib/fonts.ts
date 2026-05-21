@@ -3,6 +3,11 @@ import localFont from 'next/font/local';
 /**
  * Self-hosted variable brand fonts (GDPR-clean — no Google CDN, §14).
  *
+ * NOTE: `path` values below use relative literals intentionally.
+ * `next/font/local` uses static analysis (not runtime resolution) to locate
+ * font files — it cannot resolve `@/` aliases or `process.cwd()` paths.
+ * This is a documented framework constraint, not a §4.10 violation.
+ *
  * Files come from Fontsource via npm (see public/fonts/README.md). Variable
  * fonts contain weights 200–700 in a single file per subset. unicode-range
  * lets the browser fetch only what's needed for the rendered glyphs.
@@ -39,6 +44,7 @@ export const oswald = localFont({
   fallback: ['system-ui', 'Helvetica Neue', 'Arial', 'sans-serif'],
 });
 
+/** Source Sans 3 — body copy font loaded from `/public/fonts`. */
 export const sourceSans = localFont({
   src: [
     {

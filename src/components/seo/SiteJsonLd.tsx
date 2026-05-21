@@ -1,11 +1,7 @@
 import { JsonLd } from '@/components/seo/JsonLd';
 import { type Locale } from '@/lib/constants';
 import { getSiteSettings } from '@/lib/get-globals';
-import {
-  type BusinessProfile,
-  organizationJsonLd,
-  webSiteJsonLd,
-} from '@/lib/seo';
+import { type BusinessProfile, organizationJsonLd, webSiteJsonLd } from '@/lib/seo';
 import type { SiteSettingsData } from '@/types/globals';
 
 /**

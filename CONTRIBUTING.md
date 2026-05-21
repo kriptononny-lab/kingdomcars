@@ -14,7 +14,7 @@ npm run dev
 ## Code style (§4 of the project prompt)
 
 - **Max 100 LOC per file.** Larger → decompose.
-- **One file, one responsibility.** Component that fetches *and* renders *and* formats = 3 files.
+- **One file, one responsibility.** Component that fetches _and_ renders _and_ formats = 3 files.
 - **Server Components by default.** `'use client'` only with a written justification (state / browser API / effect).
 - **No barrel `index.ts` re-exports.**
 - **No `any`, `@ts-ignore`, `as unknown as`.** `@ts-expect-error` must include a reason comment.
@@ -24,18 +24,19 @@ npm run dev
 
 ### Naming
 
-| Kind | Convention |
-|---|---|
-| Component file | `PascalCase.tsx` |
-| Hook | `useThing.ts` |
-| Utility | `kebab-case.ts` |
-| Type | `PascalCase`, no `I` prefix |
+| Kind           | Convention                  |
+| -------------- | --------------------------- |
+| Component file | `PascalCase.tsx`            |
+| Hook           | `useThing.ts`               |
+| Utility        | `kebab-case.ts`             |
+| Type           | `PascalCase`, no `I` prefix |
 
 ## Commits
 
 [Conventional Commits](https://www.conventionalcommits.org/). Enforced by commitlint via lefthook.
 
 Examples:
+
 - `feat(form): add honeypot + zod schema`
 - `fix(seo): wrong hreflang on /en/about`
 - `refactor(header): split LanguageSwitcher into own file`

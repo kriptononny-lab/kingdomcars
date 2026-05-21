@@ -34,7 +34,7 @@ export function MobileMenu({ navItems, ctaLabel }: Props) {
         aria-label={t('openMenu')}
         aria-expanded={open}
         aria-controls="mobile-menu"
-        className="inline-flex h-11 w-11 items-center justify-center rounded-md text-gold lg:hidden"
+        className="text-gold inline-flex h-11 w-11 items-center justify-center rounded-md lg:hidden"
       >
         <Menu aria-hidden="true" />
       </button>
@@ -54,7 +54,7 @@ export function MobileMenu({ navItems, ctaLabel }: Props) {
         aria-modal="true"
         aria-label={tCommon('menu')}
         className={cn(
-          'fixed right-0 top-0 z-50 flex h-[100dvh] w-[min(360px,80vw)] flex-col gap-6 bg-surface-section p-6 shadow-2xl transition-transform lg:hidden',
+          'bg-surface-section fixed top-0 right-0 z-50 flex h-[100dvh] w-[min(360px,80vw)] flex-col gap-6 p-6 shadow-2xl transition-transform lg:hidden',
           open ? 'translate-x-0' : 'translate-x-full',
         )}
       >
@@ -62,7 +62,7 @@ export function MobileMenu({ navItems, ctaLabel }: Props) {
           type="button"
           onClick={close}
           aria-label={t('closeMenu')}
-          className="ml-auto inline-flex h-11 w-11 items-center justify-center rounded-md text-text-muted motion-safe:hover:text-gold"
+          className="text-text-muted motion-safe:hover:text-gold ml-auto inline-flex h-11 w-11 items-center justify-center rounded-md"
         >
           <X aria-hidden="true" />
         </button>
@@ -72,7 +72,7 @@ export function MobileMenu({ navItems, ctaLabel }: Props) {
               key={item.id ?? item.link.label}
               link={item.link}
               onClick={close}
-              className="px-2 py-2 font-heading text-sm font-semibold uppercase tracking-wider text-text-primary"
+              className="font-heading text-text-primary px-2 py-2 text-sm font-semibold tracking-wider uppercase"
             />
           ))}
         </nav>
@@ -81,7 +81,7 @@ export function MobileMenu({ navItems, ctaLabel }: Props) {
             type="button"
             data-cta-open="true"
             onClick={close}
-            className="mt-auto min-h-[44px] rounded-lg bg-gold px-5 py-3 font-heading text-sm font-semibold uppercase tracking-wider text-black"
+            className="bg-gold font-heading mt-auto min-h-[44px] rounded-lg px-5 py-3 text-sm font-semibold tracking-wider text-black uppercase"
           >
             {ctaLabel}
           </button>

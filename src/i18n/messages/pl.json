@@ -74,5 +74,14 @@
     "pl": "Polski",
     "en": "English",
     "ru": "Русский"
+  },
+  "wizard": {
+    "apartment": "Transport mieszkania",
+    "warehouse": "Transport magazynu",
+    "trash": "Wywóz śmieci",
+    "office": "Transport biura",
+    "people": "{count} {count, plural, one {osoba} few {osoby} other {osób}}",
+    "back": "← Wróć",
+    "doneTitle": "Dziękujemy za zapytanie!"
   }
 }

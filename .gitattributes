@@ -1,0 +1,69 @@
+# =============================================================================
+# .gitattributes — line-ending normalisation for cross-platform development.
+#
+# Without this file, Windows developers commit CRLF, Linux runners read CRLF
+# as "wrong line endings", and Prettier/ESLint flag every file. With this
+# file, git stores everything as LF in the repo and only Windows working
+# copies see CRLF (transparently, when checked out).
+# =============================================================================
+
+# Default: auto-detect, normalise text to LF in the repo
+* text=auto eol=lf
+
+# Source files — strictly LF, no exceptions
+*.ts        text eol=lf
+*.tsx       text eol=lf
+*.js        text eol=lf
+*.jsx       text eol=lf
+*.mjs       text eol=lf
+*.cjs       text eol=lf
+*.json      text eol=lf
+*.jsonc     text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.md        text eol=lf
+*.mdx       text eol=lf
+*.css       text eol=lf
+*.scss      text eol=lf
+*.html      text eol=lf
+*.svg       text eol=lf
+*.toml      text eol=lf
+
+# Config files (no extension or dotfiles) — LF
+.gitignore           text eol=lf
+.gitattributes       text eol=lf
+.dockerignore        text eol=lf
+.editorconfig        text eol=lf
+.prettierignore      text eol=lf
+.prettierrc          text eol=lf
+.env.example         text eol=lf
+.env.docker.example  text eol=lf
+.env.test            text eol=lf
+.npmrc               text eol=lf
+.nvmrc               text eol=lf
+Dockerfile           text eol=lf
+Dockerfile.dev       text eol=lf
+Makefile             text eol=lf
+LICENSE              text eol=lf
+Caddyfile            text eol=lf
+
+# Shell scripts must be LF (CRLF breaks bash on Linux containers)
+*.sh        text eol=lf
+
+# Binaries — explicitly mark as binary so git doesn't try to convert
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.webp      binary
+*.ico       binary
+*.woff      binary
+*.woff2     binary
+*.ttf       binary
+*.eot       binary
+*.pdf       binary
+*.zip       binary
+*.gz        binary
+
+# Lock files — large auto-generated files, exclude from diffs
+package-lock.json    text eol=lf -diff

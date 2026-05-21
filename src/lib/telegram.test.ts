@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { applyEnv, restoreEnv, snapshotEnv } from '../../tests/fixtures/env-stubs';
+import { applyEnv, restoreEnv, snapshotEnv } from '@tests/fixtures/env-stubs';
 
 let snap: ReturnType<typeof snapshotEnv>;
 
@@ -20,7 +20,9 @@ const sample = { name: 'John', phone: '+48 500 100 200', locale: 'pl' };
 
 describe('sendTelegramMessage', () => {
   it('posts to api.telegram.org by default and returns true on 200', async () => {
-    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('', { status: 200 }));
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(new Response('', { status: 200 }));
     const { sendTelegramMessage } = await import('./telegram');
     expect(await sendTelegramMessage(sample)).toBe(true);
     const [url, init] = fetchSpy.mock.calls[0]!;
@@ -33,10 +35,14 @@ describe('sendTelegramMessage', () => {
 
   it('honours TELEGRAM_API_BASE override', async () => {
     applyEnv({ TELEGRAM_API_BASE: 'http://localhost:9999' });
-    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('', { status: 200 }));
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(new Response('', { status: 200 }));
     const { sendTelegramMessage } = await import('./telegram');
     await sendTelegramMessage(sample);
-    expect(String(fetchSpy.mock.calls[0]?.[0])).toBe('http://localhost:9999/botTESTBOT/sendMessage');
+    expect(String(fetchSpy.mock.calls[0]?.[0])).toBe(
+      'http://localhost:9999/botTESTBOT/sendMessage',
+    );
   });
 
   it('returns false on non-2xx status', async () => {
@@ -52,7 +58,9 @@ describe('sendTelegramMessage', () => {
   });
 
   it('escapes HTML in user-supplied fields', async () => {
-    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('', { status: 200 }));
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(new Response('', { status: 200 }));
     const { sendTelegramMessage } = await import('./telegram');
     await sendTelegramMessage({ ...sample, name: '<script>alert(1)</script>' });
     const body = JSON.parse(String(fetchSpy.mock.calls[0]?.[1]?.body));
@@ -61,7 +69,9 @@ describe('sendTelegramMessage', () => {
   });
 
   it('includes only provided optional fields', async () => {
-    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('', { status: 200 }));
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(new Response('', { status: 200 }));
     const { sendTelegramMessage } = await import('./telegram');
     await sendTelegramMessage({ ...sample, email: 'a@b.com', service: 'office' });
     const body = JSON.parse(String(fetchSpy.mock.calls[0]?.[1]?.body));

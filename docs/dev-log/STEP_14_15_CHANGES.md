@@ -26,12 +26,12 @@ git commit -m "feat: CI/CD pipelines + docs (steps 14 & 15)"
 
 ### Workflows (`.github/workflows/`)
 
-| Файл | Триггер | Что делает |
-|---|---|---|
-| `ci.yml` | PR + push в main | install (cached) → lint → typecheck → unit+coverage → build → e2e (Playwright с sidecar Postgres) → npm audit |
-| `lighthouse.yml` | PR в main | Lighthouse CI на 3 локалях, пороги: perf ≥ 95, a11y/seo/best-practices = 100 |
-| `deploy.yml` | push в main | docker build → push в GHCR (с GitHub Actions cache) → SSH deploy → health-check |
-| `codeql.yml` | PR, push, еженедельно | GitHub CodeQL `security-and-quality` пресет |
+| Файл             | Триггер               | Что делает                                                                                                    |
+| ---------------- | --------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `ci.yml`         | PR + push в main      | install (cached) → lint → typecheck → unit+coverage → build → e2e (Playwright с sidecar Postgres) → npm audit |
+| `lighthouse.yml` | PR в main             | Lighthouse CI на 3 локалях, пороги: perf ≥ 95, a11y/seo/best-practices = 100                                  |
+| `deploy.yml`     | push в main           | docker build → push в GHCR (с GitHub Actions cache) → SSH deploy → health-check                               |
+| `codeql.yml`     | PR, push, еженедельно | GitHub CodeQL `security-and-quality` пресет                                                                   |
 
 **Особенности:**
 
@@ -45,17 +45,21 @@ git commit -m "feat: CI/CD pipelines + docs (steps 14 & 15)"
 Это нельзя положить в файл — заполняется в GitHub UI:
 
 **Secrets → Actions:**
+
 - `PAYLOAD_SECRET`, `REVALIDATE_SECRET`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — прод-значения.
 - `SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY`, `SSH_PORT` (опц.), `DEPLOY_PATH` — для deploy job.
 - `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT` — опц. для source-map upload.
 
 **Variables → Actions:**
+
 - `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SITE_HOST` — не-секреты, нужны на build-step.
 
 **Environments:**
+
 - `production` — добавить required reviewers, чтобы deploy не запускался без апрува.
 
 **Branch protection on `main`:**
+
 - Require pull request before merging.
 - Require approvals: 1.
 - Require status checks: `Install`, `Lint`, `Typecheck`, `Unit + coverage`, `Production build`, `E2E (Playwright)`, `npm audit (high+)`, `Lighthouse CI`, `Analyze (javascript-typescript)`.
@@ -65,6 +69,7 @@ git commit -m "feat: CI/CD pipelines + docs (steps 14 & 15)"
 ### Dependabot (`.github/dependabot.yml`)
 
 Еженедельные PR'ы каждый понедельник в 06:00 Europe/Warsaw, сгруппированные:
+
 - `payload` — все `@payloadcms/*` идут одним PR (они должны двигаться вместе).
 - `types` — все `@types/*` одним PR.
 - `dev-deps` — все devDependencies одним PR.
@@ -128,20 +133,21 @@ npm run gen:component FooterBlock --block          # → src/components/blocks/
 
 ### `docs/adr/` — 5 ADR + template (Michael Nygard format)
 
-| ADR | Тема |
-|---|---|
-| 0000-template | Шаблон для новых ADR |
-| 0001-payload-as-cms | Почему Payload, не Strapi/Sanity/Directus |
-| 0002-postgres-as-database | Почему Postgres, не SQLite |
-| 0003-next-intl | Почему next-intl, не react-i18next/next-translate/Lingui |
-| 0004-cache-strategy | ISR + tag-based revalidation, последствия (build needs DB) |
-| 0005-server-actions-for-forms | Server Actions vs API routes, no-JS fallback |
+| ADR                           | Тема                                                       |
+| ----------------------------- | ---------------------------------------------------------- |
+| 0000-template                 | Шаблон для новых ADR                                       |
+| 0001-payload-as-cms           | Почему Payload, не Strapi/Sanity/Directus                  |
+| 0002-postgres-as-database     | Почему Postgres, не SQLite                                 |
+| 0003-next-intl                | Почему next-intl, не react-i18next/next-translate/Lingui   |
+| 0004-cache-strategy           | ISR + tag-based revalidation, последствия (build needs DB) |
+| 0005-server-actions-for-forms | Server Actions vs API routes, no-JS fallback               |
 
 Каждый ADR имеет 4 секции: Context, Decision, Rationale (numbered, falsifiable), Trade-offs, Alternatives.
 
 ### `README.md` — переписан
 
 Структура по §21:
+
 1. Описание (1 параграф)
 2. Stack (как badges + список)
 3. Quick Start (3 команды)
@@ -162,14 +168,14 @@ npm run gen:component FooterBlock --block          # → src/components/blocks/
 
 ## Что осталось не сделанным
 
-| Задача | Почему |
-|---|---|
-| `CHANGELOG.md` автогенерация | Нужен первый релиз; до того changelog не имеет смысла |
-| `docs/deployment.md` rewrite | Текущий файл уже из cleanup-этапа Step 13 и достаточно полный; стоит проверить когда деплоить в первый раз |
-| Storybook | §20 явно называет optional |
-| `payload-types.ts` генерация | Запускается через `npm run payload:gen:types` — это runtime артефакт, не для commit |
-| otplib v12→v13 миграция | Перенесена из cleanup-патча (полный API-rewrite, отдельная задача) |
-| JSDoc на public-функциях `lib/` | §21 указывает как требование; покрытие сейчас ~60% — стоит дописать как отдельный мини-патч |
+| Задача                          | Почему                                                                                                     |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `CHANGELOG.md` автогенерация    | Нужен первый релиз; до того changelog не имеет смысла                                                      |
+| `docs/deployment.md` rewrite    | Текущий файл уже из cleanup-этапа Step 13 и достаточно полный; стоит проверить когда деплоить в первый раз |
+| Storybook                       | §20 явно называет optional                                                                                 |
+| `payload-types.ts` генерация    | Запускается через `npm run payload:gen:types` — это runtime артефакт, не для commit                        |
+| otplib v12→v13 миграция         | Перенесена из cleanup-патча (полный API-rewrite, отдельная задача)                                         |
+| JSDoc на public-функциях `lib/` | §21 указывает как требование; покрытие сейчас ~60% — стоит дописать как отдельный мини-патч                |
 
 ---
 

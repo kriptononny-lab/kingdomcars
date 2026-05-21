@@ -15,7 +15,10 @@ const OPEN_CLASS = /translate-x-0(?!.*translate-x-full)/;
 test.describe('Mobile navigation', () => {
   test('drawer opens via hamburger and closes via Esc', async ({ page }) => {
     await page.goto('/');
-    const hamburger = page.getByRole('button').filter({ has: page.locator('svg') }).first();
+    const hamburger = page
+      .getByRole('button')
+      .filter({ has: page.locator('svg') })
+      .first();
     await hamburger.click();
     const dialog = page.getByRole('dialog');
     await expect(dialog).toHaveClass(OPEN_CLASS);
@@ -26,7 +29,10 @@ test.describe('Mobile navigation', () => {
 
   test('drawer closes via close button', async ({ page }) => {
     await page.goto('/');
-    const hamburger = page.getByRole('button').filter({ has: page.locator('svg') }).first();
+    const hamburger = page
+      .getByRole('button')
+      .filter({ has: page.locator('svg') })
+      .first();
     await hamburger.click();
     const dialog = page.getByRole('dialog');
     await expect(dialog).toHaveClass(OPEN_CLASS);
@@ -38,7 +44,10 @@ test.describe('Mobile navigation', () => {
 
   test('body scroll is locked while drawer is open', async ({ page }) => {
     await page.goto('/');
-    const hamburger = page.getByRole('button').filter({ has: page.locator('svg') }).first();
+    const hamburger = page
+      .getByRole('button')
+      .filter({ has: page.locator('svg') })
+      .first();
     await hamburger.click();
     const overflow = await page.evaluate(() => document.body.style.overflow);
     expect(overflow).toBe('hidden');

@@ -51,3 +51,45 @@ export const staggerItem: Variants = {
   hidden: { opacity: 0, y: 16 },
   visible: { opacity: 1, y: 0, transition: TRANSITION_BASE },
 };
+
+export type SlideDirection = 'left' | 'right' | 'up' | 'down';
+
+/**
+ * Slide-in variants factory. Distance is in pixels (default 24). Direction
+ * controls which axis to come in from. Returned variants share the standard
+ * base transition so timing matches FadeIn / Reveal.
+ *
+ * Explicit per-axis branches (not `[axis]: value`) — framer-motion's
+ * `Variant` type carries a `[key: \`--${string}\`]: …` CSS-variable index
+ * signature that conflicts with computed-key writes to plain `x` / `y`
+ * properties. Two literal-keyed returns satisfy the typer.
+ */
+export function slideInVariants(direction: SlideDirection, distance = 24): Variants {
+  const sign = direction === 'right' || direction === 'down' ? 1 : -1;
+  const offset = sign * distance;
+  if (direction === 'left' || direction === 'right') {
+    return {
+      hidden: { opacity: 0, x: offset },
+      visible: { opacity: 1, x: 0, transition: TRANSITION_BASE },
+    };
+  }
+  return {
+    hidden: { opacity: 0, y: offset },
+    visible: { opacity: 1, y: 0, transition: TRANSITION_BASE },
+  };
+}
+
+/**
+ * Pulse used on CTAs and badges to draw attention. The Y of `1.04` is
+ * deliberately small — the spec (§9) restricts UI micro-animations to
+ * `transform`/`opacity` and 200–400 ms durations.
+ */
+export function pulseVariants(intensity = 1.04): Variants {
+  return {
+    rest: { scale: 1 },
+    pulse: {
+      scale: [1, intensity, 1],
+      transition: { duration: 1.6, ease: 'easeInOut', repeat: Infinity },
+    },
+  };
+}

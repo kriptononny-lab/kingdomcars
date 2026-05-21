@@ -28,6 +28,13 @@ export function formatNumber(value: number, locale: Locale): string {
  */
 const DEFAULT_DATE_OPTIONS: Intl.DateTimeFormatOptions = { dateStyle: 'medium' };
 
+/**
+ * Format a date string or Date object using the active locale's conventions.
+ *
+ * @param value  - ISO date string or Date object.
+ * @param locale - Active locale for `Intl.DateTimeFormat`.
+ * @returns Localised date string (e.g. "15 maja 2024" for pl).
+ */
 export function formatDate(
   date: Date | string | number,
   locale: Locale,

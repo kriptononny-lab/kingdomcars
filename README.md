@@ -67,33 +67,33 @@ Full reference with descriptions: [`.env.example`](./.env.example).
 
 ### Server (required at runtime, optional at build via `SKIP_ENV_VALIDATION=1`)
 
-| Name | Required | Description |
-|---|---|---|
-| `DATABASE_URL` | ✅ | Postgres connection string |
-| `PAYLOAD_SECRET` | ✅ | ≥ 32-char random string, rotate on compromise |
-| `PAYLOAD_PUBLIC_SERVER_URL` | ✅ | Public URL of the Payload admin |
-| `REVALIDATE_SECRET` | ✅ | ≥ 16-char webhook auth for `/api/revalidate` |
-| `TELEGRAM_BOT_TOKEN` | ✅ | Bot token from `@BotFather` |
-| `TELEGRAM_CHAT_ID` | ✅ | Chat ID receiving form submissions |
-| `LOG_LEVEL` | ⚪ | `info` default; `debug` for local dev |
-| `UPSTASH_REDIS_REST_URL` / `_TOKEN` | ⚪ | Distributed rate-limit (falls back to in-memory) |
-| `SENTRY_DSN` / `SENTRY_ORG` / `SENTRY_PROJECT` / `SENTRY_AUTH_TOKEN` | ⚪ | Error reporting + source maps |
+| Name                                                                 | Required | Description                                      |
+| -------------------------------------------------------------------- | -------- | ------------------------------------------------ |
+| `DATABASE_URL`                                                       | ✅       | Postgres connection string                       |
+| `PAYLOAD_SECRET`                                                     | ✅       | ≥ 32-char random string, rotate on compromise    |
+| `PAYLOAD_PUBLIC_SERVER_URL`                                          | ✅       | Public URL of the Payload admin                  |
+| `REVALIDATE_SECRET`                                                  | ✅       | ≥ 16-char webhook auth for `/api/revalidate`     |
+| `TELEGRAM_BOT_TOKEN`                                                 | ✅       | Bot token from `@BotFather`                      |
+| `TELEGRAM_CHAT_ID`                                                   | ✅       | Chat ID receiving form submissions               |
+| `LOG_LEVEL`                                                          | ⚪       | `info` default; `debug` for local dev            |
+| `UPSTASH_REDIS_REST_URL` / `_TOKEN`                                  | ⚪       | Distributed rate-limit (falls back to in-memory) |
+| `SENTRY_DSN` / `SENTRY_ORG` / `SENTRY_PROJECT` / `SENTRY_AUTH_TOKEN` | ⚪       | Error reporting + source maps                    |
 
 ### Client (bundled into the browser — never put secrets)
 
-| Name | Required | Description |
-|---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | ✅ | Canonical site URL (used for OG, hreflang, canonical) |
-| `NEXT_PUBLIC_SITE_HOST` | ✅ | Host portion only (used for `next/image remotePatterns`) |
-| `NEXT_PUBLIC_ANALYTICS_URL` / `_ID` | ⚪ | Umami / Plausible script URL + site ID |
-| `NEXT_PUBLIC_SENTRY_DSN` / `_RELEASE` | ⚪ | Browser-side Sentry |
+| Name                                  | Required | Description                                              |
+| ------------------------------------- | -------- | -------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                | ✅       | Canonical site URL (used for OG, hreflang, canonical)    |
+| `NEXT_PUBLIC_SITE_HOST`               | ✅       | Host portion only (used for `next/image remotePatterns`) |
+| `NEXT_PUBLIC_ANALYTICS_URL` / `_ID`   | ⚪       | Umami / Plausible script URL + site ID                   |
+| `NEXT_PUBLIC_SENTRY_DSN` / `_RELEASE` | ⚪       | Browser-side Sentry                                      |
 
 ### CI-only
 
-| Name | Purpose |
-|---|---|
-| `SKIP_ENV_VALIDATION=1` | Pass it at build time when secrets are injected later (CI builds, Docker `next build` step). |
-| `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | Override seed defaults — required in production. |
+| Name                                       | Purpose                                                                                      |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| `SKIP_ENV_VALIDATION=1`                    | Pass it at build time when secrets are injected later (CI builds, Docker `next build` step). |
+| `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | Override seed defaults — required in production.                                             |
 
 ---
 
@@ -116,21 +116,21 @@ Decision records (why Payload, why Postgres, why next-intl, caching, forms)
 
 ## Make targets
 
-| Command | Action |
-|---|---|
-| `make up` | Start full stack: postgres → build → app → caddy |
-| `make down` | Stop everything (volumes preserved) |
-| `make restart` | Restart the app container only |
-| `make logs` | Follow app logs |
-| `make ps` | List running services |
-| `make seed` | Run idempotent seed (admin, pages, nav, settings) |
-| `make migrate` | Apply Payload migrations |
-| `make shell` | `sh` into the app container |
-| `make backup` | `pg_dump` → `./backups/<timestamp>.sql.gz` |
-| `make restore DUMP=…` | Restore from a dump file |
-| `make test` | Unit + e2e |
-| `make lint` / `typecheck` / `format` | Quality checks |
-| `make clean` | Drop volumes + remove orphan containers |
+| Command                              | Action                                            |
+| ------------------------------------ | ------------------------------------------------- |
+| `make up`                            | Start full stack: postgres → build → app → caddy  |
+| `make down`                          | Stop everything (volumes preserved)               |
+| `make restart`                       | Restart the app container only                    |
+| `make logs`                          | Follow app logs                                   |
+| `make ps`                            | List running services                             |
+| `make seed`                          | Run idempotent seed (admin, pages, nav, settings) |
+| `make migrate`                       | Apply Payload migrations                          |
+| `make shell`                         | `sh` into the app container                       |
+| `make backup`                        | `pg_dump` → `./backups/<timestamp>.sql.gz`        |
+| `make restore DUMP=…`                | Restore from a dump file                          |
+| `make test`                          | Unit + e2e                                        |
+| `make lint` / `typecheck` / `format` | Quality checks                                    |
+| `make clean`                         | Drop volumes + remove orphan containers           |
 
 ---
 
@@ -138,23 +138,23 @@ Decision records (why Payload, why Postgres, why next-intl, caching, forms)
 
 The above maps onto these for non-Docker workflows:
 
-| Script | Action |
-|---|---|
-| `npm run dev` | Next.js dev server |
-| `npm run build` | Production build (standalone output) |
-| `npm run start` | Run production build locally |
-| `npm run lint` | ESLint with `--max-warnings=0` |
-| `npm run format[:check]` | Prettier |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run test` | Vitest (unit + component) |
-| `npm run test:cov` | Coverage with v8 reporter |
-| `npm run test:e2e` | Playwright (desktop + mobile chrome) |
-| `npm run test:e2e:update-snapshots` | Update Playwright visual snapshots |
-| `npm run seed` | Seed via tsx (uses bootstrap-env loader) |
-| `npm run payload:migrate` | Run Payload migrations via tsx |
-| `npm run analyze` | Bundle analyser |
-| `npm run bundlewatch` | Bundle-size check vs budgets |
-| `npm run gen:component <Name>` | Scaffold a new component + test |
+| Script                              | Action                                   |
+| ----------------------------------- | ---------------------------------------- |
+| `npm run dev`                       | Next.js dev server                       |
+| `npm run build`                     | Production build (standalone output)     |
+| `npm run start`                     | Run production build locally             |
+| `npm run lint`                      | ESLint with `--max-warnings=0`           |
+| `npm run format[:check]`            | Prettier                                 |
+| `npm run typecheck`                 | `tsc --noEmit`                           |
+| `npm run test`                      | Vitest (unit + component)                |
+| `npm run test:cov`                  | Coverage with v8 reporter                |
+| `npm run test:e2e`                  | Playwright (desktop + mobile chrome)     |
+| `npm run test:e2e:update-snapshots` | Update Playwright visual snapshots       |
+| `npm run seed`                      | Seed via tsx (uses bootstrap-env loader) |
+| `npm run payload:migrate`           | Run Payload migrations via tsx           |
+| `npm run analyze`                   | Bundle analyser                          |
+| `npm run bundlewatch`               | Bundle-size check vs budgets             |
+| `npm run gen:component <Name>`      | Scaffold a new component + test          |
 
 ---
 
@@ -176,8 +176,9 @@ naming, commit format (Conventional Commits), PR process.
 
 The PR template at [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md)
 lists the merge checklist. Pre-commit (`lefthook`) runs ESLint + Prettier
-+ Commitlint locally; CI re-runs everything + adds typecheck, build,
-Playwright, Lighthouse, CodeQL, `npm audit`.
+
+- Commitlint locally; CI re-runs everything + adds typecheck, build,
+  Playwright, Lighthouse, CodeQL, `npm audit`.
 
 ### Branch protection (recommended)
 

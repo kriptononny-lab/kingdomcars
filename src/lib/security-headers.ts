@@ -42,6 +42,9 @@ const BASE_DIRECTIVES: Readonly<Record<string, Directive>> = {
   'base-uri': ["'self'"],
   'form-action': ["'self'"],
   'frame-ancestors': ["'none'"],
+  // Google Maps embeds (ContactInfoBlock). Only the Maps embed subdomain is
+  // whitelisted — not all of google.com — to keep the allowlist tight.
+  'frame-src': ["'self'", 'https://www.google.com'],
   'upgrade-insecure-requests': [],
 };
 
@@ -51,6 +54,12 @@ function scriptSrc(nonce: string): Directive {
   return IS_PRODUCTION ? base : [...base, "'unsafe-eval'"];
 }
 
+/**
+ * Build a per-request Content-Security-Policy header value with a nonce.
+ *
+ * @param nonce - Cryptographically random base64 string generated per request.
+ * @returns Full CSP header value string.
+ */
 export function buildContentSecurityPolicy(nonce: string): string {
   const directives = { ...BASE_DIRECTIVES, 'script-src': scriptSrc(nonce) };
   return Object.entries(directives)
@@ -58,6 +67,7 @@ export function buildContentSecurityPolicy(nonce: string): string {
     .join('; ');
 }
 
+/** Non-CSP security headers applied globally via `next.config.ts` `headers()` hook. */
 export const staticSecurityHeaders = [
   { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
   { key: 'X-Frame-Options', value: 'DENY' },

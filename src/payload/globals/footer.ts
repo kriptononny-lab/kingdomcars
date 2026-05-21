@@ -21,6 +21,7 @@ export const Footer: GlobalConfig = {
     {
       name: 'columns',
       type: 'array',
+      localized: true,
       maxRows: 4,
       labels: { singular: 'Column', plural: 'Columns' },
       fields: [
@@ -45,6 +46,7 @@ export const Footer: GlobalConfig = {
     {
       name: 'legalLinks',
       type: 'array',
+      localized: true,
       labels: { singular: 'Legal link', plural: 'Legal links' },
       maxRows: 5,
       fields: [linkField],

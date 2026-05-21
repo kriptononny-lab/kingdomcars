@@ -14,6 +14,7 @@ interface PostalAddress {
   addressCountry: string;
 }
 
+/** Optional business profile data used to populate JSON-LD schemas. */
 export interface BusinessProfile {
   phone?: string;
   email?: string;
@@ -23,6 +24,10 @@ export interface BusinessProfile {
 
 const url = (): string => clientEnv.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '');
 
+/**
+ * Generate `Organization` JSON-LD schema.
+ * @param p - Optional business profile overrides.
+ */
 export function organizationJsonLd(p: BusinessProfile = {}) {
   return {
     '@context': 'https://schema.org',
@@ -37,6 +42,10 @@ export function organizationJsonLd(p: BusinessProfile = {}) {
   };
 }
 
+/**
+ * Generate `WebSite` JSON-LD schema with locale-aware SearchAction.
+ * @param locale - Active locale for the siteLinks search box target.
+ */
 export function webSiteJsonLd(locale: Locale) {
   return {
     '@context': 'https://schema.org',
@@ -48,6 +57,10 @@ export function webSiteJsonLd(locale: Locale) {
   };
 }
 
+/**
+ * Generate `LocalBusiness` JSON-LD schema for the homepage.
+ * @param p - Business profile (phone, email, address).
+ */
 export function localBusinessJsonLd(p: BusinessProfile) {
   return {
     '@context': 'https://schema.org',
@@ -63,11 +76,16 @@ export function localBusinessJsonLd(p: BusinessProfile) {
   };
 }
 
+/** A single breadcrumb item for `BreadcrumbList` JSON-LD. */
 export interface BreadcrumbItem {
   name: string;
   url: string;
 }
 
+/**
+ * Generate `BreadcrumbList` JSON-LD schema.
+ * @param items - Ordered list of breadcrumb items.
+ */
 export function breadcrumbJsonLd(items: BreadcrumbItem[]) {
   return {
     '@context': 'https://schema.org',
@@ -81,11 +99,16 @@ export function breadcrumbJsonLd(items: BreadcrumbItem[]) {
   };
 }
 
+/** A single FAQ item for `FAQPage` JSON-LD. */
 export interface FaqItem {
   question: string;
   answer: string;
 }
 
+/**
+ * Generate `FAQPage` JSON-LD schema for FAQ sections.
+ * @param items - Array of question/answer pairs.
+ */
 export function faqPageJsonLd(items: FaqItem[]) {
   return {
     '@context': 'https://schema.org',

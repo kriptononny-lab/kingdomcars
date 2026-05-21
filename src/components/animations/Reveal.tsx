@@ -19,13 +19,7 @@ interface Props {
  * IntersectionObserver-based fade-up. Triggers once by default — saving CPU
  * for users scrolling back through long pages.
  */
-export function Reveal({
-  children,
-  as = 'div',
-  className,
-  amount = 0.2,
-  repeat = false,
-}: Props) {
+export function Reveal({ children, as = 'div', className, amount = 0.2, repeat = false }: Props) {
   const Component = m[as];
   return (
     <Component

@@ -56,12 +56,12 @@ package.json                    # +otplib, +qrcode, +@types/qrcode
 
 ## New env vars
 
-| Var | Required | Notes |
-|---|---|---|
-| `SENTRY_DSN` | optional | Server-side reporting. SDK no-ops when unset. |
-| `NEXT_PUBLIC_SENTRY_DSN` | optional | Browser-side reporting (usually = SENTRY_DSN). |
-| `NEXT_PUBLIC_SENTRY_RELEASE` | optional | Short SHA / semver; CI fills it in Step 14. |
-| `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` | optional | Source-map upload — CI only. |
+| Var                                                 | Required | Notes                                          |
+| --------------------------------------------------- | -------- | ---------------------------------------------- |
+| `SENTRY_DSN`                                        | optional | Server-side reporting. SDK no-ops when unset.  |
+| `NEXT_PUBLIC_SENTRY_DSN`                            | optional | Browser-side reporting (usually = SENTRY_DSN). |
+| `NEXT_PUBLIC_SENTRY_RELEASE`                        | optional | Short SHA / semver; CI fills it in Step 14.    |
+| `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` | optional | Source-map upload — CI only.                   |
 
 All are already wired through `lib/env.ts` Zod schema; missing values just disable the feature.
 
@@ -122,24 +122,28 @@ already pass MFA by including `mfaCode` in the JSON body of `/api/users/login`.
 ## Design notes
 
 ### Why a `tunnelRoute`
+
 Ad-blockers and corporate firewalls drop direct requests to `sentry.io`. With
 `tunnelRoute: '/sentry-tunnel'`, the SDK uploads via our own domain — the
 proxy matcher in `src/proxy.ts` was updated to NOT process `/sentry-tunnel/*`
 so the tunnel works unimpeded.
 
 ### Why MFA secret is `read: () => false`
+
 Field-level read access of `false` means even admins can't see another user's
 TOTP secret through the API. The `beforeLogin` hook reads it via
 `overrideAccess: true` directly in the same process — no API round trip, no
 exposure surface.
 
 ### Why beforeLogin throws plain `Error`
+
 Payload 3 surfaces the error message back to the client in the login
 response. Generic messages like "Invalid MFA code" and "Too many login
 attempts" don't leak account state (we deliberately don't say "no such
 user" vs "wrong password").
 
 ### Why login rate-limit is per-IP, not per-username
+
 Per-username limit + slow hash gives an attacker a free user enumeration
 oracle: try a known user, get a long response time + lockout; try an unknown
 user, get a fast response. IP-keying treats every attempt the same. Payload's

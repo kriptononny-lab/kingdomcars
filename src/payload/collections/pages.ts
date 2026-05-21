@@ -2,9 +2,12 @@ import type { CollectionConfig } from 'payload';
 
 import { isAdmin } from '@/payload/access/is-admin';
 import { publishedOnly } from '@/payload/access/published-only';
-import { pageBlocks } from '@/payload/blocks';
+import { pageBlocks } from '@/payload/blocks/page-blocks';
 import { seoField } from '@/payload/fields/seo';
-import { revalidatePageAfterChange, revalidatePageAfterDelete } from '@/payload/hooks/revalidate-page';
+import {
+  revalidatePageAfterChange,
+  revalidatePageAfterDelete,
+} from '@/payload/hooks/revalidate-page';
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -56,6 +59,7 @@ export const Pages: CollectionConfig = {
       name: 'layout',
       type: 'blocks',
       label: 'Page layout',
+      localized: true,
       minRows: 0,
       blocks: pageBlocks,
     },

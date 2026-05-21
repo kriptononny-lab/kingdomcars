@@ -12,14 +12,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
-const TARGET = path.resolve(
-  process.cwd(),
-  'node_modules',
-  'payload',
-  'dist',
-  'bin',
-  'loadEnv.js',
-);
+const TARGET = path.resolve(process.cwd(), 'node_modules', 'payload', 'dist', 'bin', 'loadEnv.js');
 
 const OLD_DEFAULT_IMPORT = "import nextEnvImport from '@next/env';";
 const NEW_NAMESPACE_IMPORT = "import * as nextEnvImport from '@next/env';";
@@ -49,11 +42,39 @@ if (content.includes(OLD_DESTRUCTURE) && !content.includes(NEW_RESOLUTION)) {
 
 if (changed) {
   writeFileSync(TARGET, content, 'utf8');
-  console.warn('[patch-payload] loadEnv.js patched (Payload 3 / Next 16 / Node 22+ ESM-CJS interop).');
+  console.warn(
+    '[patch-payload] loadEnv.js patched (Payload 3 / Next 16 / Node 22+ ESM-CJS interop).',
+  );
 } else if (content.includes(NEW_RESOLUTION)) {
   console.warn('[patch-payload] loadEnv.js already up to date.');
 } else {
   console.warn(
     '[patch-payload] loadEnv.js in unexpected shape — manual review needed (Payload may have refactored).',
   );
+}
+
+// ---------------------------------------------------------------------------
+// CI-only fallback: stub out the `server-only` package so CLI scripts
+// (`npm run payload:migrate`, `npm run seed`) can import server modules
+// without crashing. The real `server-only` package throws when loaded
+// outside an RSC/server context — protection that Next's bundler enforces
+// at build/runtime in production; CLI scripts deliberately bypass it.
+//
+// Strictly opt-in via env: STUB_SERVER_ONLY=1. Not set locally, not set in
+// production build, only set in CI workflow (where it's the simplest way
+// to make `node --import=tsx/esm --import=./scripts/bootstrap-env.mts`
+// work on Linux runners if the ESM-only loader hook still doesn't catch
+// the resolve on this specific tsx/Node combination). Documented in
+// docs/adr/0006-server-only.md.
+// ---------------------------------------------------------------------------
+if (process.env.STUB_SERVER_ONLY === '1') {
+  const stubTarget = path.resolve(process.cwd(), 'node_modules', 'server-only', 'index.js');
+  if (existsSync(stubTarget)) {
+    writeFileSync(
+      stubTarget,
+      '// stubbed for CLI scripts via STUB_SERVER_ONLY=1 — see scripts/patch-payload.mjs\nmodule.exports = {};\n',
+      'utf8',
+    );
+    console.warn('[patch-payload] server-only stubbed (STUB_SERVER_ONLY=1).');
+  }
 }

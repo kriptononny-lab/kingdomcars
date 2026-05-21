@@ -1,4 +1,5 @@
 import { ContactFormBlockView } from '@/components/blocks/ContactFormBlock';
+import { ContactInfoBlockView } from '@/components/blocks/ContactInfoBlock';
 import { CountersBlockView } from '@/components/blocks/CountersBlock';
 import { CTABlockView } from '@/components/blocks/CTABlock';
 import { FAQBlockView } from '@/components/blocks/FAQBlock';
@@ -11,7 +12,8 @@ import { PricingBlockView } from '@/components/blocks/PricingBlock';
 import { RichTextBlockView } from '@/components/blocks/RichTextBlock';
 import { ServicesBlockView } from '@/components/blocks/ServicesBlock';
 import { TestimonialsBlockView } from '@/components/blocks/TestimonialsBlock';
-import type { PageBlock } from '@/types/blocks';
+import { WizardFormBlockView } from '@/components/blocks/WizardFormBlock';
+import type { PageBlock } from '@/types/blocks/page-block';
 
 interface Props {
   block: PageBlock;
@@ -51,6 +53,12 @@ export function BlockView({ block }: Props) {
     }
     case 'contactForm': {
       return <ContactFormBlockView block={block} />;
+    }
+    case 'contactInfo': {
+      return <ContactInfoBlockView block={block} />;
+    }
+    case 'wizardForm': {
+      return <WizardFormBlockView block={block} />;
     }
     case 'testimonials': {
       return <TestimonialsBlockView block={block} />;

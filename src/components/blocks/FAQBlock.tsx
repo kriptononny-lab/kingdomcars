@@ -16,7 +16,7 @@ interface Props {
  */
 export function FAQBlockView({ block }: Props) {
   return (
-    <section className="py-20">
+    <section className="py-28">
       <JsonLd data={faqPageJsonLd(block.items)} />
       <Container>
         <SectionHeader title={block.sectionTitle} />
@@ -24,9 +24,9 @@ export function FAQBlockView({ block }: Props) {
           {block.items.map((item) => (
             <details
               key={item.id ?? item.question}
-              className="group rounded-lg border border-white/5 bg-surface-card p-5 transition-colors duration-200 open:border-gold/20"
+              className="group bg-surface-card open:border-gold/20 rounded-lg border border-white/5 p-5 transition-colors duration-200"
             >
-              <summary className="flex cursor-pointer items-center justify-between gap-4 font-heading text-base font-semibold uppercase tracking-wider [&::-webkit-details-marker]:hidden">
+              <summary className="font-heading flex cursor-pointer items-center justify-between gap-4 text-base font-semibold tracking-wider uppercase [&::-webkit-details-marker]:hidden">
                 <span>{item.question}</span>
                 <span
                   aria-hidden="true"
@@ -35,7 +35,7 @@ export function FAQBlockView({ block }: Props) {
                   +
                 </span>
               </summary>
-              <p className="mt-3 text-sm leading-relaxed text-text-muted">{item.answer}</p>
+              <p className="text-text-muted mt-3 text-sm leading-relaxed">{item.answer}</p>
             </details>
           ))}
         </div>

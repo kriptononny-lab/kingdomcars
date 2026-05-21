@@ -16,7 +16,7 @@ export function CookieSettingsLink({ className }: { className?: string }) {
     <button
       type="button"
       onClick={openSettings}
-      className={className ?? 'text-sm text-text-muted motion-safe:hover:text-gold'}
+      className={className ?? 'text-text-muted motion-safe:hover:text-gold text-sm'}
     >
       {t('customize')}
     </button>

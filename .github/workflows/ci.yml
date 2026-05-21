@@ -4,6 +4,17 @@
 # Jobs run in parallel where possible. Each job restores the same npm cache
 # (keyed off package-lock.json) so cold starts are minimised. The "build" job
 # uses SKIP_ENV_VALIDATION=1 so we don't need to expose real secrets to PRs.
+#
+# Build, E2E and Lighthouse set STUB_SERVER_ONLY=1 so the postinstall script
+# (see scripts/patch-payload.mjs) replaces `node_modules/server-only/index.js`
+# with a no-op. The real `server-only` package throws when loaded outside an
+# RSC compiler, which crashes the tsx-driven CLI scripts (migrate, seed) that
+# we need at build time. Production deploys never set this env, so the real
+# package — and the bundler's client/server boundary check it enforces — is
+# preserved. See docs/adr/0006-server-only.md for the full rationale.
+#
+# Lighthouse gate (§11): perf ≥ 0.95, a11y / best-practices / seo = 1.0.
+# Thresholds live in `.lighthouserc.json`. Regressions block the merge.
 # =============================================================================
 
 name: CI
@@ -88,10 +99,30 @@ jobs:
     name: Build
     needs: install
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: payload
+          POSTGRES_PASSWORD: ci_build_password
+          POSTGRES_DB: kingdomcars_build
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U payload -d kingdomcars_build"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
+      STUB_SERVER_ONLY: '1'
       SKIP_ENV_VALIDATION: '1'
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       NEXT_PUBLIC_SITE_HOST: localhost
+      DATABASE_URL: postgres://payload:ci_build_password@localhost:5432/kingdomcars_build
+      PAYLOAD_SECRET: ci_build_mock_secret_at_least_thirty_two_chars
+      PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
+      REVALIDATE_SECRET: ci_build_mock_revalidate_secret_16ch
+      TELEGRAM_BOT_TOKEN: '0:ci_build_mock'
+      TELEGRAM_CHAT_ID: '-1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -99,6 +130,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci --no-audit --no-fund
+      - name: Apply Payload migrations
+        run: npm run payload:migrate
       - run: npm run build
       - name: Bundle size report
         run: npx bundlewatch --config bundlewatch.config.json || true
@@ -123,6 +156,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
+      STUB_SERVER_ONLY: '1'
       DATABASE_URL: postgres://payload:ci_test_password@localhost:5432/kingdomcars_test
       PAYLOAD_SECRET: ci_test_secret_at_least_thirty_two_chars_xx
       PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
@@ -139,6 +173,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci --no-audit --no-fund
+      - name: Apply Payload migrations
+        run: npm run payload:migrate
+      - name: Seed test data
+        run: npm run seed
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4
@@ -167,15 +205,31 @@ jobs:
     name: Lighthouse CI
     needs: build
     runs-on: ubuntu-latest
+    # §11 gate: perf ≥ 0.95, a11y/best-practices/seo = 1.0. If the build
+    # regresses, the merge is blocked — that's the whole point of the gate.
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: payload
+          POSTGRES_PASSWORD: ci_lhci_password
+          POSTGRES_DB: kingdomcars_lhci
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U payload -d kingdomcars_lhci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
+      STUB_SERVER_ONLY: '1'
       SKIP_ENV_VALIDATION: '1'
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       NEXT_PUBLIC_SITE_HOST: localhost
-      PAYLOAD_SECRET: ci_test_secret_at_least_thirty_two_chars_xx
+      PAYLOAD_SECRET: ci_lhci_secret_at_least_thirty_two_chars_xx
       PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
-      REVALIDATE_SECRET: ci_test_revalidate_secret_16ch
-      DATABASE_URL: postgres://payload:ci@localhost:5432/kingdomcars_test
-      TELEGRAM_BOT_TOKEN: '0:ci_mock'
+      REVALIDATE_SECRET: ci_lhci_revalidate_secret_16ch
+      DATABASE_URL: postgres://payload:ci_lhci_password@localhost:5432/kingdomcars_lhci
+      TELEGRAM_BOT_TOKEN: '0:ci_lhci_mock'
       TELEGRAM_CHAT_ID: '-1'
     steps:
       - uses: actions/checkout@v4
@@ -184,6 +238,12 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci --no-audit --no-fund
+      - name: Apply Payload migrations
+        run: npm run payload:migrate
+      - name: Seed content
+        # LHCI hits real Page URLs; without seed they 404 / have empty meta,
+        # which tanks SEO and a11y scores artificially.
+        run: npm run seed
       - run: npm run build
       - name: Run LHCI
         run: npx --yes @lhci/cli@0.14.x autorun --config=.lighthouserc.json

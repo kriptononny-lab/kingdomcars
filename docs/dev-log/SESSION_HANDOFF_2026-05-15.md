@@ -18,6 +18,7 @@ Image `v2-app:latest` собран за 149 секунд без `--legacy-peer-d
 Прошли все стадии из плана: применены 2 архитектурных патча, починены 130 lint-ошибок (вылезли после `npm install` с обновлённым unicorn-plugin), починены 9 настоящих TS-ошибок (которые прятались под `ignoreBuildErrors: true`), починен Docker build (была цепь проблем: lockfile sync → Node 22 vs 24 → npm 10 vs 11 → `.npmrc` legacy-peer-deps → `String.raw` в config.matcher).
 
 ### Прошли quality gates с нуля
+
 - `npm run lint` — 0 errors, 0 warnings (было 130 errors)
 - `npm run typecheck` — 0 errors (было 9 настоящих, спрятанных под флагом)
 - `npm test` — 100/100 passed (11 тест-файлов, +1 новый env-валидационный)
@@ -46,7 +47,7 @@ Image `v2-app:latest` собран за 149 секунд без `--legacy-peer-d
    - CookieSettingsDialog: disable перемещён на конкретные setState вызовы
    - JsonLd: replaceAll + String.raw
    - cookie-banner.spec: `5_000` → `5000`
-   - setup.ts: typeof import → import type * as NextIntl
+   - setup.ts: typeof import → import type \* as NextIntl
 
 5. **`kingdomcars-typecheck-fixes.zip`** (6 файлов) — фиксы 9 настоящих TS-ошибок:
    - scripts/seed.ts: убраны 4× `@ts-expect-error` (Payload API стал лояльнее)
@@ -64,7 +65,7 @@ Image `v2-app:latest` собран за 149 секунд без `--legacy-peer-d
 
 ### Ad-hoc фиксы (без архива, через PowerShell)
 
-- `src/proxy.ts`: `config.matcher` с `String.raw\`...\`` обратно в обычный string literal с экранированием `\\.`. Next 16 webpack-парсер не поддерживает TaggedTemplateExpression в `config.matcher[0]`. Добавлен точечный `// eslint-disable-next-line unicorn/prefer-string-raw -- ...`
+- `src/proxy.ts`: `config.matcher` с `String.raw\`...\``обратно в обычный string literal с экранированием`\\.`. Next 16 webpack-парсер не поддерживает TaggedTemplateExpression в `config.matcher[0]`. Добавлен точечный `// eslint-disable-next-line unicorn/prefer-string-raw -- ...`
 - `node_modules/server-only/`: создан физический stub (package.json + index.js + index.mjs с правильным exports map для CJS+ESM). Это **временный фикс** — не переживает `npm ci`. Постоянное решение запланировано как следующий шаг.
 
 ## Что осталось доделать (по убыванию приоритета)
@@ -74,6 +75,7 @@ Image `v2-app:latest` собран за 149 секунд без `--legacy-peer-d
 **Проблема:** `node_modules/server-only/` стирается при любом `npm ci` или `npm install` (если main lockfile не содержит этой записи). У нового разработчика или в CI seed/migrate упадут с `Cannot find module 'server-only'`.
 
 **План:**
+
 1. Создать `local-packages/server-only/` с тремя файлами (package.json, index.js, index.mjs) — те же что сейчас в node_modules
 2. Добавить в `package.json`:
    ```json
@@ -91,6 +93,7 @@ Image `v2-app:latest` собран за 149 секунд без `--legacy-peer-d
 В файле слегка покороблены метаданные после неудачных heredoc-вставок через PowerShell. Семантически работает (TS не ругается, рантайм OK, Payload-админка использует свои метаданные). Эталонная версия — в zip `kingdomcars-fix-payload-layout.zip`. Чинится открытием в VS Code и заменой содержимого на эталон.
 
 Эталон файла:
+
 ```tsx
 /* eslint-disable */
 import type { Metadata } from 'next';
@@ -140,6 +143,7 @@ export default Layout;
 ### 4. GitHub Settings (для CI/CD из step14-15)
 
 Документировано в `STEP_14_15_CHANGES.md`. Нужно настроить:
+
 - Secrets: SENTRY_AUTH_TOKEN, deploy keys, etc
 - Variables: NEXT_PUBLIC_SITE_URL, environments
 - Environments: production, staging
@@ -153,12 +157,14 @@ export default Layout;
 ## Ключевые конфигурации проекта
 
 ### Хост (Windows)
+
 - Path: `C:\Users\Sergo\Desktop\v2\`
 - Node 24.13.1, npm 11.8.0
 - Docker Desktop 4.73, engine linux/amd64
 - PowerShell + PSReadLine (нестабилен на длинных heredoc; крэшится при больших вставках — используем notepad или zip-патчи для больших правок)
 
 ### .env (генерировался ранее, у пользователя на диске)
+
 ```
 POSTGRES_PASSWORD=DE47tidGNfOTp6ux8hlKV1km3SzPRe2Z
 PAYLOAD_SECRET=<48 chars>
@@ -171,6 +177,7 @@ NEXT_PUBLIC_SITE_HOST=localhost
 ```
 
 ### Контейнеры (docker compose)
+
 - `v2-postgres-1`: postgres:16-alpine, healthy, порт 5432
 - `v2-app-1`: v2-app:latest (Node 24 + Next 16.2.6 + Payload 3), healthy, internal 3000
 - `v2-caddy-1`: caddy:2-alpine, healthy, порты 80/443
@@ -189,7 +196,7 @@ NEXT_PUBLIC_SITE_HOST=localhost
    - Hydration sync (читать localStorage/cookie на mount)
    - Reduced-motion ветке анимаций
    - re-sync state при открытии диалога
-   
+
    Решение: точечный disable с rationale-комментарием. Альтернатива (useSyncExternalStore) overkill для UI.
 
 6. **Payload 3 beta-128 breaking change**: `RootLayout` теперь требует `serverFunction` проп + `handleServerFunctions` импортируется из `@payloadcms/next/layouts` (НЕ из `/utilities`, хотя по PR-диффу значится так).

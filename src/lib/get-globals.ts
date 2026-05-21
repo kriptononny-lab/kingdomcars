@@ -19,6 +19,9 @@ function fetchGlobal(slug: GlobalSlug, tag: string) {
     )();
 }
 
+/** Fetch the Header global for a given locale (cached, revalidated by tag). */
 export const getHeader = fetchGlobal('header', REVALIDATE.TAG_HEADER);
+/** Fetch the Footer global for a given locale (cached, revalidated by tag). */
 export const getFooter = fetchGlobal('footer', REVALIDATE.TAG_FOOTER);
+/** Fetch the SiteSettings global for a given locale (cached, revalidated by tag). */
 export const getSiteSettings = fetchGlobal('site-settings', REVALIDATE.TAG_SETTINGS);

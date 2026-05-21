@@ -60,14 +60,14 @@
 
 ## Метрики до/после Stage 0
 
-| Параметр | До | После |
-|---|---|---|
-| `public/` общий размер | ~6 MB | 604 KB (-90%) |
-| Логотип LCP-asset | 5.7 MB PNG | 21 KB WebP (-99.6%) |
-| CSP `script-src` | `'unsafe-inline' 'strict-dynamic'` (= `unsafe-inline`) | `'nonce-XXX' 'strict-dynamic'` (реальная защита) |
-| `revalidate` webhook | пустая директория | живой endpoint с auth |
-| Файлы > 100 строк | 0 | 0 (правило соблюдено) |
-| Установленных `key={i}` в layout | 4 | 0 |
+| Параметр                         | До                                                     | После                                            |
+| -------------------------------- | ------------------------------------------------------ | ------------------------------------------------ |
+| `public/` общий размер           | ~6 MB                                                  | 604 KB (-90%)                                    |
+| Логотип LCP-asset                | 5.7 MB PNG                                             | 21 KB WebP (-99.6%)                              |
+| CSP `script-src`                 | `'unsafe-inline' 'strict-dynamic'` (= `unsafe-inline`) | `'nonce-XXX' 'strict-dynamic'` (реальная защита) |
+| `revalidate` webhook             | пустая директория                                      | живой endpoint с auth                            |
+| Файлы > 100 строк                | 0                                                      | 0 (правило соблюдено)                            |
+| Установленных `key={i}` в layout | 4                                                      | 0                                                |
 
 ## Команды для проверки локально
 

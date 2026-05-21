@@ -35,6 +35,16 @@ function hreflangAlternates(
   };
 }
 
+/**
+ * Build Next.js `Metadata` from a Payload `PageDoc` for a given locale.
+ *
+ * Falls back gracefully: uses `page.title` when `seo.title` is absent,
+ * and omits `robots` unless `seo.noindex` is explicitly set.
+ *
+ * @param page   - Payload page document (title + optional seo fields).
+ * @param locale - Active locale used to set `alternates.canonical` hreflang.
+ * @returns Next.js Metadata object ready to be returned from `generateMetadata`.
+ */
 export function buildPageMetadata(page: PageDoc, locale: Locale): Metadata {
   const fallbackTitle = page.title ?? SITE.NAME;
   const title = page.seo?.title ?? fallbackTitle;
@@ -56,7 +66,7 @@ export function buildPageMetadata(page: PageDoc, locale: Locale): Metadata {
       description,
       url: canonical,
       siteName: SITE.NAME,
-      locale: locale === 'pl' ? 'pl_PL' : (locale === 'en' ? 'en_GB' : 'ru_RU'),
+      locale: locale === 'pl' ? 'pl_PL' : locale === 'en' ? 'en_GB' : 'ru_RU',
       type: 'website',
     },
     twitter: { card: 'summary_large_image', title, description },

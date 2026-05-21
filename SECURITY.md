@@ -4,16 +4,17 @@
 
 Only `main` is supported. Older tags are not patched.
 
-| Version | Supported |
-|---|---|
-| `main` | ✅ |
-| anything else | ❌ |
+| Version       | Supported |
+| ------------- | --------- |
+| `main`        | ✅        |
+| anything else | ❌        |
 
 ## Reporting a vulnerability
 
 **Do not** open a public GitHub issue.
 
 Email **security@kingdomcars.example** with:
+
 - A clear description of the issue
 - Reproduction steps or PoC
 - Affected URL / version / commit

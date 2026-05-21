@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
+import { notFound } from 'next/navigation';
 
 import { PageRenderer } from '@/components/layout/PageRenderer';
 import { LOCALES, type Locale } from '@/lib/constants';
@@ -13,7 +13,16 @@ interface Props {
 }
 
 /** Slugs handled by their own explicit routes — must NOT be SSG'd here. */
-const RESERVED = new Set(['home', 'about', 'privacy', 'cookies']);
+const RESERVED = new Set([
+  'home',
+  'about',
+  'privacy',
+  'cookies',
+  'uslugi',
+  'services',
+  'cennik',
+  'pricing',
+]);
 
 /**
  * Build SSG params for every published Page in every locale, minus the
@@ -24,9 +33,7 @@ export async function generateStaticParams() {
   const all = await Promise.all(
     LOCALES.map(async (locale) => {
       const slugs = await getAllPageSlugs(locale);
-      return slugs
-        .filter((s) => !RESERVED.has(s))
-        .map((slug) => ({ locale, slug: [slug] }));
+      return slugs.filter((s) => !RESERVED.has(s)).map((slug) => ({ locale, slug: [slug] }));
     }),
   );
   return all.flat();

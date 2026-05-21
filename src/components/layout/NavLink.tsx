@@ -18,7 +18,9 @@ interface Props {
  *   5. literal "link" (last-resort — should never reach this)
  *
  * Without this fallback an empty label produces an empty `<a>` and axe-core
- * reports a `link-name` violation (STEP_12_KNOWN_ISSUES #2).
+ * reports a `link-name` violation. The 5-level fallback below means the
+ * link always has a non-empty accessible name, even if a Payload editor
+ * accidentally clears it.
  */
 function accessibleName(link: LinkValue): string {
   const trimmed = link.label?.trim();

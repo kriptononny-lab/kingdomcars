@@ -8,8 +8,11 @@ import { LOCALES, type Locale } from '@/lib/constants';
 import { logger } from '@/lib/logger';
 import config from '@/payload/payload.config';
 
+import { aboutPageData } from './seed-data/about-page';
 import { homePageData } from './seed-data/home';
-import { headerData, footerData } from './seed-data/navigation';
+import { footerData, headerData } from './seed-data/navigation';
+import { pricingPageData } from './seed-data/pricing-page';
+import { servicesPageData } from './seed-data/services-page';
 import { STATIC_SLUGS, staticPageData } from './seed-data/static-pages';
 
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@kingdomcars.example.com';
@@ -48,6 +51,11 @@ async function ensureAdmin(payload: Payload) {
   await payload.create({
     collection: 'users',
     data: { email: ADMIN_EMAIL, password, name: 'KingdomCars admin', role: 'admin' },
+    // Users.create is `() => false` per §6 — seed has to override it. Local
+    // API skips access by default in Payload 3, but being explicit means
+    // tightening the collection later (e.g., requireing an authed admin
+    // context) won't silently break the seed.
+    overrideAccess: true,
   });
   logger.warn({ email: ADMIN_EMAIL }, 'admin created — CHANGE THE PASSWORD');
 }
@@ -75,10 +83,7 @@ async function ensureSiteSettings(payload: Payload) {
  * runtime against the collection schema. We rely on the seed running
  * successfully end-to-end as the type contract.
  */
-async function seedLocalisedPage(
-  payload: Payload,
-  build: (locale: Locale) => PageSeedInput,
-) {
+async function seedLocalisedPage(payload: Payload, build: (locale: Locale) => PageSeedInput) {
   const plData = build('pl');
   const existing = await payload.find({
     collection: 'pages',
@@ -132,7 +137,10 @@ async function main() {
   await ensureAdmin(payload);
   await ensureSiteSettings(payload);
   await seedLocalisedPage(payload, homePageData);
-  for (const slug of STATIC_SLUGS) {
+  await seedLocalisedPage(payload, aboutPageData);
+  await seedLocalisedPage(payload, servicesPageData);
+  await seedLocalisedPage(payload, pricingPageData);
+  for (const slug of STATIC_SLUGS.filter((s) => s !== 'about')) {
     await seedLocalisedPage(payload, (locale) => staticPageData(slug, locale));
   }
   await seedLocalisedGlobal(payload, 'header', headerData);

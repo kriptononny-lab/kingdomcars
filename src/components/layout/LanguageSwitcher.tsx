@@ -42,7 +42,7 @@ export function LanguageSwitcher() {
             aria-current={active ? 'true' : undefined}
             aria-label={tHeader('currentLanguage', { language: t(l) })}
             className={cn(
-              'min-h-[36px] rounded-md px-2 py-1 font-heading text-xs font-semibold uppercase tracking-wider transition-colors',
+              'font-heading min-h-[36px] rounded-md px-2 py-1 text-xs font-semibold tracking-wider uppercase transition-colors',
               active
                 ? 'bg-gold text-black'
                 : 'text-text-muted motion-safe:hover:bg-gold/10 motion-safe:hover:text-gold',
