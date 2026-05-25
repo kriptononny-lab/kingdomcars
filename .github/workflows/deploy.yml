@@ -39,7 +39,7 @@ jobs:
       image: ${{ steps.meta.outputs.tags }}
       digest: ${{ steps.push.outputs.digest }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0 # full history for release notes / Sentry release
 
