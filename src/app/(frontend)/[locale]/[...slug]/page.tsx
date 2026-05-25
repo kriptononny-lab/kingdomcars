@@ -1,11 +1,11 @@
+export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 import { PageRenderer } from '@/components/layout/PageRenderer';
-import { LOCALES, type Locale } from '@/lib/constants';
+import { type Locale } from '@/lib/constants';
 import { getPageBySlug } from '@/lib/get-page-by-slug';
-import { getAllPageSlugs } from '@/lib/get-page-slugs';
 import { buildPageMetadata } from '@/lib/page-metadata';
 
 interface Props {
@@ -30,13 +30,9 @@ const RESERVED = new Set([
  * would create conflicts).
  */
 export async function generateStaticParams() {
-  const all = await Promise.all(
-    LOCALES.map(async (locale) => {
-      const slugs = await getAllPageSlugs(locale);
-      return slugs.filter((s) => !RESERVED.has(s)).map((slug) => ({ locale, slug: [slug] }));
-    }),
-  );
-  return all.flat();
+  // Return empty array — all pages rendered dynamically at request time
+  // (avoids DB connection during build)
+  return [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

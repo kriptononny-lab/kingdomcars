@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 
@@ -32,6 +33,7 @@ export default async function HomePage({ params }: Props) {
         id="ld-business"
         data={localBusinessJsonLd({
           phone: settings.phonePrimary,
+          phoneSecondary: settings.phoneSecondary,
           email: settings.email,
           address: settings.address
             ? {

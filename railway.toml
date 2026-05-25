@@ -1,4 +1,11 @@
+﻿[build]
+# Railway builds using docker/Dockerfile (builder stage -> runner stage).
+# The seeder stage is used separately via a deploy hook or one-off command.
+dockerfilePath = "docker/Dockerfile"
+watchPatterns = ["src/**", "scripts/**", "public/**"]
+
 [deploy]
+# Railway injects PORT automatically; our Next.js standalone server reads it.
 startCommand = "node server.js"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 60

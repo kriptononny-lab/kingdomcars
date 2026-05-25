@@ -10,8 +10,8 @@ playwright-report
 test-results
 *.md
 !README.md
-.env*
-!.env.example
+.env.local
+.env.example
 Dockerfile*
 docker-compose*
 .dockerignore

@@ -1,6 +1,9 @@
-import { Link } from '@/i18n/navigation';
+'use client';
+
+import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import type { LinkValue } from '@/types/blocks/common';
+import { useLocale } from 'next-intl';
 
 interface Props {
   link: LinkValue;
@@ -49,9 +52,17 @@ export function NavLink({ link, className, onClick }: Props) {
   const cls = cn('inline-flex min-h-[44px] items-center', className);
   const text = accessibleName(link);
 
+  const pathname = usePathname();
+  const locale = useLocale();
+  // next-intl's usePathname strips the locale prefix, so home is just '/'
+  const isHome = pathname === '/';
+  // Locale prefix for anchor links: default locale (pl) has no prefix
+  const localePrefix = locale === 'pl' ? '' : `/${locale}`;
+
   if (link.kind === 'anchor' && link.anchor) {
+    const href = isHome ? `#${link.anchor}` : `${localePrefix}/#${link.anchor}`;
     return (
-      <a href={`#${link.anchor}`} className={cls} onClick={onClick}>
+      <a href={href} className={cls} onClick={onClick}>
         {text}
       </a>
     );

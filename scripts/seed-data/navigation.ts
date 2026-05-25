@@ -52,15 +52,36 @@ export function footerData(locale: Locale) {
       {
         heading: t.footerHeadings.legal,
         links: [
-          { link: { label: t.privacy, kind: 'internal' as const } },
-          { link: { label: t.cookies, kind: 'internal' as const } },
+          {
+            link: {
+              label: t.privacy,
+              kind: 'external' as const,
+              url:
+                locale === 'pl'
+                  ? '/polityka-prywatnosci'
+                  : locale === 'ru'
+                    ? '/ru/politika-konfidentsialnosti'
+                    : '/en/privacy',
+              newTab: false,
+            },
+          },
+          {
+            link: {
+              label: t.cookies,
+              kind: 'external' as const,
+              url:
+                locale === 'pl'
+                  ? '/polityka-cookies'
+                  : locale === 'ru'
+                    ? '/ru/polityka-cookies'
+                    : '/en/cookies',
+              newTab: false,
+            },
+          },
         ],
       },
     ],
     copyright: t.footerCopyright.replace('{year}', String(new Date().getFullYear())),
-    legalLinks: [
-      { link: { label: t.privacy, kind: 'internal' as const } },
-      { link: { label: t.cookies, kind: 'internal' as const } },
-    ],
+    legalLinks: [],
   };
 }

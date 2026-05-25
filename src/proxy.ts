@@ -47,6 +47,10 @@ async function tryRedirect(req: NextRequest): Promise<NextResponse | null> {
 }
 
 export default async function proxy(req: NextRequest): Promise<NextResponse> {
+  // If user has no locale cookie yet, default to Polish (ignore browser language)
+  if (!req.cookies.get('NEXT_LOCALE')) {
+    req.headers.set('Accept-Language', 'pl');
+  }
   const redirect = await tryRedirect(req);
   if (redirect) return redirect;
 

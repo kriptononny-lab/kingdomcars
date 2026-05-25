@@ -14,6 +14,10 @@ export function staticPageData(slug: StaticSlug, locale: Locale) {
     title: copy.title,
     slug: SLUG_PER_LOCALE[slug][locale],
     _status: 'published',
+    seo: {
+      title: copy.seoTitle ?? copy.title,
+      description: copy.seoDescription,
+    },
     layout: [{ blockType: 'richText', content: lexicalDoc(copy.blocks) }],
   };
 }

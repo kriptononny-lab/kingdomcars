@@ -17,9 +17,22 @@ interface PostalAddress {
 /** Optional business profile data used to populate JSON-LD schemas. */
 export interface BusinessProfile {
   phone?: string;
+  phoneSecondary?: string;
   email?: string;
   address?: PostalAddress;
   sameAs?: string[];
+}
+
+/**
+ * Build the schema.org `telephone` value: a single string when only the
+ * primary exists, or an array when a secondary number is present.
+ */
+function telephoneValue(p: BusinessProfile): string | string[] | undefined {
+  const list = [p.phone, p.phoneSecondary].filter(
+    (n): n is string => typeof n === 'string' && n.length > 0,
+  );
+  if (list.length === 0) return undefined;
+  return list.length === 1 ? list[0] : list;
 }
 
 const url = (): string => clientEnv.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '');
@@ -35,7 +48,7 @@ export function organizationJsonLd(p: BusinessProfile = {}) {
     name: SITE.NAME,
     url: url(),
     logo: `${url()}/logo-mark.webp`,
-    ...(p.phone && { telephone: p.phone }),
+    ...(telephoneValue(p) && { telephone: telephoneValue(p) }),
     ...(p.email && { email: p.email }),
     ...(p.address && { address: { '@type': 'PostalAddress', ...p.address } }),
     ...(p.sameAs?.length && { sameAs: p.sameAs }),
@@ -69,7 +82,7 @@ export function localBusinessJsonLd(p: BusinessProfile) {
     url: url(),
     image: `${url()}/logo-mark.webp`,
     priceRange: '€€',
-    ...(p.phone && { telephone: p.phone }),
+    ...(telephoneValue(p) && { telephone: telephoneValue(p) }),
     ...(p.email && { email: p.email }),
     ...(p.address && { address: { '@type': 'PostalAddress', ...p.address } }),
     areaServed: { '@type': 'Country', name: 'Poland' },
