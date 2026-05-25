@@ -1,54 +1,77 @@
+import type { CSSProperties } from 'react';
+
 /**
  * Animated waving Polish flag (white over red) rendered inline next to the
- * hero headline highlight. The cloth is split into vertical columns, each
- * animated with a phase-shifted `flagWave` (declared in globals.css) to
- * simulate wind. Sized in `em` so it scales with the surrounding text.
+ * hero headline highlight. The cloth is rendered as many thin vertical strips,
+ * each offset along a sine wave (via the `--y0`/`--y1` CSS vars consumed by the
+ * `flagWave` keyframes in globals.css) so a smooth ripple travels across the
+ * cloth. A soft light/shadow gradient on top adds depth. Sized in `em` so it
+ * scales with the surrounding text.
  *
  * Decorative — `aria-hidden`; the word "Polska/Польше" already carries the
- * meaning. Animation is disabled under `prefers-reduced-motion` via the
- * global reset in globals.css.
+ * meaning. Animation is disabled under `prefers-reduced-motion` via the global
+ * reset in globals.css.
  */
+const STRIP_COUNT = 96;
+const CLOTH_W = 48;
+const CLOTH_H = 34;
+const HALF = CLOTH_H / 2;
+const AMPLITUDE = 2.8;
+const DURATION_S = 2.2;
+const STRIP_W = CLOTH_W / STRIP_COUNT;
+
+const STRIPS = Array.from({ length: STRIP_COUNT }, (_, i) => {
+  const phase = (i / STRIP_COUNT) * Math.PI * 2;
+  return {
+    x: i * STRIP_W,
+    y0: -Math.sin(phase) * AMPLITUDE,
+    y1: -Math.sin(phase + Math.PI) * AMPLITUDE,
+    delay: -(i / STRIP_COUNT) * DURATION_S,
+  };
+});
+
 export function PolishFlag() {
   return (
     <svg
-      viewBox="0 0 41 31"
+      viewBox="0 0 54 42"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
       role="img"
       focusable="false"
       style={{
         display: 'inline-block',
-        width: '1.15em',
+        width: '1.25em',
         height: 'auto',
         verticalAlign: 'baseline',
-        marginLeft: '0.18em',
+        marginLeft: '0.2em',
+        overflow: 'visible',
       }}
     >
-      <g transform="translate(2,2)">
-        <g className="flag-col" style={{ animationDelay: '0s' }}>
-          <rect x="0" y="0" width="6.5" height="13.5" fill="#ffffff" />
-          <rect x="0" y="13.5" width="6.5" height="13.5" fill="#d4213d" />
-        </g>
-        <g className="flag-col" style={{ animationDelay: '0.25s' }}>
-          <rect x="6.5" y="0" width="6.5" height="13.5" fill="#f7f7f7" />
-          <rect x="6.5" y="13.5" width="6.5" height="13.5" fill="#cb1e37" />
-        </g>
-        <g className="flag-col" style={{ animationDelay: '0.5s' }}>
-          <rect x="13" y="0" width="6.5" height="13.5" fill="#f0f0f0" />
-          <rect x="13" y="13.5" width="6.5" height="13.5" fill="#c01b33" />
-        </g>
-        <g className="flag-col" style={{ animationDelay: '0.75s' }}>
-          <rect x="19.5" y="0" width="6.5" height="13.5" fill="#f7f7f7" />
-          <rect x="19.5" y="13.5" width="6.5" height="13.5" fill="#cb1e37" />
-        </g>
-        <g className="flag-col" style={{ animationDelay: '1s' }}>
-          <rect x="26" y="0" width="6.5" height="13.5" fill="#ffffff" />
-          <rect x="26" y="13.5" width="6.5" height="13.5" fill="#d4213d" />
-        </g>
-        <g className="flag-col" style={{ animationDelay: '1.25s' }}>
-          <rect x="32.5" y="0" width="6.5" height="13.5" fill="#f0f0f0" />
-          <rect x="32.5" y="13.5" width="6.5" height="13.5" fill="#c01b33" />
-        </g>
+      <defs>
+        <linearGradient id="flagShade" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.14" />
+          <stop offset="50%" stopColor="#000000" stopOpacity="0.13" />
+          <stop offset="100%" stopColor="#ffffff" stopOpacity="0.14" />
+        </linearGradient>
+      </defs>
+      <g transform="translate(3,4)">
+        {STRIPS.map((s) => (
+          <g
+            key={s.x}
+            className="flag-col"
+            style={
+              {
+                '--y0': `${s.y0.toFixed(2)}px`,
+                '--y1': `${s.y1.toFixed(2)}px`,
+                animationDelay: `${s.delay.toFixed(3)}s`,
+              } as CSSProperties
+            }
+          >
+            <rect x={s.x} y={0} width={STRIP_W + 0.25} height={HALF} fill="#ffffff" />
+            <rect x={s.x} y={HALF} width={STRIP_W + 0.25} height={HALF} fill="#d4213d" />
+          </g>
+        ))}
+        <rect x={0} y={0} width={CLOTH_W} height={CLOTH_H} fill="url(#flagShade)" />
       </g>
     </svg>
   );

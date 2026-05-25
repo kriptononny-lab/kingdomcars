@@ -161,13 +161,12 @@ body {
 @keyframes flagWave {
   0%,
   100% {
-    transform: translateY(0) scaleY(1);
+    transform: translateY(var(--y0, 0));
   }
   50% {
-    transform: translateY(-1.5px) scaleY(0.94);
+    transform: translateY(var(--y1, 0));
   }
 }
 .flag-col {
-  transform-origin: center;
-  animation: flagWave 1.6s ease-in-out infinite;
+  animation: flagWave 2.2s ease-in-out infinite;
 }
