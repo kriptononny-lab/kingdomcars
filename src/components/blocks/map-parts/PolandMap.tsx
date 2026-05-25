@@ -1,6 +1,6 @@
 import { CITIES, POLAND_PATH, ROUTES } from '@/components/blocks/map-parts/poland-map-data';
 
-const WARSAW = { cx: 270, cy: 190 };
+const WARSAW = { cx: 329, cy: 219 };
 
 /**
  * Decorative Poland map: country outline + dashed routes from Warszawa to
@@ -41,25 +41,36 @@ export function PolandMap() {
           style={{ animationDelay: `${r.delayS}s` }}
         />
       ))}
-      {CITIES.map((city, i) => (
-        <g key={city.name}>
-          <circle
-            cx={city.cx}
-            cy={city.cy}
-            r="4"
-            fill="#E8A825"
-            style={{
-              animation: 'cityPulse 2s ease-in-out infinite',
-              animationDelay: `${i * 0.3}s`,
-              transformOrigin: 'center',
-              transformBox: 'fill-box',
-            }}
-          />
-          <text x={city.cx + 8} y={city.cy + 4} fill="#B0B0B0" fontSize="11">
-            {city.name}
-          </text>
-        </g>
-      ))}
+      {CITIES.map((city, i) => {
+        // Flip labels to the left of pins near the right edge so text
+        // doesn't overflow the viewBox.
+        const labelOnLeft = city.cx > 360;
+        return (
+          <g key={city.name}>
+            <circle
+              cx={city.cx}
+              cy={city.cy}
+              r="4"
+              fill="#E8A825"
+              style={{
+                animation: 'cityPulse 2s ease-in-out infinite',
+                animationDelay: `${i * 0.3}s`,
+                transformOrigin: 'center',
+                transformBox: 'fill-box',
+              }}
+            />
+            <text
+              x={labelOnLeft ? city.cx - 8 : city.cx + 8}
+              y={city.cy + 4}
+              fill="#B0B0B0"
+              fontSize="11"
+              textAnchor={labelOnLeft ? 'end' : 'start'}
+            >
+              {city.name}
+            </text>
+          </g>
+        );
+      })}
       <circle
         cx={WARSAW.cx}
         cy={WARSAW.cy}

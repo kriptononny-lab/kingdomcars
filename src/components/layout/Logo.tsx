@@ -24,7 +24,7 @@ export function Logo({ size = 48 }: Props) {
     <Link href="/" className="inline-flex items-center" aria-label="KingdomCars вЂ” home">
       <Image
         src="/logo.webp"
-        alt=""
+        alt="KingdomCars"
         width={size}
         height={size}
         priority

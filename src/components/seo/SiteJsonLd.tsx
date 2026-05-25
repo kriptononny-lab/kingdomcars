@@ -16,6 +16,7 @@ function profileFromSettings(s: SiteSettingsData): BusinessProfile {
   );
   return {
     phone: s.phonePrimary,
+    phoneSecondary: s.phoneSecondary,
     email: s.email,
     address: s.address
       ? {

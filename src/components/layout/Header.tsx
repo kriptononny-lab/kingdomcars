@@ -49,6 +49,16 @@ export async function Header() {
               {cfg.phonePrimary}
             </a>
           ) : null}
+          {cfg.phoneSecondary ? (
+            <a
+              href={`tel:${cfg.phoneSecondary.replaceAll(/\s+/g, '')}`}
+              className="border-gold/30 font-heading text-gold motion-safe:hover:bg-gold/10 inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm font-semibold"
+              aria-label={`Call ${cfg.phoneSecondary}`}
+            >
+              <Phone size={14} aria-hidden="true" />
+              {cfg.phoneSecondary}
+            </a>
+          ) : null}
           <LanguageSwitcher />
           {data.ctaLabel ? (
             <button

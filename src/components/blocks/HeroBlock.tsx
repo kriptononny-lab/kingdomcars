@@ -1,5 +1,6 @@
 import { HeroBackdrop } from '@/components/blocks/hero-parts/HeroBackdrop';
 import { HeroVan } from '@/components/blocks/hero-parts/HeroVan';
+import { PolishFlag } from '@/components/blocks/hero-parts/PolishFlag';
 import { Container } from '@/components/layout/Container';
 import { CTAButton } from '@/components/layout/CTAButton';
 import type { LinkValue } from '@/types/blocks/common';
@@ -58,7 +59,11 @@ export function HeroBlockView({ block }: Props) {
               </>
             ) : null}
             {block.titleHighlight ? (
-              <span className="text-gold"> {block.titleHighlight}</span>
+              <span className="text-gold">
+                {' '}
+                {block.titleHighlight}
+                <PolishFlag />
+              </span>
             ) : null}
           </h1>
           {block.description ? (

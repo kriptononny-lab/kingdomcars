@@ -158,3 +158,16 @@ body {
     opacity: 1;
   }
 }
+@keyframes flagWave {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(-1.5px) scaleY(0.94);
+  }
+}
+.flag-col {
+  transform-origin: center;
+  animation: flagWave 1.6s ease-in-out infinite;
+}

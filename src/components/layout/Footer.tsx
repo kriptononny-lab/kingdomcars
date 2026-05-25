@@ -31,6 +31,14 @@ export async function Footer() {
                 {cfg.phonePrimary}
               </a>
             ) : null}
+            {cfg.phoneSecondary ? (
+              <a
+                href={`tel:${cfg.phoneSecondary.replaceAll(/\s+/g, '')}`}
+                className="font-heading text-gold mt-1 block text-base"
+              >
+                {cfg.phoneSecondary}
+              </a>
+            ) : null}
             {cfg.address ? <p className="text-text-muted mt-1 text-sm">{cfg.address}</p> : null}
             {cfg.hours ? <p className="text-text-muted text-sm">{cfg.hours}</p> : null}
           </div>

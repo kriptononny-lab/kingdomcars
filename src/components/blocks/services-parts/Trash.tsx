@@ -1,33 +1,24 @@
 /**
- * Trash / disposal service illustration. See Apartment.tsx for the shared
- * visual language across service icons.
+ * Trash / disposal service illustration — isometric tapered bin with a lid
+ * and handle. See Apartment.tsx for the shared isometric visual language
+ * (light from upper-right).
  */
 export function Trash() {
   return (
     <>
       <rect width="200" height="200" fill="#1a1a1a" />
-      <path
-        d="M65,60 L70,160 L130,160 L135,60"
-        fill="#2a2a2a"
-        stroke="#E8A825"
-        strokeWidth="1"
-        opacity="0.5"
-      />
-      <line x1="55" y1="60" x2="145" y2="60" stroke="#E8A825" strokeWidth="1.5" opacity="0.4" />
-      <rect
-        x="85"
-        y="45"
-        width="30"
-        height="15"
-        rx="2"
-        fill="none"
-        stroke="#E8A825"
-        strokeWidth="1"
-        opacity="0.3"
-      />
-      <line x1="85" y1="75" x2="88" y2="150" stroke="#E8A825" strokeWidth="1" opacity="0.2" />
-      <line x1="100" y1="75" x2="100" y2="150" stroke="#E8A825" strokeWidth="1" opacity="0.2" />
-      <line x1="115" y1="75" x2="112" y2="150" stroke="#E8A825" strokeWidth="1" opacity="0.2" />
+      <ellipse cx="100" cy="178" rx="46" ry="8" fill="#000" opacity="0.3" />
+      {/* tapered body */}
+      <polygon points="130.5,157 100,174.6 100,134.6 147.1,107.4" fill="#e8a825" />
+      <polygon points="69.5,157 100,174.6 100,134.6 52.9,107.4" fill="#9c7012" />
+      {/* lid */}
+      <polygon points="152.7,107.4 100,137.8 100,129.8 152.7,99.4" fill="#c48b1a" />
+      <polygon points="47.3,107.4 100,137.8 100,129.8 47.3,99.4" fill="#7a560a" />
+      <polygon points="100,69 152.7,99.4 100,129.8 47.3,99.4" fill="#ffd766" />
+      {/* handle */}
+      <polygon points="87.3,97.8 102.8,106.8 102.8,98.8 87.3,89.8" fill="#9c7012" />
+      <polygon points="112.7,101 102.8,106.8 102.8,98.8 112.7,93" fill="#e8a825" />
+      <polygon points="97.2,84 112.7,93 102.8,98.8 87.3,89.8" fill="#f5c542" />
     </>
   );
 }
